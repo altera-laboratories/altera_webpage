@@ -514,6 +514,33 @@
                 grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
+
+        /* ---- Accessibility: respect prefers-reduced-motion ---- */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            /* Show scroll-reveal and hero content in their final state, no entrance motion */
+            .reveal,
+            .hero-reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                animation: none !important;
+            }
+
+            /* Sit the 3D mockups flat rather than mid-tilt */
+            .mockup-tilt-left,
+            .mockup-tilt-right {
+                transform: none !important;
+            }
+        }
     </style>
 
     <!-- KaTeX CSS + JS -->
@@ -1907,8 +1934,9 @@
                 observer.observe(el);
             });
 
-            // Subtle desktop-only parallax tilt for problem/solution mockups
-            const canParallax = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 768px)').matches;
+            // Subtle desktop-only parallax tilt for problem/solution mockups (skip when reduced motion is requested)
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const canParallax = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 768px)').matches && !prefersReducedMotion;
             if (canParallax) {
                 const tiltCards = document.querySelectorAll('.mockup-tilt-left, .mockup-tilt-right');
                 tiltCards.forEach((card) => {
@@ -2040,6 +2068,8 @@
 
             if (!container || !svgEl) return;
 
+            var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
             var width = container.clientWidth;
             var height = container.clientHeight;
 
@@ -2168,7 +2198,7 @@
                 if (immediate) {
                     svg.call(zoom.transform, transform);
                 } else {
-                    svg.transition().duration(1000).call(zoom.transform, transform);
+                    svg.transition().duration(prefersReducedMotion ? 0 : 1000).call(zoom.transform, transform);
                 }
             }
 
@@ -2180,7 +2210,7 @@
 
             // Initial centering (Immediate for stability, then delayed for refinement)
             centerView(true);
-            setTimeout(function () { centerView(false); }, 500);
+            if (!prefersReducedMotion) setTimeout(function () { centerView(false); }, 500);
 
             var link = g.append('g')
                 .attr('mask', 'url(#graph-mask)')
@@ -2378,7 +2408,7 @@
             svg.call(zoom).on('dblclick.zoom', null);
 
             // Simulation tick
-            simulation.on('tick', function () {
+            function ticked() {
                 link
                     .attr('x1', function (d) { return d.source.x; })
                     .attr('y1', function (d) { return d.source.y; })
@@ -2402,7 +2432,17 @@
                 if (maskHolesText) maskHolesText.attr('transform', d => `translate(${d.x}, ${d.y + verticalOffset(d)})`);
 
                 node.attr('transform', function (d) { return 'translate(' + d.x + ',' + d.y + ')'; });
-            });
+            }
+            simulation.on('tick', ticked);
+
+            // For reduced-motion users, settle the layout synchronously and skip the
+            // on-load force animation + zoom tween so the graph appears static.
+            if (prefersReducedMotion) {
+                simulation.stop();
+                simulation.tick(300);
+                ticked();
+                centerView(true);
+            }
 
             // Build legend
             var legendEl = document.getElementById('graph-legend');
