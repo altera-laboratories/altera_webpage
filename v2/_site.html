@@ -651,9 +651,14 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 .v2-traction .tr-head { margin-bottom: 72px !important; }
 .v2-traction .tr-row { margin-bottom: 40px !important; }
 .v2-traction .tr-row:last-child { margin-bottom: 0 !important; }
-/* interleave the alternating cards so each row nests beside its neighbor */
+/* interleave the alternating cards so each row nests beside its neighbor.
+   Rows overlap, so they must not swallow clicks meant for the row beneath. */
 @media (min-width: 901px){
   .v2-traction .tr-row + .tr-row { margin-top: -130px !important; }
+  .v2-traction .tr-row { pointer-events: none; }
+  .v2-traction .tr-row .tr-card,
+  .v2-traction .tr-row .tr-date,
+  .v2-traction .tr-row .tr-node { pointer-events: auto; }
 }
 .v2-traction .tr-date { margin-bottom: 16px !important; }
 </style>
