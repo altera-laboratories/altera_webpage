@@ -651,10 +651,10 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 .v2-traction .tr-head { margin-bottom: 72px !important; }
 .v2-traction .tr-row { margin-bottom: 40px !important; }
 .v2-traction .tr-row:last-child { margin-bottom: 0 !important; }
-/* interleave the alternating cards so each row nests beside its neighbor.
-   Rows overlap, so they must not swallow clicks meant for the row beneath. */
+/* Interleaved timeline: a script staggers each row a uniform distance below
+   the previous one (fixed offsets cannot stay consistent with varying card
+   heights). Rows overlap, so they must not swallow clicks on cards beneath. */
 @media (min-width: 901px){
-  .v2-traction .tr-row + .tr-row { margin-top: -130px !important; }
   .v2-traction .tr-row { pointer-events: none; }
   .v2-traction .tr-row .tr-card,
   .v2-traction .tr-row .tr-date,
@@ -3518,5 +3518,34 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   </div>
 </footer>
 <script>document.addEventListener("DOMContentLoaded",function(){(function go(){if(window.lucide){lucide.createIcons();}else{setTimeout(go,80);}})();});</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var STAGGER = 190, SIDE_GAP = 36, BASE = 40;
+  function layoutTimeline(){
+    var rows = Array.prototype.slice.call(document.querySelectorAll('#traction .tr-row'));
+    if (!rows.length) return;
+    rows.forEach(function(r){ r.style.marginTop = ''; });
+    if (window.innerWidth < 901) return;
+    var heights = rows.map(function(r){ return r.offsetHeight; });
+    var sides = rows.map(function(r){ return r.classList.contains('left') ? 'L' : 'R'; });
+    var tops = [0], sideBottom = {};
+    sideBottom[sides[0]] = heights[0];
+    for (var i = 1; i < rows.length; i++){
+      var want = tops[i-1] + STAGGER;
+      if (sideBottom[sides[i]] != null) want = Math.max(want, sideBottom[sides[i]] + SIDE_GAP);
+      tops.push(want);
+      sideBottom[sides[i]] = want + heights[i];
+    }
+    for (var j = 1; j < rows.length; j++){
+      var naturalTop = tops[j-1] + heights[j-1] + BASE;
+      rows[j].style.marginTop = (tops[j] - naturalTop) + 'px';
+    }
+  }
+  var t1; window.addEventListener('resize', function(){ clearTimeout(t1); t1 = setTimeout(layoutTimeline, 120); });
+  window.addEventListener('load', layoutTimeline);
+  layoutTimeline();
+  setTimeout(layoutTimeline, 600);
+});
+</script>
 </body>
 </html>
