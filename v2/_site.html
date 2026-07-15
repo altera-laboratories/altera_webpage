@@ -715,6 +715,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   /* No reset ships with this page, so browser defaults leak: figure gets margin 1em 40px
      (starved the problem-section stat cards to 160px) and p gets a font-size top margin
      (the void above each stat number). Neutralize where fragments assumed a reset. */
+  /* Problem section: stats run full-width beneath the copy/mockup columns */
+  .v2-problem .vp-stats-row{ grid-template-columns:repeat(4,1fr) !important; margin-top:44px !important; }
+  @media (max-width:900px){ .v2-problem .vp-stats-row{ grid-template-columns:repeat(2,1fr) !important; } }
+  @media (max-width:520px){ .v2-problem .vp-stats-row{ grid-template-columns:1fr !important; } }
+  .v2-problem .vp-sources{ margin-top:18px !important; }
+  .v2-problem .vp-grid{ align-items:center !important; }
   .v2-problem .vp-fig{ margin:0 !important; }
   .v2-problem .vp-fig .num{ margin-top:0 !important; }
   .v2-problem .vp-stats{ align-items:start !important; }
@@ -774,7 +780,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             </div>
 
             <div class="hero-foot">
-              <span><span class="tick">✓</span> Built on Bayesian Knowledge Tracing</span>
+              <span>Built on Bayesian Knowledge Tracing</span>
               <span class="div" aria-hidden="true"></span>
               <span>Live in your Canvas roster</span>
             </div>
@@ -1045,41 +1051,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           Current AI tools create a "substitution" effect: students bypass the reasoning that builds durable understanding. The result is measurable learning loss, and a <span class="em">"black box"</span> that leaves instructors blind to what their students actually know.
         </p>
 
-        <div class="vp-stats">
-          <figure class="vp-fig">
-            <div class="rule" aria-hidden="true"></div>
-            <p class="num">92<span class="pct">%</span></p>
-            <figcaption class="cap">of students<br>use AI in their studies.</figcaption>
-          </figure>
-          <figure class="vp-fig">
-            <div class="rule" aria-hidden="true"></div>
-            <p class="num">88<span class="pct">%</span></p>
-            <figcaption class="cap">use AI on<br>assessed work.</figcaption>
-          </figure>
-          <figure class="vp-fig">
-            <div class="rule" aria-hidden="true"></div>
-            <p class="num">17<span class="pct">%</span></p>
-            <figcaption class="cap">lower exam scores<br>once AI is removed.</figcaption>
-          </figure>
-          <figure class="vp-fig">
-            <div class="rule" aria-hidden="true"></div>
-            <p class="num">90<span class="pct">%</span></p>
-            <figcaption class="cap">of faculty: AI will<br>diminish critical thinking.</figcaption>
-          </figure>
-        </div>
+        
 
-        <div class="vp-sources">
-          <span class="lbl">Sources:</span>
-          <a href="https://www.hepi.ac.uk/reports/student-generative-ai-survey-2025/" target="_blank" rel="noopener noreferrer">
-            HEPI 2025 (n=1,041) <i data-lucide="external-link"></i>
-          </a>
-          <a href="https://www.pnas.org/doi/10.1073/pnas.2422633122" target="_blank" rel="noopener noreferrer">
-            Bastani et al., PNAS 2025 <i data-lucide="external-link"></i>
-          </a>
-          <a href="https://imaginingthedigitalfuture.org/wp-content/uploads/2026/01/Elon-AACU-faculty-AI-survey-full-report-1-21-26.pdf" target="_blank" rel="noopener noreferrer">
-            AAC&U/Elon Faculty Survey 2026 <i data-lucide="external-link"></i>
-          </a>
-        </div>
+        
       </div>
 
       <!-- RIGHT: pinned notecard mockup -->
@@ -1106,6 +1080,42 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       </div>
 
     </div>
+
+    <div class="vp-stats vp-stats-row">
+          <figure class="vp-fig">
+            <div class="rule" aria-hidden="true"></div>
+            <p class="num">92<span class="pct">%</span></p>
+            <figcaption class="cap">of students<br>use AI in their studies.</figcaption>
+          </figure>
+          <figure class="vp-fig">
+            <div class="rule" aria-hidden="true"></div>
+            <p class="num">88<span class="pct">%</span></p>
+            <figcaption class="cap">use AI on<br>assessed work.</figcaption>
+          </figure>
+          <figure class="vp-fig">
+            <div class="rule" aria-hidden="true"></div>
+            <p class="num">17<span class="pct">%</span></p>
+            <figcaption class="cap">lower exam scores<br>once AI is removed.</figcaption>
+          </figure>
+          <figure class="vp-fig">
+            <div class="rule" aria-hidden="true"></div>
+            <p class="num">90<span class="pct">%</span></p>
+            <figcaption class="cap">of faculty: AI will<br>diminish critical thinking.</figcaption>
+          </figure>
+        </div>
+    <div class="vp-sources">
+          <span class="lbl">Sources:</span>
+          <a href="https://www.hepi.ac.uk/reports/student-generative-ai-survey-2025/" target="_blank" rel="noopener noreferrer">
+            HEPI 2025 (n=1,041) <i data-lucide="external-link"></i>
+          </a>
+          <a href="https://www.pnas.org/doi/10.1073/pnas.2422633122" target="_blank" rel="noopener noreferrer">
+            Bastani et al., PNAS 2025 <i data-lucide="external-link"></i>
+          </a>
+          <a href="https://imaginingthedigitalfuture.org/wp-content/uploads/2026/01/Elon-AACU-faculty-AI-survey-full-report-1-21-26.pdf" target="_blank" rel="noopener noreferrer">
+            AAC&U/Elon Faculty Survey 2026 <i data-lucide="external-link"></i>
+          </a>
+        </div>
+
   </div>
 </section>
 <section id="solution" class="v2-solution" aria-labelledby="v2-solution-h2">
