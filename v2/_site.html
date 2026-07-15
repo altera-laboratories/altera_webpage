@@ -686,13 +686,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   @media (min-width: 761px){
     header.nav .nav-inner{
       display:flex !important; flex-wrap:nowrap !important; align-items:center !important;
-      height:64px !important; min-height:64px !important; padding-top:0 !important; padding-bottom:0 !important;
-      gap:20px !important;
+      height:76px !important; min-height:76px !important; padding-top:0 !important; padding-bottom:0 !important;
+      gap:20px !important; border-bottom:0 !important;
     }
     header.nav .wrap{ padding-left:32px !important; padding-right:32px !important; }
     header.nav .brand{ flex:0 0 auto !important; }
     header.nav .brand, header.nav .brand img, .brand img{ height:auto !important; }
-    header.nav .brand img{ height:56px !important; width:auto !important; display:block !important; }
+    header.nav .brand img{ height:60px !important; width:auto !important; display:block !important; }
     .brand-name{ white-space:nowrap !important; font-size:21px !important; }
     header.nav nav.links{
       flex:1 1 auto !important; min-width:0 !important;
@@ -715,6 +715,18 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   /* No reset ships with this page, so browser defaults leak: figure gets margin 1em 40px
      (starved the problem-section stat cards to 160px) and p gets a font-size top margin
      (the void above each stat number). Neutralize where fragments assumed a reset. */
+  /* Kill the tinted band that read as a shadow under the nav */
+  body{ background-image:none !important; }
+  .nav-inner{ border-bottom:0 !important; }
+  /* Product bento icon chips: ink on paper, not blue (blue = data only) */
+  .v2-product .vp-icon{ background:var(--paper-50) !important; border:1px solid rgba(31,26,20,.16) !important; }
+  .v2-product .vp-icon i, .v2-product .vp-icon svg{ color:var(--ink-600) !important; width:17px; height:17px; }
+  .v2-product .vp-canvas-img{ height:22px; width:auto; display:block; }
+  .v2-product .vp-head{ display:flex; align-items:center; gap:10px; }
+  /* Cognitive Core header: pill sits tight above the H2 like every other section */
+  .v2-core__rail .eyebrow{ display:inline-flex; margin:0 0 18px !important; }
+  /* TEDCO in the partner strip */
+  .partners .partner:nth-child(5) .p-logo{ height:34px !important; }
   /* Problem section: stats run full-width beneath the copy/mockup columns */
   .v2-problem .vp-stats-row{ grid-template-columns:repeat(4,1fr) !important; margin-top:44px !important; }
   @media (max-width:900px){ .v2-problem .vp-stats-row{ grid-template-columns:repeat(2,1fr) !important; } }
@@ -812,6 +824,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               </a>
               <a class="partner" href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer">
                 <img class="p-logo" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" />
+              </a>
+              <a class="partner" href="https://www.tedcomd.com/news-events/press-releases/2026/tedcos-maryland-innovation-initiative-announces-664448-granted" target="_blank" rel="noopener noreferrer">
+                <img class="p-logo" src="public/images/logos/TEDCO/tedco-logo-ink.png" alt="TEDCO" />
               </a>
             </div>
           </div>
@@ -1830,7 +1845,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c8">
         <div>
           <div class="vp-head">
-            <span class="vp-icon" aria-hidden="true"><i data-lucide="cpu"></i></span>
+            <span class="vp-icon" aria-hidden="true"><i data-lucide="atom"></i></span>
             <span class="vp-card-eyebrow">Proprietary Engine</span>
           </div>
           <h3 class="h3">Mastery Tracking Engine</h3>
@@ -1906,7 +1921,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c4">
         <div>
           <div class="vp-head">
-            <span class="vp-icon" aria-hidden="true"><i data-lucide="message-square"></i></span>
+            <span class="vp-icon" aria-hidden="true"><i data-lucide="graduation-cap"></i></span>
             <span class="vp-card-eyebrow">For Students</span>
           </div>
           <h4 class="h4-serif">AI Tutor That Teaches</h4>
@@ -1941,7 +1956,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c4">
         <div>
           <div class="vp-head">
-            <span class="vp-canvas-logo" aria-label="Canvas"><span class="swatch" aria-hidden="true">CV</span>Canvas</span>
+            <img class="vp-canvas-img" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas">
             <span class="vp-card-eyebrow">Integration Partner</span>
           </div>
           <h4 class="h4-serif">Works Inside Canvas</h4>
@@ -1975,7 +1990,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <div>
           <div class="vp-head" style="justify-content: space-between;">
             <div style="display:flex; align-items:center; gap:0.75rem;">
-              <span class="vp-icon" aria-hidden="true"><i data-lucide="layout-dashboard"></i></span>
+              <span class="vp-icon" aria-hidden="true"><i data-lucide="building-2"></i></span>
               <span class="vp-card-eyebrow">For Admins</span>
             </div>
             <div class="vp-dash-dots" aria-hidden="true">
@@ -2255,7 +2270,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
       <!-- LEFT: editorial copy + legend explainers -->
       <div class="v2-core__rail">
-        <span class="v2-core__badge" aria-hidden="true"><i data-lucide="network"></i></span>
         <span class="eyebrow">The mastery graph</span>
         <h2 class="h2 v2-core__h2" id="v2-core-h2">The Cognitive Core</h2>
         <p class="body v2-core__lead">
@@ -2911,12 +2925,18 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <div class="tr-side">
           <span class="tr-date">Jun 29, 2026</span>
           <div class="tr-card">
-            <a class="tr-title" href="https://www.tedcomd.com/" target="_blank" rel="noopener noreferrer">
+            <a class="tr-title" href="https://www.tedcomd.com/news-events/press-releases/2026/tedcos-maryland-innovation-initiative-announces-664448-granted" target="_blank" rel="noopener noreferrer">
               <h3 class="h3">TEDCO BII Grant Award</h3>
             </a>
             <p class="tr-body">
               Awarded a <strong>$49,838</strong> TEDCO Baltimore Innovation Initiative grant for "Altera Core: Adaptive Knowledge Tracking for Canvas-Native STEM Higher Education", funding a 9-month build at JHU.
             </p>
+            <a class="tr-ext" href="https://www.tedcomd.com/news-events/press-releases/2026/tedcos-maryland-innovation-initiative-announces-664448-granted" target="_blank" rel="noopener noreferrer">
+              Read the announcement <i data-lucide="external-link"></i>
+            </a>
+            <div class="tr-logo-frame">
+              <img class="logo" src="./public/images/logos/TEDCO/tedco-logo-ink.png" alt="TEDCO">
+            </div>
           </div>
         </div>
       </div>
