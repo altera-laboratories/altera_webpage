@@ -697,10 +697,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     header.nav .brand, header.nav .brand img, .brand img{ height:auto !important; }
     header.nav .brand img{ height:60px !important; width:auto !important; display:block !important; }
     .brand-name{ white-space:nowrap !important; font-size:21px !important; }
+    header.nav .nav-inner{ position:relative !important; }
     header.nav nav.links{
-      flex:1 1 auto !important; min-width:0 !important;
+      position:absolute !important; left:50% !important; transform:translateX(-50%) !important;
       display:flex !important; justify-content:center !important; gap:4px !important;
-      overflow-x:auto !important; scrollbar-width:none !important;
+      max-width:56vw !important; overflow-x:auto !important; scrollbar-width:none !important;
     }
     header.nav nav.links::-webkit-scrollbar{ display:none !important; }
     header.nav nav.links a.link{ white-space:nowrap !important; padding:8px 13px !important; }
