@@ -705,9 +705,15 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .brand-name{ white-space:nowrap !important; font-size:21px !important; }
     header.nav .nav-inner{ position:relative !important; }
     header.nav nav.links{
-      position:absolute !important; left:50% !important; transform:translateX(-50%) !important;
       display:flex !important; justify-content:center !important; gap:4px !important;
-      max-width:56vw !important; overflow-x:auto !important; scrollbar-width:none !important;
+      flex:1 1 auto !important; min-width:0 !important;
+      overflow-x:auto !important; scrollbar-width:none !important;
+    }
+    @media (min-width: 1150px){
+      header.nav nav.links{
+        position:absolute !important; left:50% !important; transform:translateX(-50%) !important;
+        flex:none !important; max-width:56vw !important;
+      }
     }
     header.nav nav.links::-webkit-scrollbar{ display:none !important; }
     header.nav nav.links a.link{ white-space:nowrap !important; padding:8px 13px !important; }
@@ -2804,7 +2810,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       z-index: 3;
     }
     @media (min-width: 880px) {
-      .v2-traction .tr-node { left: 50%; }
+      /* center the dot on the card's top edge so it pins its card, not the floating pill */
+      .v2-traction .tr-node { left: 50%; top: 36px; }
     }
 
     /* card column */
