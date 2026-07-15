@@ -1757,7 +1757,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .v2-product .vp-row .pip { width: 0.5rem; height: 0.5rem; border-radius: 50%; flex-shrink: 0; }
     .v2-product .vp-row .pip.hi { background: var(--mastery-high-stroke); }
     .v2-product .vp-row .pip.mid { background: var(--mastery-med-stroke); }
-    .v2-product .vp-row .pip.lo { background: var(--signal-500); }
+    .v2-product .vp-row .pip.lo { background: var(--mastery-low-stroke); }
     .v2-product .vp-row .nm {
       font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-700);
       flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -1769,7 +1769,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .v2-product .vp-row .track > i { display: block; height: 100%; border-radius: var(--radius-pill); }
     .v2-product .vp-row .track > i.hi { background: var(--mastery-high-fill); }
     .v2-product .vp-row .track > i.mid { background: var(--mastery-med-fill); }
-    .v2-product .vp-row .track > i.lo { background: var(--signal-500); }
+    .v2-product .vp-row .track > i.lo { background: var(--mastery-low-fill); }
     .v2-product .vp-row .pct {
       font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-500); flex-shrink: 0;
     }
@@ -1946,15 +1946,15 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               <span class="pct">82%</span>
             </div>
             <div class="vp-row">
-              <span class="pip mid" aria-hidden="true"></span>
+              <span class="pip lo" aria-hidden="true"></span>
               <span class="nm">Jordan T.</span>
-              <span class="track" aria-hidden="true"><i class="mid" style="width:41%"></i></span>
+              <span class="track" aria-hidden="true"><i class="lo" style="width:41%"></i></span>
               <span class="pct">41%</span>
             </div>
             <div class="vp-row">
-              <span class="pip lo" aria-hidden="true"></span>
+              <span class="pip mid" aria-hidden="true"></span>
               <span class="nm">Alex K.</span>
-              <span class="track" aria-hidden="true"><i class="lo" style="width:63%"></i></span>
+              <span class="track" aria-hidden="true"><i class="mid" style="width:63%"></i></span>
               <span class="pct">63%</span>
             </div>
           </div>
