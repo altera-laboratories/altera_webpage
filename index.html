@@ -2195,12 +2195,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     /* ---- right: the paper panel holding the graph ---- */
     .v2-core__panelframe{
       position:relative;
-      padding:14px;
-      border-radius:var(--radius-lg);
-      background:linear-gradient(160deg, var(--paper-200), var(--paper-100));
-      border:1px solid var(--surface-border);
-      box-shadow:var(--shadow-paper);
     }
+    /* single frame: the inner panel carries the card look on its own */
+    .v2-core__panel{ box-shadow:var(--shadow-paper) !important; }
     .v2-core__panel{
       position:relative;
       border-radius:var(--radius-card);
