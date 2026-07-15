@@ -721,6 +721,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   /* Kill the tinted band that read as a shadow under the nav */
   body{ background-image:none !important; }
   .nav-inner{ border-bottom:0 !important; }
+  /* Tone down the near-white: warm the lifted-paper token page-wide,
+     sink the icon chips into their cards, center the timeline logo frames */
+  :root{ --paper-50:#f7f0de; }
+  .v2-product .vp-icon{ background:rgba(31,26,20,.055) !important; border:1px solid rgba(31,26,20,.13) !important; }
+  .v2-traction .tr-logo-frame{ justify-content:center !important; }
   /* Bento card headers: eyebrows never wrap, logo row stays tidy */
   .v2-product .vp-card-eyebrow{ white-space:nowrap !important; }
   .v2-product .vp-canvas-img{ height:18px !important; }
