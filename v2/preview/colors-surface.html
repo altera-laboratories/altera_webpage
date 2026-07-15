@@ -1,0 +1,225 @@
+<!-- @dsCard group="Color" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Paper surfaces · Altera v2 Reading Room</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  *,
+  *::before,
+  *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    background-color: var(--paper-100);
+    color: var(--ink-700);
+    font-family: var(--font-sans);
+    position: relative;
+    min-height: 100vh;
+  }
+
+  /* Paper grain layered over the cream base, soft-light, low opacity. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: var(--paper-grain);
+    opacity: 0.5;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .specimen {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .specimen-head {
+    margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+    max-width: 60ch;
+  }
+
+  .specimen-head .eyebrow { margin: 0 0 0.5rem; }
+
+  .specimen-head h1 {
+    margin: 0 0 0.5rem;
+  }
+
+  .specimen-head p {
+    margin: 0;
+    color: var(--ink-600);
+  }
+
+  /* Stacked paper cards on the cream base. */
+  .stack {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: clamp(0.75rem, 2vw, 1.25rem);
+  }
+
+  .swatch-card {
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background-color: var(--paper-50);
+    box-shadow: var(--shadow-paper-sm);
+    transition: transform 220ms var(--ease-soft), box-shadow 220ms var(--ease-soft);
+  }
+
+  .swatch-card:hover,
+  .swatch-card:focus-within {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-paper);
+  }
+
+  .swatch-chip {
+    position: relative;
+    height: 132px;
+    border-bottom: 1px solid var(--paper-300);
+  }
+
+  /* Grain over each fill so the paper reads as painted stock. */
+  .swatch-chip::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--paper-grain);
+    opacity: 0.45;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+  }
+
+  .chip-50  { background-color: var(--paper-50); }
+  .chip-100 { background-color: var(--paper-100); }
+  .chip-200 { background-color: var(--paper-200); }
+  .chip-300 { background-color: var(--paper-300); }
+  .chip-400 { background-color: var(--paper-400); }
+
+  .swatch-meta {
+    padding: 0.85rem 0.95rem 1rem;
+    background-color: var(--paper-50);
+  }
+
+  .swatch-token {
+    display: block;
+    color: var(--terracotta-600);
+    margin-bottom: 0.3rem;
+  }
+
+  .swatch-hex {
+    display: inline-block;
+    color: var(--ink-900);
+    margin-bottom: 0.5rem;
+  }
+
+  .swatch-role {
+    margin: 0;
+    color: var(--ink-600);
+    font-size: 0.92rem;
+    line-height: 1.45;
+  }
+
+  .swatch-role strong {
+    color: var(--ink-700);
+    font-weight: 600;
+  }
+
+  .specimen-foot {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    padding-top: 1rem;
+    border-top: 1px solid var(--paper-300);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    align-items: baseline;
+  }
+
+  .specimen-foot .metadata { margin: 0; }
+
+  /* Keyboard focus is always visible. */
+  .swatch-card:focus-visible,
+  a:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-signal);
+  }
+
+  a {
+    color: var(--terracotta-600);
+    text-underline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .swatch-card { transition: none; }
+    .swatch-card:hover,
+    .swatch-card:focus-within { transform: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="specimen">
+    <header class="specimen-head">
+      <p class="eyebrow">Color · Paper surfaces</p>
+      <h1 class="h2">The cream the page is printed on.</h1>
+      <p class="body">Five warm paper tones carry every surface in the Reading Room, from the page base up to card stock, dividers, and borders. Stack them on the cream and the hierarchy reads like an academic press: light, layered, intentional.</p>
+    </header>
+
+    <section class="stack" aria-label="Paper surface swatches">
+      <article class="swatch-card" tabindex="0">
+        <div class="swatch-chip chip-50" aria-hidden="true"></div>
+        <div class="swatch-meta">
+          <code class="data-label swatch-token">--paper-50</code>
+          <code class="mono swatch-hex">#faf5ea</code>
+          <p class="swatch-role"><strong>Lifted surface.</strong> The lightest stock, used for swatch faces, inset wells, and panels that need to float above the page.</p>
+        </div>
+      </article>
+
+      <article class="swatch-card" tabindex="0">
+        <div class="swatch-chip chip-100" aria-hidden="true"></div>
+        <div class="swatch-meta">
+          <code class="data-label swatch-token">--paper-100</code>
+          <code class="mono swatch-hex">#f3ead8</code>
+          <p class="swatch-role"><strong>Page base.</strong> The cream the whole site is printed on. This is the body background everything else sits on.</p>
+        </div>
+      </article>
+
+      <article class="swatch-card" tabindex="0">
+        <div class="swatch-chip chip-200" aria-hidden="true"></div>
+        <div class="swatch-meta">
+          <code class="data-label swatch-token">--paper-200</code>
+          <code class="mono swatch-hex">#ebdec5</code>
+          <p class="swatch-role"><strong>Card stock.</strong> The default fill for cards and notecards, one warm step above the page so blocks read as raised paper.</p>
+        </div>
+      </article>
+
+      <article class="swatch-card" tabindex="0">
+        <div class="swatch-chip chip-300" aria-hidden="true"></div>
+        <div class="swatch-meta">
+          <code class="data-label swatch-token">--paper-300</code>
+          <code class="mono swatch-hex">#ddccac</code>
+          <p class="swatch-role"><strong>Divider.</strong> Hairline rules and section seams, dark enough to separate without breaking the warm field.</p>
+        </div>
+      </article>
+
+      <article class="swatch-card" tabindex="0">
+        <div class="swatch-chip chip-400" aria-hidden="true"></div>
+        <div class="swatch-meta">
+          <code class="data-label swatch-token">--paper-400</code>
+          <code class="mono swatch-hex">#c9b793</code>
+          <p class="swatch-role"><strong>Border.</strong> The strongest paper tone, reserved for card outlines and the edges that frame a collage tile.</p>
+        </div>
+      </article>
+    </section>
+
+    <footer class="specimen-foot">
+      <p class="metadata">Light surface specimen · marketing and brand layer</p>
+      <p class="metadata">Seam note: the product app stays on Deep Space Lab v1 dark.</p>
+    </footer>
+  </main>
+</body>
+</html>

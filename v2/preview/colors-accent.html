@@ -1,0 +1,314 @@
+<!-- @dsCard group="Color" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Accent and ink swatches · Altera v2</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background-color: var(--paper-100);
+      color: var(--ink-700);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .specimen {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2.5rem 2.75rem 3rem;
+    }
+
+    /* Paper grain wash over the page base. */
+    .specimen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--paper-grain);
+      opacity: 0.5;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .specimen > * { position: relative; }
+
+    header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--paper-300);
+    }
+
+    header .h2 { margin: 0.5rem 0 0.6rem; }
+
+    header .body {
+      max-width: 60ch;
+      color: var(--ink-600);
+      margin: 0;
+    }
+
+    /* Section scaffolding. */
+    section { margin-top: 2.25rem; }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-head .h4 { margin: 0; }
+
+    .section-note {
+      color: var(--ink-500);
+      font-size: 0.85rem;
+    }
+
+    /* Swatch grid. */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .swatch {
+      border: 1px solid var(--paper-400);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background-color: var(--paper-50);
+      box-shadow: var(--shadow-paper-sm);
+    }
+
+    .chip {
+      position: relative;
+      height: 96px;
+    }
+
+    /* Grain wash over each fill for warmth. */
+    .chip::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--paper-grain);
+      opacity: 0.4;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    .meta {
+      padding: 0.7rem 0.8rem 0.85rem;
+    }
+
+    .meta .name {
+      display: block;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--ink-900);
+      letter-spacing: -0.005em;
+    }
+
+    .meta .hex {
+      display: block;
+      margin-top: 0.15rem;
+      color: var(--ink-600);
+    }
+
+    .meta .use {
+      display: block;
+      margin-top: 0.45rem;
+      font-size: 0.8rem;
+      line-height: 1.35;
+      color: var(--ink-500);
+    }
+
+    /* Reserved tag for royal blue, data/focus only. */
+    .tag {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--signal-500);
+      color: var(--signal-700);
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Fill assignments, drawn from token vars. */
+    .fill-signal-500 { background-color: var(--signal-500); }
+    .fill-signal-700 { background-color: var(--signal-700); }
+    .fill-terracotta-500 { background-color: var(--terracotta-500); }
+    .fill-terracotta-600 { background-color: var(--terracotta-600); }
+    .fill-ochre-500 { background-color: var(--ochre-500); }
+    .fill-ochre-600 { background-color: var(--ochre-600); }
+    .fill-ink-900 { background-color: var(--ink-900); }
+    .fill-ink-700 { background-color: var(--ink-700); }
+    .fill-ink-600 { background-color: var(--ink-600); }
+    .fill-ink-500 { background-color: var(--ink-500); }
+    .fill-ink-400 { background-color: var(--ink-400); }
+
+    /* Focus visibility on every interactive surface. */
+    a, .swatch:focus-within {
+      outline: none;
+    }
+    .swatch:focus-within {
+      box-shadow: var(--shadow-signal);
+      border-color: var(--signal-500);
+    }
+    a.ref {
+      color: var(--terracotta-600);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      border-radius: var(--radius-md);
+    }
+    a.ref:focus-visible {
+      outline: 2px solid var(--signal-500);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="specimen">
+    <header>
+      <p class="eyebrow">Color · accents and ink</p>
+      <h2 class="h2">Accent and ink swatches.</h2>
+      <p class="body">
+        Royal blue is reserved for data and focus, never decoration. Terracotta carries
+        links, eyebrows, and editorial marks; ochre adds warmth and emphasis. The ink ramp
+        runs from headline weight down to metadata on the warm paper base.
+      </p>
+    </header>
+
+    <section aria-labelledby="accents-head">
+      <div class="section-head">
+        <h3 class="h4" id="accents-head">Accents.</h3>
+        <span class="section-note">Signal, terracotta, ochre.</span>
+      </div>
+      <div class="grid">
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-signal-500"></div>
+          <div class="meta">
+            <span class="name">signal-500</span>
+            <span class="hex data-label">#476ee3</span>
+            <span class="use">Royal blue. Data series, focus rings, the Cognitive Core. Never decoration.</span>
+            <span class="tag">data / focus only</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-signal-700"></div>
+          <div class="meta">
+            <span class="name">signal-700</span>
+            <span class="hex data-label">#2f4fb0</span>
+            <span class="use">Blue text on paper. Data labels and SMI readouts that need contrast.</span>
+            <span class="tag">data / focus only</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-terracotta-500"></div>
+          <div class="meta">
+            <span class="name">terracotta-500</span>
+            <span class="hex data-label">#c0603a</span>
+            <span class="use">Warm accent fills, italic display emphasis, painted-paper marks.</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-terracotta-600"></div>
+          <div class="meta">
+            <span class="name">terracotta-600</span>
+            <span class="hex data-label">#9c4a2f</span>
+            <span class="use">Links, eyebrows, and editorial marks. The primary on-paper accent.</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-ochre-500"></div>
+          <div class="meta">
+            <span class="name">ochre-500</span>
+            <span class="hex data-label">#cf8a3b</span>
+            <span class="use">Warmth and highlight. Collage swatch, soft emphasis, pinned notes.</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-ochre-600"></div>
+          <div class="meta">
+            <span class="name">ochre-600</span>
+            <span class="hex data-label">#b5722a</span>
+            <span class="use">Deeper ochre for kraft tones and grounded emphasis on cream.</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section aria-labelledby="ink-head">
+      <div class="section-head">
+        <h3 class="h4" id="ink-head">Ink ramp.</h3>
+        <span class="section-note">Headline to metadata.</span>
+      </div>
+      <div class="grid">
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-ink-900"></div>
+          <div class="meta">
+            <span class="name">ink-900</span>
+            <span class="hex data-label">#1f1a14</span>
+            <span class="use">Deep-ink headlines. Fraunces display set on cream paper.</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-ink-700"></div>
+          <div class="meta">
+            <span class="name">ink-700</span>
+            <span class="hex data-label">#3d3528</span>
+            <span class="use">Strong body and subheads. The default reading weight.</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-ink-600"></div>
+          <div class="meta">
+            <span class="name">ink-600</span>
+            <span class="hex data-label">#5a4f3e</span>
+            <span class="use">Body copy. Long-form paragraphs at comfortable contrast.</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-ink-500"></div>
+          <div class="meta">
+            <span class="name">ink-500</span>
+            <span class="hex data-label">#7a6c56</span>
+            <span class="use">Muted text. Captions, secondary notes, supporting lines.</span>
+          </div>
+        </article>
+
+        <article class="swatch" tabindex="0">
+          <div class="chip fill-ink-400"></div>
+          <div class="meta">
+            <span class="name">ink-400</span>
+            <span class="hex data-label">#9c8c72</span>
+            <span class="use">Metadata. Timestamps, source tags, the quietest layer.</span>
+          </div>
+        </article>
+
+      </div>
+    </section>
+  </main>
+</body>
+</html>

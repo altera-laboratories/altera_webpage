@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Altera v2 · Reading Room · contact sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{ --cream:#f3ead8; --ink:#1f1a14; --terra:#9c4a2f; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#2a241b;color:var(--cream);font-family:'JetBrains Mono',monospace;padding:28px 34px 60px}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:30px;color:var(--cream);letter-spacing:-.01em;margin-bottom:4px}
+  .sub{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#cf8a3b;margin-bottom:26px}
+  .hero-wrap{margin-bottom:30px}
+  .label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#c9b793;margin:0 0 8px 2px}
+  .hero-frame{width:1300px;max-width:100%;height:560px;overflow:hidden;border-radius:12px;border:1px solid #574b39;box-shadow:0 18px 40px -20px rgba(0,0,0,.6)}
+  .hero-frame iframe{width:1625px;height:700px;border:0;transform:scale(.8);transform-origin:top left}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .frame{width:100%;aspect-ratio:1200/760;overflow:hidden;border-radius:10px;border:1px solid #574b39;background:var(--cream);box-shadow:0 10px 26px -16px rgba(0,0,0,.6)}
+  .frame iframe{width:1200px;height:760px;border:0;transform:scale(.34);transform-origin:top left}
+  @media(max-width:1100px){.grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+  <h1>Altera Labs · The Reading Room</h1>
+  <div class="sub">v2 design system · contact sheet · 1 hero + 13 cards</div>
+
+  <div class="hero-wrap">
+    <div class="label">MARKETING HERO · ui_kits/marketing/index.html</div>
+    <div class="hero-frame"><iframe data-src="ui_kits/marketing/index.html" scrolling="no"></iframe></div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+<script>
+  const cards = [
+    ['preview/collage.html','Brand · collage signature'],
+    ['preview/type-display.html','Type · Fraunces display'],
+    ['preview/type-scale.html','Type · scale'],
+    ['preview/type-mono-labels.html','Type · mono data'],
+    ['preview/eyebrow-labels.html','Type · eyebrows'],
+    ['preview/colors-surface.html','Color · surfaces'],
+    ['preview/colors-accent.html','Color · accents + ink'],
+    ['preview/colors-mastery.html','Color · mastery'],
+    ['preview/buttons.html','Components · buttons'],
+    ['preview/pills.html','Components · pills'],
+    ['preview/cards.html','Components · paper cards'],
+    ['preview/radii.html','Foundations · radii'],
+    ['preview/shadows.html','Foundations · shadows'],
+  ];
+  const g = document.getElementById('grid');
+  for (const [src,label] of cards){
+    const c = document.createElement('div');
+    c.innerHTML = `<div class="label">${label}</div><div class="frame"><iframe data-src="${src}" scrolling="no"></iframe></div>`;
+    g.appendChild(c);
+  }
+  // eager-load every iframe and signal readiness via the title
+  const frames = [...document.querySelectorAll('iframe')];
+  let loaded = 0;
+  frames.forEach(f => f.addEventListener('load', () => { if (++loaded === frames.length) document.title = 'READY ' + loaded; }));
+  frames.forEach(f => { f.src = f.dataset.src; });
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document | Altera Labs</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="./public/images/logos/Altera/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper-100:#f3ead8; --paper-300:#ddccac; --paper-400:#c9b793;
+    --ink-900:#1f1a14; --ink-500:#7a6c56; --ink-400:#9c8c72;
+    --terracotta-600:#9c4a2f; --terracotta-500:#c0603a;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper-100); font-family:'Inter',sans-serif; color:var(--ink-500); }
+  .top{ position:sticky; top:0; z-index:5; background:var(--paper-100); border-bottom:1px solid var(--paper-300); }
+  .top-inner{ max-width:1000px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .top-inner img{ height:44px; width:auto; display:block; }
+  .doc-title{ font-family:'Fraunces',serif; font-weight:600; color:var(--ink-900); font-size:17px;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1 1 auto; text-align:center; }
+  a.dl{ font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--terracotta-600); text-decoration:none; white-space:nowrap; }
+  a.dl:hover{ color:var(--terracotta-500); text-decoration:underline; }
+  main{ max-width:1000px; margin:0 auto; padding:28px 24px 80px; }
+  .status{ font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--ink-400); text-align:center; padding:40px 0; }
+  canvas.page{ display:block; width:100%; height:auto; margin:0 auto 22px;
+    background:#fff; border:1px solid var(--paper-400); border-radius:6px;
+    box-shadow:0 10px 26px -12px rgba(31,26,20,.28); }
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a href="/" aria-label="Altera Labs home"><img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs"></a>
+      <div class="doc-title" id="title">Document</div>
+      <a class="dl" id="download" href="#" download>Download PDF</a>
+    </div>
+  </header>
+  <main>
+    <div class="status" id="status">Loading document&hellip;</div>
+    <div id="pages"></div>
+  </main>
+
+  <script type="module">
+    const DOCS = {
+      'paper': {
+        file: 'public/documents/ai-and-the-brain-neurocognitive-perspective.pdf',
+        title: 'Artificial Intelligence and the Brain: A Neurocognitive Perspective'
+      },
+      'letter': {
+        file: 'public/documents/altera-labs-recommendation-letter.pdf',
+        title: 'Faculty Recommendation Letter'
+      },
+      'bii-proposal': {
+        file: 'public/documents/bii-full-proposal-altera-labs.pdf',
+        title: 'BII Full Proposal: Altera Core'
+      }
+    };
+    const key = new URLSearchParams(location.search).get('doc');
+    const doc = DOCS[key];
+    const status = document.getElementById('status');
+    if (!doc) {
+      status.textContent = 'Unknown document.';
+    } else {
+      document.getElementById('title').textContent = doc.title;
+      document.title = doc.title + ' | Altera Labs';
+      const dl = document.getElementById('download');
+      dl.href = doc.file;
+      import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs').then(async (pdfjsLib) => {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+        try {
+          const pdf = await pdfjsLib.getDocument(doc.file).promise;
+          status.remove();
+          const holder = document.getElementById('pages');
+          const scale = Math.min(2, (window.devicePixelRatio || 1) * 1.25);
+          for (let n = 1; n <= pdf.numPages; n++) {
+            const page = await pdf.getPage(n);
+            const vp = page.getViewport({ scale: 1 });
+            const width = Math.min(952, document.querySelector('main').clientWidth - 2);
+            const render = page.getViewport({ scale: (width / vp.width) * scale });
+            const canvas = document.createElement('canvas');
+            canvas.className = 'page';
+            canvas.width = render.width; canvas.height = render.height;
+            holder.appendChild(canvas);
+            await page.render({ canvasContext: canvas.getContext('2d'), viewport: render }).promise;
+          }
+        } catch (e) {
+          status.textContent = 'Could not render the document here. Use the Download PDF link above.';
+        }
+      }).catch(() => {
+        status.textContent = 'Could not load the viewer. Use the Download PDF link above.';
+      });
+    }
+  </script>
+</body>
+</html>

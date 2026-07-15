@@ -1,0 +1,272 @@
+<!-- @dsCard group="Type" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Type · Mono data labels · Altera</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2.5rem;
+    background-color: var(--paper-100);
+    background-image: var(--paper-grain);
+    background-blend-mode: soft-light;
+    color: var(--ink-700);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .specimen {
+    max-width: 1040px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  /* Header */
+  .specimen-head { display: grid; gap: 0.5rem; }
+  .specimen-head .h2 { margin: 0; }
+  .specimen-head .lede {
+    margin: 0;
+    max-width: 60ch;
+    color: var(--ink-600);
+  }
+  .lede .mono { color: var(--terracotta-600); }
+
+  /* Live class strip */
+  .live-strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.25rem;
+    background: var(--paper-50);
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-paper-sm);
+  }
+  .live-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--signal-700);
+  }
+  .live-dot {
+    width: 0.5rem; height: 0.5rem;
+    border-radius: var(--radius-pill);
+    background: var(--signal-500);
+    box-shadow: 0 0 0 0 rgba(71,110,227,0.5);
+    animation: pulse 2.2s var(--ease-soft) infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(71,110,227,0.45); }
+    70% { box-shadow: 0 0 0 7px rgba(71,110,227,0); }
+    100% { box-shadow: 0 0 0 0 rgba(71,110,227,0); }
+  }
+  .strip-divider { width: 1px; align-self: stretch; background: var(--paper-300); }
+  .strip-metric { display: grid; gap: 0.15rem; }
+  .strip-metric .data-label,
+  .strip-metric .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+  }
+  .metric-value {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--ink-900);
+    line-height: 1;
+  }
+  .smi { font-size: 1.65rem; color: var(--mastery-high-fill); }
+  .pl { font-size: 1.2rem; color: var(--signal-700); }
+
+  /* Node tags */
+  .node-row { display: grid; gap: 0.7rem; }
+  .node-row .eyebrow { margin: 0; }
+  .node-tags { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .node {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    padding: 0.4rem 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--paper-400);
+    background: var(--paper-200);
+    color: var(--ink-700);
+  }
+  .node .nid { color: var(--ink-400); }
+  .node .nval { font-weight: 600; }
+  .node.high { border-color: var(--mastery-high-stroke); }
+  .node.high .nval { color: var(--mastery-high-fill); }
+  .node.med { border-color: var(--mastery-med-stroke); }
+  .node.med .nval { color: var(--mastery-med-fill); }
+  .node.low { border-color: var(--mastery-low-stroke); }
+  .node.low .nval { color: var(--mastery-low-fill); }
+
+  /* Figure caption */
+  figure.spec-fig {
+    margin: 0;
+    display: grid;
+    gap: 0.7rem;
+    padding: 1.25rem;
+    background: var(--paper-50);
+    border: 1px solid var(--paper-300);
+    border-radius: var(--radius-card);
+  }
+  .fig-readout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+  }
+  .readout-cell { display: grid; gap: 0.2rem; }
+  .readout-cell .data-label {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+  }
+  .readout-cell .num {
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink-900);
+  }
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.55;
+    color: var(--ink-500);
+    border-top: 1px solid var(--paper-300);
+    padding-top: 0.7rem;
+  }
+  figcaption .fig-mark {
+    color: var(--terracotta-600);
+    font-weight: 600;
+  }
+
+  /* Footnote: mono is instrumentation, not prose */
+  .note {
+    font-size: 0.85rem;
+    color: var(--ink-500);
+    max-width: 64ch;
+    margin: 0;
+  }
+  .note .mono {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+    color: var(--terracotta-600);
+  }
+
+  a.ref {
+    color: var(--terracotta-600);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    border-radius: var(--radius-md);
+  }
+  a.ref:focus-visible,
+  .node:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-signal);
+  }
+  .node:focus-visible { outline: 2px solid transparent; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-dot { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="specimen">
+    <header class="specimen-head">
+      <p class="eyebrow">Type · instrumentation voice</p>
+      <h2 class="h2">The mono is for readings, not sentences.</h2>
+      <p class="lede body">
+        JetBrains Mono carries every number Altera reports back to an instructor: mastery
+        percentages, Bayesian estimates, node identifiers, figure provenance. Prose stays in
+        Inter and Fraunces. If it is a measurement, it is set in <span class="mono">mono</span>.
+      </p>
+    </header>
+
+    <section class="live-strip" aria-label="Live class view readout">
+      <span class="live-tag"><span class="live-dot" aria-hidden="true"></span>Live class view</span>
+      <span class="strip-divider" aria-hidden="true"></span>
+      <div class="strip-metric">
+        <span class="data-label">Sustainable Mastery Index</span>
+        <span class="metric-value smi">74%</span>
+      </div>
+      <span class="strip-divider" aria-hidden="true"></span>
+      <div class="strip-metric">
+        <span class="data-label">Mastery estimate</span>
+        <span class="metric-value pl">p(L) = 0.64</span>
+      </div>
+      <span class="strip-divider" aria-hidden="true"></span>
+      <div class="strip-metric">
+        <span class="data-label">Section · PHYS 201</span>
+        <span class="metric-value" style="font-size:1.05rem;color:var(--ink-700)">38 / 41 active</span>
+      </div>
+    </section>
+
+    <section class="node-row" aria-label="Cognitive Core node tags">
+      <p class="eyebrow">Cognitive Core · concept nodes</p>
+      <div class="node-tags">
+        <span class="node high" tabindex="0"><span class="nid">node-014</span><span>free-body diagrams</span><span class="nval">0.88</span></span>
+        <span class="node high" tabindex="0"><span class="nid">node-021</span><span>vector decomposition</span><span class="nval">0.81</span></span>
+        <span class="node med" tabindex="0"><span class="nid">node-033</span><span>Newton's second law</span><span class="nval">0.62</span></span>
+        <span class="node low" tabindex="0"><span class="nid">node-047</span><span>friction on inclines</span><span class="nval">0.41</span></span>
+        <span class="node low" tabindex="0"><span class="nid">node-052</span><span>tension in pulleys</span><span class="nval">0.37</span></span>
+      </div>
+    </section>
+
+    <figure class="spec-fig">
+      <div class="fig-readout">
+        <div class="readout-cell">
+          <span class="data-label">prior</span>
+          <span class="num">p(L₀) = 0.30</span>
+        </div>
+        <div class="readout-cell">
+          <span class="data-label">transit</span>
+          <span class="num">p(T) = 0.18</span>
+        </div>
+        <div class="readout-cell">
+          <span class="data-label">slip</span>
+          <span class="num">p(S) = 0.10</span>
+        </div>
+        <div class="readout-cell">
+          <span class="data-label">guess</span>
+          <span class="num">p(G) = 0.22</span>
+        </div>
+        <div class="readout-cell">
+          <span class="data-label">posterior</span>
+          <span class="num" style="color:var(--mastery-med-fill)">p(L) = 0.64</span>
+        </div>
+      </div>
+      <figcaption>
+        <span class="fig-mark">Fig. 3.</span> Bayesian Knowledge Tracing update for node-033 after
+        four Socratic turns. Posterior mastery is the value rolled into the section SMI. Parameters
+        fit per cohort, recalibrated nightly. Source: Altera Cognitive Core, run 2026-06-19T14:02Z.
+      </figcaption>
+    </figure>
+
+    <p class="note">
+      Rule of thumb: a label like <span class="mono">SMI</span>, <span class="mono">p(L)</span>,
+      or <span class="mono">node-047</span> is set in mono so an instructor reads it as an
+      instrument reading, not an opinion. Headlines and explanations stay in the serif and sans
+      voices. See <a class="ref" href="#">the data voice reference</a> for the full list.
+    </p>
+  </main>
+</body>
+</html>

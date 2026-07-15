@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 600" width="640" height="600" role="img" aria-label="A painted-paper collage of a knowledge tree growing out of an open book, its canopy made of concept-node leaves in mastery colors.">
+  <defs>
+    <!-- paper grain: fractal noise desaturated, used as a soft multiply texture -->
+    <filter id="paper" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.07 0" result="grain"/>
+      <feComposite in="grain" in2="SourceGraphic" operator="in" result="grainClip"/>
+      <feMerge>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="grainClip"/>
+      </feMerge>
+    </filter>
+    <!-- coarser grain for big shapes -->
+    <filter id="paperBig" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.45" numOctaves="3" seed="13" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.09 0" result="grain"/>
+      <feComposite in="grain" in2="SourceGraphic" operator="in" result="grainClip"/>
+      <feMerge>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="grainClip"/>
+      </feMerge>
+    </filter>
+    <!-- torn edge: displace shape outline with noise -->
+    <filter id="torn" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022 0.03" numOctaves="2" seed="4" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="tornSoft" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04 0.05" numOctaves="2" seed="21" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- soft layered drop shadow -->
+    <filter id="lift" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="2.2" stdDeviation="2.4" flood-color="#1f1a14" flood-opacity="0.22"/>
+    </filter>
+    <filter id="liftBig" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#1f1a14" flood-opacity="0.20"/>
+    </filter>
+
+    <radialGradient id="vign" cx="50%" cy="42%" r="62%">
+      <stop offset="0%" stop-color="#f6efe0"/>
+      <stop offset="100%" stop-color="#ebdec5"/>
+    </radialGradient>
+    <linearGradient id="trunkG" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#9c4a2f"/>
+      <stop offset="55%" stop-color="#b5722a"/>
+      <stop offset="100%" stop-color="#cf8a3b"/>
+    </linearGradient>
+    <linearGradient id="pageL" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e7d9bd"/>
+      <stop offset="100%" stop-color="#f0e6cf"/>
+    </linearGradient>
+    <linearGradient id="pageR" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f0e6cf"/>
+      <stop offset="100%" stop-color="#e2d2b2"/>
+    </linearGradient>
+
+    <!-- reusable leaf shape (hand-cut) -->
+    <path id="leaf" d="M0,0 C 16,-10 36,-8 44,6 C 40,20 18,28 1,22 C -8,15 -8,7 0,0 Z"/>
+    <!-- reusable concept node tile -->
+    <path id="node" d="M-15,-13 L 16,-15 L 18,13 L -13,16 Z"/>
+  </defs>
+
+  <!-- light cream ground (kept light, never dark) -->
+  <rect x="0" y="0" width="640" height="600" fill="url(#vign)"/>
+  <!-- faint paper grain wash over whole panel -->
+  <rect x="0" y="0" width="640" height="600" fill="#000" opacity="0" filter="url(#paperBig)"/>
+  <rect x="0" y="0" width="640" height="600" fill="#e9dcc2" opacity="0.0"/>
+
+  <!-- ground shadow under book -->
+  <ellipse cx="320" cy="540" rx="180" ry="26" fill="#1f1a14" opacity="0.10"/>
+
+  <!-- ============ ROOTS (stitched threads diving into the book) ============ -->
+  <g stroke="#476ee3" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-dasharray="2 6" opacity="0.85">
+    <path d="M320,470 C 300,495 268,500 248,520"/>
+    <path d="M320,470 C 338,495 372,500 392,520"/>
+    <path d="M320,470 C 318,498 314,508 316,522"/>
+  </g>
+
+  <!-- ============ TREE: trunk + branches as prerequisite edges ============ -->
+  <!-- ink underdrawing for branches (slightly offset like pencil under paint) -->
+  <g stroke="#1f1a14" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.16">
+    <path d="M322,468 C 318,400 326,360 318,316"/>
+    <path d="M320,372 C 270,348 232,330 196,300"/>
+    <path d="M320,372 C 372,346 416,332 452,300"/>
+    <path d="M318,316 C 296,280 268,256 244,232"/>
+    <path d="M318,316 C 344,282 374,258 398,232"/>
+  </g>
+
+  <!-- trunk: torn kraft paper -->
+  <g filter="url(#liftBig)">
+    <path filter="url(#torn)" fill="url(#trunkG)"
+      d="M300,472 C 296,430 304,392 308,360 C 300,344 304,326 314,312
+         C 326,326 330,344 324,360 C 330,392 338,430 338,472
+         C 326,478 312,478 300,472 Z"/>
+    <!-- bark seam highlight -->
+    <path d="M314,470 C 312,420 318,378 316,330" stroke="#e7d9bd" stroke-width="2" fill="none" opacity="0.5"/>
+  </g>
+
+  <!-- stitched prerequisite branch-edges (royal blue thread) -->
+  <g stroke="#476ee3" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="9 7">
+    <path d="M320,372 C 270,348 232,330 196,300"/>
+    <path d="M320,372 C 372,346 416,332 452,300"/>
+    <path d="M316,318 C 296,280 268,256 244,232"/>
+    <path d="M318,318 C 344,282 374,258 398,232"/>
+    <path d="M196,300 C 176,278 160,258 150,236"/>
+    <path d="M452,300 C 472,278 488,258 498,236"/>
+  </g>
+  <!-- a few ink-thread edges for variety -->
+  <g stroke="#1f1a14" stroke-width="2" fill="none" stroke-linecap="round" stroke-dasharray="3 6" opacity="0.7">
+    <path d="M244,232 C 232,210 224,196 220,182"/>
+    <path d="M398,232 C 410,210 418,196 424,182"/>
+    <path d="M318,316 C 318,288 320,266 320,244"/>
+  </g>
+
+  <!-- ============ CANOPY: concept-node leaf tiles in mastery colors ============ -->
+  <!-- each leaf = painted paper tile: torn edge, grain, individual rotation, soft shadow -->
+
+  <!-- back layer leaves (parchment / sage, lower mastery saturation) -->
+  <g filter="url(#lift)">
+    <use href="#leaf" x="0" y="0" transform="translate(150,236) rotate(-38) scale(1.15)" fill="#6f8f5f" filter="url(#tornSoft)"/>
+    <use href="#leaf" transform="translate(498,232) rotate(150) scale(1.1)" fill="#6f8f5f" filter="url(#tornSoft)"/>
+    <use href="#leaf" transform="translate(212,196) rotate(-70) scale(1.0)" fill="#e7d9bd" filter="url(#tornSoft)"/>
+    <use href="#leaf" transform="translate(430,190) rotate(122) scale(1.0)" fill="#e7d9bd" filter="url(#tornSoft)"/>
+    <use href="#leaf" transform="translate(322,238) rotate(-92) scale(1.05)" fill="#6f8f5f" filter="url(#tornSoft)"/>
+  </g>
+
+  <!-- mid layer mastery leaves -->
+  <g filter="url(#lift)">
+    <!-- emerald = high mastery -->
+    <use href="#leaf" transform="translate(244,232) rotate(-150) scale(1.35)" fill="#0f7a52" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(398,232) rotate(-15) scale(1.35)" fill="#0f7a52" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(196,300) rotate(168) scale(1.25)" fill="#0f7a52" filter="url(#torn)"/>
+    <!-- amber = mid mastery -->
+    <use href="#leaf" transform="translate(452,300) rotate(20) scale(1.25)" fill="#c0791f" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(286,210) rotate(-120) scale(1.1)" fill="#c0791f" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(356,206) rotate(-44) scale(1.1)" fill="#c0791f" filter="url(#torn)"/>
+    <!-- rose = low mastery (a couple, the parts still growing) -->
+    <use href="#leaf" transform="translate(220,182) rotate(-100) scale(1.0)" fill="#b5341f" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(424,178) rotate(-2) scale(1.0)" fill="#b5341f" filter="url(#torn)"/>
+  </g>
+
+  <!-- top crown leaves (brightest, one rose tip still maturing) -->
+  <g filter="url(#lift)">
+    <use href="#leaf" transform="translate(320,164) rotate(-90) scale(1.3)" fill="#0f7a52" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(268,150) rotate(-128) scale(1.0)" fill="#c0791f" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(372,148) rotate(-52) scale(1.0)" fill="#0f7a52" filter="url(#torn)"/>
+    <use href="#leaf" transform="translate(322,126) rotate(-90) scale(0.9)" fill="#b5341f" filter="url(#torn)"/>
+  </g>
+
+  <!-- leaf veins / stitch detail on a few leaves (thread) -->
+  <g stroke="#1f1a14" stroke-width="1.4" stroke-linecap="round" opacity="0.5" fill="none" stroke-dasharray="2 4">
+    <path d="M244,232 l 30,-6"/>
+    <path d="M398,232 l 30,-2"/>
+    <path d="M320,164 l 0,-26"/>
+    <path d="M452,300 l 28,4"/>
+  </g>
+
+  <!-- a few concept-NODE tiles riding the branches (the graph nodes) -->
+  <g>
+    <g transform="translate(320,372) rotate(-4)" filter="url(#lift)">
+      <use href="#node" fill="#3f6b87" filter="url(#tornSoft)"/>
+      <circle cx="0" cy="0" r="4" fill="#f3ead8"/>
+    </g>
+    <g transform="translate(318,318) rotate(6)" filter="url(#lift)">
+      <use href="#node" fill="#cf8a3b" filter="url(#tornSoft)" transform="scale(0.82)"/>
+      <circle cx="0" cy="0" r="3.4" fill="#1f1a14"/>
+    </g>
+    <g transform="translate(196,300) rotate(-9)" filter="url(#lift)">
+      <use href="#node" fill="#5d6b7e" filter="url(#tornSoft)" transform="scale(0.7)"/>
+      <circle cx="0" cy="0" r="3" fill="#f3ead8"/>
+    </g>
+    <g transform="translate(452,300) rotate(8)" filter="url(#lift)">
+      <use href="#node" fill="#9c4a2f" filter="url(#tornSoft)" transform="scale(0.7)"/>
+      <circle cx="0" cy="0" r="3" fill="#f3ead8"/>
+    </g>
+  </g>
+
+  <!-- ============ OPEN BOOK at the base (parchment paper collage) ============ -->
+  <g filter="url(#liftBig)">
+    <!-- book back / cover (slate-denim torn paper) -->
+    <path filter="url(#torn)" fill="#3f6b87"
+      d="M150,498 C 230,470 280,474 320,486 C 360,474 410,470 490,498
+         L 498,540 C 410,514 360,520 320,532 C 280,520 230,514 142,540 Z"/>
+    <!-- left page -->
+    <path filter="url(#tornSoft)" fill="url(#pageL)"
+      d="M158,496 C 224,474 278,478 316,490 L 316,528 C 278,516 226,512 162,534 Z"/>
+    <!-- right page -->
+    <path filter="url(#tornSoft)" fill="url(#pageR)"
+      d="M324,490 C 362,478 416,474 482,496 L 478,534 C 414,512 362,516 324,528 Z"/>
+    <!-- center spine -->
+    <path d="M320,488 L 320,530" stroke="#1f1a14" stroke-width="2.4" opacity="0.6"/>
+  </g>
+
+  <!-- text lines on pages (mono-ish dashes, no real text) -->
+  <g stroke="#1f1a14" stroke-width="1.5" stroke-linecap="round" opacity="0.4">
+    <path d="M180,500 l 110,-2" stroke-dasharray="14 6"/>
+    <path d="M178,508 l 112,-1" stroke-dasharray="20 6"/>
+    <path d="M180,516 l 100,0" stroke-dasharray="10 6"/>
+    <path d="M350,500 l 110,2" stroke-dasharray="14 6"/>
+    <path d="M350,508 l 110,2" stroke-dasharray="20 6"/>
+    <path d="M352,516 l 96,2" stroke-dasharray="10 6"/>
+  </g>
+
+  <!-- tiny mono caption -->
+  <text x="320" y="572" text-anchor="middle"
+    font-family="ui-monospace, 'SFMono-Regular', Menlo, monospace"
+    font-size="12" letter-spacing="2.5" fill="#1f1a14" opacity="0.62">cognitive core</text>
+
+  <!-- a couple of loose paper scraps for hand-made warmth -->
+  <g filter="url(#lift)">
+    <path filter="url(#tornSoft)" fill="#cf8a3b" opacity="0.9"
+      transform="translate(112,330) rotate(-12)" d="M0,0 l 26,-4 l 4,20 l -24,5 Z"/>
+    <path filter="url(#tornSoft)" fill="#c0603a" opacity="0.9"
+      transform="translate(512,346) rotate(16)" d="M0,0 l 24,4 l -3,19 l -23,-3 Z"/>
+  </g>
+</svg>

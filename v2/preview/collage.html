@@ -1,0 +1,307 @@
+<!-- @dsCard group="Brand" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Altera · The painted-paper collage signature</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--paper-100);
+    background-image: var(--paper-grain);
+    background-size: 320px 320px;
+    color: var(--ink-700);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    padding: 48px 44px 40px;
+  }
+
+  .specimen {
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  /* ---- Header ---- */
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--paper-300);
+    padding-bottom: 20px;
+    margin-bottom: 34px;
+  }
+  .head h2 {
+    margin: 6px 0 0;
+    max-width: 22ch;
+  }
+  .head .lede {
+    max-width: 38ch;
+    color: var(--ink-600);
+    margin: 0;
+  }
+  .head-right { flex: 0 0 auto; text-align: right; }
+
+  /* ---- Swatch row ---- */
+  .swatch-rail {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px;
+    margin: 0 0 12px;
+    padding: 8px 0 18px;
+  }
+  .swatch {
+    position: relative;
+    width: 116px;
+    height: 116px;
+    flex: 0 0 auto;
+    box-shadow: var(--shadow-paper);
+    background-blend-mode: soft-light;
+    background-size: cover, 160px 160px;
+    display: flex;
+    align-items: flex-end;
+    padding: 9px 10px;
+    /* torn paper edge */
+    clip-path: polygon(
+      2% 4%, 14% 1%, 31% 5%, 52% 1%, 71% 4%, 88% 1%, 99% 6%,
+      96% 23%, 100% 47%, 97% 71%, 99% 92%,
+      83% 97%, 61% 99%, 38% 96%, 19% 100%, 4% 95%,
+      1% 74%, 4% 49%, 0% 27%
+    );
+  }
+  .swatch::after {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: var(--paper-grain);
+    background-size: 150px 150px;
+    mix-blend-mode: soft-light;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .swatch .data-label,
+  .swatch .tag {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    color: var(--paper-50);
+    text-shadow: 0 1px 2px rgba(31,26,20,0.45);
+  }
+  .swatch.on-light .tag { color: var(--ink-900); text-shadow: none; }
+
+  .s-parchment { background-color: var(--swatch-parchment); transform: rotate(-2.5deg); }
+  .s-kraft     { background-color: var(--swatch-kraft);     transform: rotate(1.8deg); }
+  .s-ochre     { background-color: var(--swatch-ochre);     transform: rotate(-1.2deg); }
+  .s-terracotta{ background-color: var(--swatch-terracotta);transform: rotate(2.6deg); }
+  .s-denim     { background-color: var(--swatch-denim);     transform: rotate(-2deg); }
+  .s-sage      { background-color: var(--swatch-sage);      transform: rotate(1.4deg); }
+  .s-slate     { background-color: var(--swatch-slate);     transform: rotate(-1.8deg); }
+  .s-signal    { background-color: var(--swatch-signal);    transform: rotate(2.2deg); }
+  .s-ink       { background-color: var(--swatch-ink);       transform: rotate(-1.5deg); }
+
+  /* ---- Core motif ---- */
+  .core {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 28px;
+    align-items: stretch;
+  }
+  @media (max-width: 720px) { .core { grid-template-columns: 1fr; } }
+
+  .core-stage {
+    position: relative;
+    background-color: var(--paper-200);
+    background-image: var(--paper-grain);
+    background-size: 260px 260px;
+    background-blend-mode: soft-light;
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-paper-sm);
+    padding: 22px;
+    min-height: 296px;
+  }
+  .core-stage .eyebrow { margin: 0 0 6px; }
+  .core-svg { display: block; width: 100%; height: auto; }
+
+  /* concept tile (foreignObject card) */
+  .tile {
+    font-family: var(--font-sans);
+    background: var(--paper-50);
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-pin);
+    padding: 7px 9px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    background-image: var(--paper-grain);
+    background-size: 120px 120px;
+    background-blend-mode: soft-light;
+  }
+  .tile .t-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-900);
+    line-height: 1.15;
+  }
+  .tile .t-meta {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    color: var(--ink-500);
+    letter-spacing: 0.02em;
+  }
+  .node-dot { stroke-width: 2; }
+  .thread { stroke: var(--signal-500); stroke-width: 1.4; stroke-dasharray: 4 3; fill: none; opacity: 0.85; }
+
+  /* ---- Legend / side ---- */
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .legend {
+    background-color: var(--paper-50);
+    border: 1px solid var(--paper-300);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-paper-sm);
+    padding: 16px 16px 14px;
+  }
+  .legend .eyebrow { margin: 0 0 10px; }
+  .legend ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+  .legend li { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--ink-600); }
+  .chip { width: 13px; height: 13px; border-radius: 3px; flex: 0 0 auto; border: 1px solid rgba(31,26,20,0.18); }
+  .chip-high { background: var(--mastery-high-fill); border-color: var(--mastery-high-stroke); }
+  .chip-med  { background: var(--mastery-med-fill);  border-color: var(--mastery-med-stroke); }
+  .chip-low  { background: var(--mastery-low-fill);  border-color: var(--mastery-low-stroke); }
+  .chip-thread { background: var(--signal-500); border-color: var(--signal-700); }
+
+  .note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--ink-500);
+    border-left: 2px solid var(--terracotta-500);
+    padding: 2px 0 2px 12px;
+  }
+  .note strong { color: var(--terracotta-600); font-weight: 600; }
+
+  a { color: var(--terracotta-600); }
+  a:focus-visible,
+  .swatch:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-signal);
+    border-radius: var(--radius-md);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .swatch { transition: transform 280ms var(--ease-soft), box-shadow 280ms var(--ease-soft); }
+    .swatch:hover { transform: translateY(-4px) rotate(0deg); box-shadow: var(--shadow-pin); }
+  }
+</style>
+</head>
+<body>
+  <main class="specimen">
+
+    <header class="head">
+      <div>
+        <p class="eyebrow">Brand signature · painted-paper collage</p>
+        <h2 class="h2">Every concept is one paper tile. Together they make a mastery model.</h2>
+      </div>
+      <div class="head-right">
+        <p class="lede body">The Cognitive Core is assembled, not rendered: torn swatches, stitched threads, and mastery-colored nodes, in the warm <span class="display-accent" style="font-style:italic">Reading Room</span> palette.</p>
+      </div>
+    </header>
+
+    <!-- Swatch rail: the raw material -->
+    <p class="data-label" style="color:var(--ink-500); margin:0 0 4px;">SWATCH SET · torn-paper + grain</p>
+    <div class="swatch-rail" role="list" aria-label="Collage paper swatches">
+      <div class="swatch s-parchment on-light" role="listitem" tabindex="0"><span class="tag">parchment</span></div>
+      <div class="swatch s-kraft" role="listitem" tabindex="0"><span class="tag">kraft</span></div>
+      <div class="swatch s-ochre on-light" role="listitem" tabindex="0"><span class="tag">ochre</span></div>
+      <div class="swatch s-terracotta" role="listitem" tabindex="0"><span class="tag">terracotta</span></div>
+      <div class="swatch s-denim" role="listitem" tabindex="0"><span class="tag">denim</span></div>
+      <div class="swatch s-sage" role="listitem" tabindex="0"><span class="tag">sage</span></div>
+      <div class="swatch s-slate" role="listitem" tabindex="0"><span class="tag">slate</span></div>
+      <div class="swatch s-signal" role="listitem" tabindex="0"><span class="tag">signal</span></div>
+      <div class="swatch s-ink" role="listitem" tabindex="0"><span class="tag">ink</span></div>
+    </div>
+
+    <!-- Core motif + legend -->
+    <section class="core">
+      <div class="core-stage">
+        <p class="eyebrow">Cognitive Core · assembled from concept tiles</p>
+        <svg class="core-svg" viewBox="0 0 560 240" role="img" aria-label="A small Cognitive Core: five labelled concept tiles connected by blue stitched threads, with mastery-colored nodes.">
+          <!-- stitched threads (drawn first, behind tiles) -->
+          <path class="thread" d="M118,58 C175,70 205,96 250,112" />
+          <path class="thread" d="M118,58 C150,110 150,150 138,182" />
+          <path class="thread" d="M250,112 C320,96 360,72 430,60" />
+          <path class="thread" d="M250,112 C300,150 360,168 420,176" />
+          <path class="thread" d="M138,182 C230,200 320,196 420,176" />
+
+          <!-- mastery nodes -->
+          <circle class="node-dot" cx="118" cy="58"  r="6" fill="var(--mastery-high-fill)" stroke="var(--mastery-high-stroke)" />
+          <circle class="node-dot" cx="250" cy="112" r="7" fill="var(--mastery-med-fill)"  stroke="var(--mastery-med-stroke)" />
+          <circle class="node-dot" cx="430" cy="60"  r="6" fill="var(--mastery-high-fill)" stroke="var(--mastery-high-stroke)" />
+          <circle class="node-dot" cx="138" cy="182" r="6" fill="var(--mastery-low-fill)"  stroke="var(--mastery-low-stroke)" />
+          <circle class="node-dot" cx="420" cy="176" r="6" fill="var(--mastery-med-fill)"  stroke="var(--mastery-med-stroke)" />
+
+          <!-- concept tiles -->
+          <foreignObject x="22" y="18" width="132" height="58">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="tile">
+              <span class="t-name">Limits</span>
+              <span class="t-meta">SMI 0.91 · stable</span>
+            </div>
+          </foreignObject>
+          <foreignObject x="186" y="74" width="138" height="58">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="tile">
+              <span class="t-name">Chain rule</span>
+              <span class="t-meta">SMI 0.62 · re-teach</span>
+            </div>
+          </foreignObject>
+          <foreignObject x="404" y="20" width="134" height="58">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="tile">
+              <span class="t-name">Continuity</span>
+              <span class="t-meta">SMI 0.88 · stable</span>
+            </div>
+          </foreignObject>
+          <foreignObject x="44" y="148" width="138" height="58">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="tile">
+              <span class="t-name">Related rates</span>
+              <span class="t-meta">SMI 0.34 · at risk</span>
+            </div>
+          </foreignObject>
+          <foreignObject x="372" y="146" width="142" height="58">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="tile">
+              <span class="t-name">Optimization</span>
+              <span class="t-meta">SMI 0.57 · watch</span>
+            </div>
+          </foreignObject>
+        </svg>
+      </div>
+
+      <aside class="side">
+        <div class="legend">
+          <p class="eyebrow">Reading the model</p>
+          <ul>
+            <li><span class="chip chip-high"></span> High mastery · concept holds across attempts</li>
+            <li><span class="chip chip-med"></span> Mid mastery · watch before next class</li>
+            <li><span class="chip chip-low"></span> Low mastery · re-teach candidate</li>
+            <li><span class="chip chip-thread"></span> Stitched thread · prerequisite link (royal blue, data only)</li>
+          </ul>
+        </div>
+        <p class="note"><strong>Art-direction note.</strong> This CSS approximation is a placeholder for commissioned painted-paper collage. Each swatch is one concept node; the nodes assemble, tile by tile, into a single live mastery model per student.</p>
+      </aside>
+    </section>
+
+  </main>
+</body>
+</html>

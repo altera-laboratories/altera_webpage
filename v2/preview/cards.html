@@ -1,0 +1,324 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Altera v2 · Paper cards</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 3rem 2.5rem 3.5rem;
+      background-color: var(--paper-100);
+      background-image: var(--paper-grain);
+      background-blend-mode: soft-light;
+      color: var(--ink-700);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+    }
+
+    .specimen-head {
+      max-width: 64rem;
+      margin: 0 auto 2.25rem;
+    }
+    .specimen-head .eyebrow { margin: 0 0 0.5rem; }
+    .specimen-head h1 { margin: 0 0 0.4rem; }
+    .specimen-head p { max-width: 42rem; margin: 0; }
+
+    /* Card grid */
+    .deck {
+      max-width: 64rem;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      align-items: start;
+    }
+    @media (max-width: 880px) {
+      .deck { grid-template-columns: 1fr; gap: 2.25rem; }
+    }
+
+    .recipe-label {
+      display: block;
+      margin: 0 0 0.75rem;
+      color: var(--ink-400);
+    }
+
+    /* (1) Standard paper card */
+    .card {
+      position: relative;
+      background-color: var(--paper-200);
+      border: 1px solid var(--paper-400);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-paper-sm);
+      padding: 1.4rem 1.4rem 1.5rem;
+    }
+    .card .grain {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background-image: var(--paper-grain);
+      mix-blend-mode: soft-light;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    .card > * { position: relative; }
+    .card h3 { margin: 0.45rem 0 0.5rem; }
+    .card .body { margin: 0; color: var(--ink-600); }
+    .card .data-label { color: var(--terracotta-600); }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1.1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--paper-300);
+    }
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.02em;
+      color: var(--ink-700);
+      background-color: var(--paper-50);
+      border: 1px solid var(--paper-400);
+      border-radius: var(--radius-pill);
+      padding: 0.18rem 0.6rem;
+    }
+
+    /* (2) Pinned notecard */
+    .pin-wrap { padding-top: 0.5rem; }
+    .notecard {
+      position: relative;
+      background-color: var(--paper-50);
+      border: 1px solid var(--paper-300);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-pin);
+      padding: 1.5rem 1.35rem 1.4rem;
+      transform: rotate(-1.6deg);
+      transition: transform 220ms var(--ease-soft, ease);
+    }
+    .notecard:hover,
+    .notecard:focus-within { transform: rotate(0deg); }
+    .notecard .grain {
+      position: absolute; inset: 0; border-radius: inherit;
+      background-image: var(--paper-grain);
+      mix-blend-mode: soft-light; opacity: 0.45; pointer-events: none;
+    }
+    .notecard > * { position: relative; }
+    /* torn + taped corner */
+    .notecard .tape {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      width: 92px;
+      height: 22px;
+      transform: translateX(-50%) rotate(1.6deg);
+      background-color: rgba(207, 138, 59, 0.32);
+      border-left: 1px dashed var(--ochre-600);
+      border-right: 1px dashed var(--ochre-600);
+      box-shadow: var(--shadow-paper-sm);
+      pointer-events: none;
+    }
+    .notecard::after {
+      content: "";
+      position: absolute;
+      top: 0; right: 0;
+      width: 26px; height: 26px;
+      background:
+        linear-gradient(135deg, transparent 46%, var(--paper-100) 47%);
+      border-top-right-radius: var(--radius-md);
+      pointer-events: none;
+    }
+    .notecard h3 { margin: 0.2rem 0 0.5rem; }
+    .notecard .body { margin: 0 0 0.85rem; color: var(--ink-600); }
+    .notecard .attrib {
+      display: block;
+      color: var(--ink-400);
+      border-top: 1px solid var(--paper-300);
+      padding-top: 0.7rem;
+    }
+
+    /* (3) Feature panel with SMI readout */
+    .panel {
+      position: relative;
+      background-color: var(--paper-50);
+      border: 1px solid var(--paper-400);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-paper);
+      padding: 1.5rem 1.5rem 1.6rem;
+      overflow: hidden;
+    }
+    .panel .grain {
+      position: absolute; inset: 0;
+      background-image: var(--paper-grain);
+      mix-blend-mode: soft-light; opacity: 0.4; pointer-events: none;
+    }
+    .panel > * { position: relative; }
+    .panel-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    .panel h3 { margin: 0.3rem 0 0.2rem; }
+
+    .smi {
+      margin-top: 1.05rem;
+      display: flex;
+      align-items: flex-end;
+      gap: 0.55rem;
+    }
+    .smi-value {
+      font-family: var(--font-display);
+      font-size: 3.1rem;
+      line-height: 0.9;
+      color: var(--signal-700);
+      letter-spacing: var(--tracking-display, -0.01em);
+    }
+    .smi-unit {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-500);
+      padding-bottom: 0.35rem;
+    }
+    .smi-delta {
+      margin-left: auto;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--mastery-high-fill);
+      padding-bottom: 0.4rem;
+    }
+
+    .track {
+      margin-top: 0.95rem;
+      height: 10px;
+      width: 100%;
+      border-radius: var(--radius-pill);
+      background-color: var(--paper-300);
+      overflow: hidden;
+      border: 1px solid var(--paper-400);
+    }
+    .track > span {
+      display: block;
+      height: 100%;
+      width: 72%;
+      border-radius: inherit;
+      background-color: var(--signal-500);
+    }
+
+    .mastery-legend {
+      margin-top: 1.15rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--paper-300);
+      display: flex;
+      gap: 1.1rem;
+      flex-wrap: wrap;
+    }
+    .mastery-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-600);
+    }
+    .dot { width: 10px; height: 10px; border-radius: 3px; border: 1px solid; }
+    .dot.high { background-color: var(--mastery-high-fill); border-color: var(--mastery-high-stroke); }
+    .dot.med  { background-color: var(--mastery-med-fill);  border-color: var(--mastery-med-stroke); }
+    .dot.low  { background-color: var(--mastery-low-fill);  border-color: var(--mastery-low-stroke); }
+
+    .panel .source {
+      margin: 0.95rem 0 0;
+      color: var(--ink-400);
+    }
+
+    /* Focus visibility */
+    a:focus-visible,
+    .notecard:focus-within,
+    [tabindex]:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow-signal);
+      border-radius: var(--radius-md);
+    }
+    a {
+      color: var(--terracotta-600);
+      text-underline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .notecard { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="specimen-head">
+    <p class="eyebrow">Components · paper cards</p>
+    <h1 class="h2">Three card recipes.</h1>
+    <p class="body">The Reading Room surfaces carry instructor-facing data on warm paper. Each recipe pins a different weight of content, from a plain concept tile to a pinned note to a feature panel holding a live readout.</p>
+  </header>
+
+  <main class="deck">
+    <!-- (1) Standard paper card -->
+    <section class="pin-wrap">
+      <span class="recipe-label data-label">01 · paper card</span>
+      <article class="card" tabindex="0">
+        <span class="grain" aria-hidden="true"></span>
+        <p class="data-label">CONCEPT TILE</p>
+        <h3 class="h4">Conservation of momentum.</h3>
+        <p class="body">A Cognitive Core node. Bayesian Knowledge Tracing updates this tile each time a student reasons through a related problem in the Socratic session.</p>
+        <div class="tag-row">
+          <span class="chip">PHYS 201</span>
+          <span class="chip">prereq · vectors</span>
+          <span class="chip">14 linked items</span>
+        </div>
+      </article>
+    </section>
+
+    <!-- (2) Pinned notecard -->
+    <section class="pin-wrap">
+      <span class="recipe-label data-label">02 · pinned notecard</span>
+      <article class="notecard" tabindex="0">
+        <span class="tape" aria-hidden="true"></span>
+        <span class="grain" aria-hidden="true"></span>
+        <p class="data-label">RE-TEACH BEFORE THURSDAY</p>
+        <h3 class="h4">Free-body diagrams.</h3>
+        <p class="body">Eleven of thirty-two students stalled here in last night's sessions. The Core flagged it as the lowest-mastery prerequisite for Friday's lab.</p>
+        <span class="attrib metadata">Flagged by Cognitive Core · 18 hours ago</span>
+      </article>
+    </section>
+
+    <!-- (3) Feature panel with SMI readout -->
+    <section class="pin-wrap">
+      <span class="recipe-label data-label">03 · feature panel</span>
+      <article class="panel" tabindex="0">
+        <span class="grain" aria-hidden="true"></span>
+        <div class="panel-head">
+          <p class="eyebrow">Sustainable Mastery Index</p>
+        </div>
+        <h3 class="h4">Section A, this week.</h3>
+
+        <div class="smi">
+          <span class="smi-value">0.72</span>
+          <span class="smi-unit">SMI</span>
+          <span class="smi-delta">+0.06 wk</span>
+        </div>
+        <div class="track" role="img" aria-label="Section A mastery at 72 percent">
+          <span></span>
+        </div>
+
+        <div class="mastery-legend">
+          <span><i class="dot high" aria-hidden="true"></i>High · 19</span>
+          <span><i class="dot med" aria-hidden="true"></i>Mid · 9</span>
+          <span><i class="dot low" aria-hidden="true"></i>Low · 4</span>
+        </div>
+
+        <p class="source metadata">Aggregated from 32 enrolled students · Canvas roster sync.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

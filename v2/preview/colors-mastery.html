@@ -1,0 +1,244 @@
+<!-- @dsCard group="Color" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mastery semantics on paper · Altera</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background-color: var(--paper-100);
+    background-image: var(--paper-grain);
+    background-size: 240px 240px;
+    color: var(--ink-700);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    padding: 40px 44px 48px;
+  }
+
+  .specimen { max-width: 1112px; margin: 0 auto; }
+
+  header.head { margin-bottom: 28px; }
+  header.head .eyebrow { margin: 0 0 10px; }
+  header.head .h2 { margin: 0 0 8px; }
+  header.head .body { margin: 0; max-width: 58ch; color: var(--ink-600); }
+
+  .rows {
+    display: grid;
+    gap: 14px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 232px 1fr 96px;
+    align-items: center;
+    gap: 24px;
+    padding: 18px 22px;
+    background-color: var(--paper-50);
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-paper-sm);
+  }
+
+  /* concept + node dot */
+  .concept { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .node {
+    position: relative;
+    flex: 0 0 auto;
+    width: 28px; height: 28px;
+    border-radius: var(--radius-pill);
+    display: grid; place-items: center;
+  }
+  .node svg { display: block; width: 28px; height: 28px; }
+  .concept-text { min-width: 0; }
+  .concept-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    letter-spacing: -0.005em;
+    color: var(--ink-900);
+    line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .concept-meta {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-400);
+    margin-top: 3px;
+  }
+
+  /* SMI bar */
+  .bar {
+    position: relative;
+    height: 16px;
+    border-radius: var(--radius-pill);
+    background-color: var(--paper-200);
+    border: 1px solid var(--paper-400);
+    overflow: hidden;
+  }
+  .bar-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: var(--radius-pill);
+    background-image: var(--paper-grain);
+    background-size: 160px 160px;
+    background-blend-mode: soft-light;
+  }
+  .bar-track-label {
+    margin-top: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.03em;
+    color: var(--ink-500);
+  }
+  .bar-track-label b { color: var(--ink-700); font-weight: 600; }
+
+  /* SMI numeric value */
+  .smi {
+    text-align: right;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .smi .val { font-size: 1.375rem; font-weight: 600; line-height: 1; color: var(--ink-900); }
+  .smi .pct { font-size: 0.8125rem; color: var(--ink-400); }
+
+  /* mastery tiers */
+  .high .node { background-color: color-mix(in srgb, var(--mastery-high-fill) 14%, transparent); }
+  .high .bar-fill { background-color: var(--mastery-high-fill); border: 1px solid var(--mastery-high-stroke); }
+  .high .smi .val { color: var(--mastery-high-fill); }
+
+  .med .node { background-color: color-mix(in srgb, var(--mastery-med-fill) 16%, transparent); }
+  .med .bar-fill { background-color: var(--mastery-med-fill); border: 1px solid var(--mastery-med-stroke); }
+  .med .smi .val { color: var(--mastery-med-fill); }
+
+  .low .node { background-color: color-mix(in srgb, var(--mastery-low-fill) 14%, transparent); }
+  .low .bar-fill { background-color: var(--mastery-low-fill); border: 1px solid var(--mastery-low-stroke); }
+  .low .smi .val { color: var(--mastery-low-fill); }
+
+  /* legend / footer */
+  .legend {
+    margin-top: 26px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px 28px;
+    padding-top: 18px;
+    border-top: 1px solid var(--paper-300);
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 9px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-500);
+  }
+  .swatch {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    flex: 0 0 auto;
+  }
+  .swatch.high { background-color: var(--mastery-high-fill); border: 1px solid var(--mastery-high-stroke); }
+  .swatch.med { background-color: var(--mastery-med-fill); border: 1px solid var(--mastery-med-stroke); }
+  .swatch.low { background-color: var(--mastery-low-fill); border: 1px solid var(--mastery-low-stroke); }
+  .swatch.data { background-color: var(--signal-500); border: 1px solid var(--signal-700); }
+  .legend-item .note { color: var(--ink-400); text-transform: none; letter-spacing: 0; }
+
+  /* focus visibility */
+  .row:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-signal), var(--shadow-paper-sm);
+    border-color: var(--signal-500);
+  }
+
+  /* fill grow-in */
+  @media (prefers-reduced-motion: no-preference) {
+    .bar-fill {
+      transform-origin: left center;
+      animation: smi-grow 900ms var(--ease-soft) both;
+    }
+    @keyframes smi-grow {
+      from { transform: scaleX(0.04); }
+      to { transform: scaleX(1); }
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="specimen">
+    <header class="head">
+      <p class="eyebrow">Mastery semantics</p>
+      <h2 class="h2">Three states, read at a glance.</h2>
+      <p class="body">Every concept in the Cognitive Core carries a Sustainable Mastery Index. Emerald reads as held, amber as forming, rose as at risk. The same three colors stay legible on warm paper, so an instructor can scan a roster before the next class.</p>
+    </header>
+
+    <div class="rows">
+      <!-- HIGH -->
+      <article class="row high" tabindex="0" aria-label="Conservation of momentum, mastery high, SMI 0.91">
+        <div class="concept">
+          <span class="node" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="6.5" fill="var(--mastery-high-fill)" stroke="var(--mastery-high-stroke)" stroke-width="1.5"/></svg>
+          </span>
+          <span class="concept-text">
+            <span class="concept-name">Conservation of momentum</span>
+            <span class="concept-meta">PHYS 101 · 38 of 42 retained</span>
+          </span>
+        </div>
+        <div>
+          <div class="bar"><span class="bar-fill" style="width:91%"></span></div>
+          <div class="bar-track-label">High mastery · <b>held across two checks</b></div>
+        </div>
+        <div class="smi"><span class="val">0.91</span><br><span class="pct">SMI</span></div>
+      </article>
+
+      <!-- MED -->
+      <article class="row med" tabindex="0" aria-label="Work-energy theorem, mastery mid, SMI 0.58">
+        <div class="concept">
+          <span class="node" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="6.5" fill="var(--mastery-med-fill)" stroke="var(--mastery-med-stroke)" stroke-width="1.5"/></svg>
+          </span>
+          <span class="concept-text">
+            <span class="concept-name">Work-energy theorem</span>
+            <span class="concept-meta">PHYS 101 · 24 of 42 retained</span>
+          </span>
+        </div>
+        <div>
+          <div class="bar"><span class="bar-fill" style="width:58%"></span></div>
+          <div class="bar-track-label">Forming · <b>review before the next unit</b></div>
+        </div>
+        <div class="smi"><span class="val">0.58</span><br><span class="pct">SMI</span></div>
+      </article>
+
+      <!-- LOW -->
+      <article class="row low" tabindex="0" aria-label="Rotational inertia, mastery low, SMI 0.23">
+        <div class="concept">
+          <span class="node" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="6.5" fill="var(--mastery-low-fill)" stroke="var(--mastery-low-stroke)" stroke-width="1.5"/></svg>
+          </span>
+          <span class="concept-text">
+            <span class="concept-name">Rotational inertia</span>
+            <span class="concept-meta">PHYS 101 · 10 of 42 retained</span>
+          </span>
+        </div>
+        <div>
+          <div class="bar"><span class="bar-fill" style="width:23%"></span></div>
+          <div class="bar-track-label">At risk · <b>re-teach flagged for Thursday</b></div>
+        </div>
+        <div class="smi"><span class="val">0.23</span><br><span class="pct">SMI</span></div>
+      </article>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="swatch high"></span> High <span class="note">SMI ≥ 0.75</span></span>
+      <span class="legend-item"><span class="swatch med"></span> Mid <span class="note">0.40 to 0.74</span></span>
+      <span class="legend-item"><span class="swatch low"></span> Low <span class="note">< 0.40</span></span>
+      <span class="legend-item"><span class="swatch data"></span> Royal blue <span class="note">reserved for data focus, not mastery</span></span>
+    </div>
+  </main>
+</body>
+</html>
