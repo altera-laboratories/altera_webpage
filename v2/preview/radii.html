@@ -1,0 +1,263 @@
+<!-- @dsCard group="Foundations" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Radius scale · Altera Reading Room</title>
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 2.5rem;
+      background-color: var(--paper-100);
+      color: var(--ink-700);
+      font-family: var(--font-sans);
+      position: relative;
+      min-height: 100%;
+    }
+
+    /* Paper grain wash over the page base. */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: var(--paper-grain);
+      opacity: 0.5;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .specimen {
+      position: relative;
+      z-index: 1;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+
+    header.intro {
+      max-width: 62ch;
+      margin-bottom: 2.25rem;
+    }
+
+    .intro .eyebrow { margin: 0 0 0.65rem; }
+
+    .intro .h2 { margin: 0 0 0.75rem; }
+
+    .intro .body { margin: 0; color: var(--ink-600); }
+
+    .rule {
+      height: 1px;
+      border: 0;
+      background: var(--paper-300);
+      margin: 1.75rem 0 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Each entry: a labelled paper chip showing one radius value. */
+    figure.swatch {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .chip {
+      height: 132px;
+      background-color: var(--paper-200);
+      border: 1px solid var(--paper-400);
+      box-shadow: var(--shadow-paper-sm);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: var(--paper-grain);
+      opacity: 0.35;
+      mix-blend-mode: soft-light;
+      pointer-events: none;
+    }
+
+    /* A small royal-blue corner marker reads the curvature at a glance. */
+    .corner {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      width: 46px;
+      height: 46px;
+      border-top: 2px solid var(--signal-500);
+      border-left: 2px solid var(--signal-500);
+    }
+
+    .chip .value {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: var(--ink-500);
+      letter-spacing: 0.02em;
+    }
+
+    .chip-pill   { border-radius: var(--radius-pill); }
+    .chip-lg     { border-radius: var(--radius-lg); }
+    .chip-card   { border-radius: var(--radius-card); }
+    .chip-button { border-radius: var(--radius-button); }
+    .chip-md     { border-radius: var(--radius-md); }
+
+    .corner-pill   { border-top-left-radius: var(--radius-pill); }
+    .corner-lg     { border-top-left-radius: var(--radius-lg); }
+    .corner-card   { border-top-left-radius: var(--radius-card); }
+    .corner-button { border-top-left-radius: var(--radius-button); }
+    .corner-md     { border-top-left-radius: var(--radius-md); }
+
+    figcaption {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .token-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink-900);
+      letter-spacing: var(--tracking-display);
+    }
+
+    .token-var {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--terracotta-600);
+    }
+
+    .token-use {
+      font-size: 0.85rem;
+      color: var(--ink-600);
+      line-height: 1.45;
+    }
+
+    footer.note {
+      margin-top: 2.25rem;
+      padding: 1rem 1.25rem;
+      background-color: var(--paper-50);
+      border: 1px solid var(--paper-300);
+      border-radius: var(--radius-card);
+      color: var(--ink-600);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      max-width: 70ch;
+    }
+
+    footer.note strong { color: var(--ink-900); font-weight: 600; }
+
+    /* Visible focus for keyboard users moving across the chips. */
+    figure.swatch:focus-within .chip,
+    .chip:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow-signal);
+    }
+
+    .chip { transition: box-shadow 160ms var(--ease-soft); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .chip { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="specimen">
+    <header class="intro">
+      <p class="eyebrow">Foundations · radius</p>
+      <h2 class="h2">Radius scale.</h2>
+      <p class="body">
+        Five steps, each a labelled paper chip. The Reading Room keeps corners
+        quiet: editorial restraint means less rounding than the v1 Deep Space
+        Lab product surface, so the curve never competes with the type. Use the
+        token, not the number.
+      </p>
+    </header>
+
+    <hr class="rule">
+
+    <div class="grid">
+      <figure class="swatch" tabindex="0">
+        <div class="chip chip-pill">
+          <span class="corner corner-pill"></span>
+          <span class="value">9999px</span>
+        </div>
+        <figcaption>
+          <span class="token-name">Pill</span>
+          <span class="token-var">--radius-pill</span>
+          <span class="token-use">Tags, status pills, the Sustainable Mastery Index badge.</span>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" tabindex="0">
+        <div class="chip chip-lg">
+          <span class="corner corner-lg"></span>
+          <span class="value">16px</span>
+        </div>
+        <figcaption>
+          <span class="token-name">Large</span>
+          <span class="token-var">--radius-lg</span>
+          <span class="token-use">Feature panels, the Cognitive Core collage frame.</span>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" tabindex="0">
+        <div class="chip chip-card">
+          <span class="corner corner-card"></span>
+          <span class="value">10px</span>
+        </div>
+        <figcaption>
+          <span class="token-name">Card</span>
+          <span class="token-var">--radius-card</span>
+          <span class="token-use">Default for notecards and content cards on paper.</span>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" tabindex="0">
+        <div class="chip chip-button">
+          <span class="corner corner-button"></span>
+          <span class="value">8px</span>
+        </div>
+        <figcaption>
+          <span class="token-name">Button</span>
+          <span class="token-var">--radius-button</span>
+          <span class="token-use">Buttons, inputs, and other interactive controls.</span>
+        </figcaption>
+      </figure>
+
+      <figure class="swatch" tabindex="0">
+        <div class="chip chip-md">
+          <span class="corner corner-md"></span>
+          <span class="value">6px</span>
+        </div>
+        <figcaption>
+          <span class="token-name">Medium</span>
+          <span class="token-var">--radius-md</span>
+          <span class="token-use">Tight inner elements: chips, swatches, inline marks.</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <footer class="note">
+      <strong>Note.</strong> Royal blue marks the corner only as a measurement
+      cue, data and focus, never decoration. Reach for the smaller steps first;
+      the pill is reserved for genuine pills, not generic containers.
+    </footer>
+  </main>
+</body>
+</html>

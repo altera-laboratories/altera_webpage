@@ -1,0 +1,240 @@
+<!-- @dsCard group="Type" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Type scale · Altera Reading Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background-color: var(--paper-100);
+    color: var(--ink-900);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Paper grain wash over the page base */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: var(--paper-grain);
+    opacity: 0.4;
+    mix-blend-mode: soft-light;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .specimen {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 56px 48px 64px;
+  }
+
+  header.masthead {
+    border-bottom: 1px solid var(--paper-300);
+    padding-bottom: 28px;
+    margin-bottom: 8px;
+  }
+  header.masthead .eyebrow { margin: 0 0 14px; }
+  header.masthead h1 { margin: 0; }
+  header.masthead .lede {
+    margin: 18px 0 0;
+    max-width: 56ch;
+    color: var(--ink-600);
+  }
+
+  /* Each scale row: spec caption on the left, live sample on the right */
+  .row {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 32px;
+    align-items: baseline;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--paper-300);
+  }
+  .row:last-child { border-bottom: 0; }
+
+  .row .spec {
+    position: sticky;
+    top: 0;
+    padding-top: 4px;
+  }
+  .row .spec .name {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--terracotta-600);
+    margin-bottom: 6px;
+  }
+  .row .spec .meta {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    line-height: 1.5;
+    color: var(--ink-400);
+  }
+
+  .sample { min-width: 0; }
+  .sample > * { margin: 0; }
+
+  .footnote {
+    margin-top: 36px;
+    color: var(--ink-500);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.6;
+  }
+  .footnote a { color: var(--terracotta-600); }
+
+  a:focus-visible,
+  .focus-demo:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-signal);
+    border-radius: var(--radius-md);
+  }
+
+  /* Small inline focus demonstrator chip */
+  .focus-demo {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 4px 12px;
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-pill);
+    background: var(--paper-50);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-700);
+    cursor: pointer;
+  }
+
+  @media (max-width: 720px) {
+    .specimen { padding: 40px 24px 48px; }
+    .row { grid-template-columns: 1fr; gap: 10px; }
+    .row .spec { position: static; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+  <main class="specimen">
+    <header class="masthead">
+      <p class="eyebrow">Reading Room · Type specimen</p>
+      <h1 class="h1 display-xl">The type scale, <span class="display-accent">set in warm ink</span>.</h1>
+      <p class="body lede">Fraunces carries the headlines, Inter does the reading and the interface, and JetBrains Mono labels the data. One specimen row per role, each captioned with its token and intended use.</p>
+    </header>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">display-xl</span>
+        <span class="meta">Fraunces<br>--fs-display-xl<br>clamp 2.75 to 5.5rem<br>track -0.01em</span>
+      </div>
+      <div class="sample">
+        <span class="h1 display-xl">Know before the next class.</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">h2</span>
+        <span class="meta">Fraunces<br>section heading<br>sentence case<br>ends in a period</span>
+      </div>
+      <div class="sample">
+        <h2 class="h2">The mastery model updates as students think.</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">h3</span>
+        <span class="meta">Fraunces<br>subsection<br>--font-display</span>
+      </div>
+      <div class="sample">
+        <h3 class="h3">Sustainable Mastery Index, per concept.</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">h4</span>
+        <span class="meta">Inter<br>label heading<br>--font-sans</span>
+      </div>
+      <div class="sample">
+        <h4 class="h4">What to re-teach on Monday</h4>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">body-lg</span>
+        <span class="meta">Inter<br>lead paragraph<br>--ink-600</span>
+      </div>
+      <div class="sample">
+        <p class="body-lg">Altera runs a Socratic dialogue with each student, then traces mastery across the Cognitive Core knowledge graph using Bayesian Knowledge Tracing.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">body</span>
+        <span class="meta">Inter<br>reading column<br>--ink-600</span>
+      </div>
+      <div class="sample">
+        <p class="body">Built at JHU's Pava Center, Altera connects to a Canvas course and assembles a live mastery model from every conversation. Instructors see the concepts that slipped before they walk into the room, not three quizzes later.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">metadata</span>
+        <span class="meta">Inter<br>captions, bylines<br>--ink-400</span>
+      </div>
+      <div class="sample">
+        <p class="metadata">Pava Center for Entrepreneurship · Johns Hopkins University · cohort of 214 students, spring term</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">eyebrow</span>
+        <span class="meta">JetBrains Mono<br>uppercase<br>--terracotta-600</span>
+      </div>
+      <div class="sample">
+        <p class="eyebrow">Cognitive Core · Field notes</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="spec">
+        <span class="name">data-label</span>
+        <span class="meta">JetBrains Mono<br>data and metrics<br>--signal-700</span>
+      </div>
+      <div class="sample">
+        <p class="data-label mono">SMI 0.82 · BKT p(L) 0.91 · 6 concepts at risk</p>
+      </div>
+    </div>
+
+    <p class="footnote">
+      Light editorial layer for marketing and brand. The product app still ships the dark Deep Space Lab v1 surface.
+      <br><br>
+      Tab to the chip to see the focus ring: <span class="focus-demo" tabindex="0" role="note">--shadow-signal</span>
+    </p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!-- @dsCard group="Type" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eyebrows and section labels · Altera</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--paper-100);
+    color: var(--ink-700);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    padding: clamp(1.75rem, 4vw, 3.5rem);
+    min-height: 100%;
+  }
+
+  .specimen {
+    max-width: 920px;
+    margin: 0 auto;
+    display: grid;
+    gap: clamp(1.75rem, 3.5vw, 2.75rem);
+  }
+
+  .specimen__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--paper-300);
+  }
+  .specimen__head .h4 { margin: 0; color: var(--ink-900); }
+  .specimen__head .metadata { margin: 0; }
+
+  /* A labeled row pairs a caption with one or more specimens. */
+  .row {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: clamp(1rem, 3vw, 2.25rem);
+    align-items: start;
+  }
+  .row__caption {
+    margin: 0;
+    padding-top: 0.15rem;
+    color: var(--ink-500);
+    border-top: 2px solid var(--terracotta-600);
+    padding-top: 0.55rem;
+  }
+  .row__caption b { color: var(--ink-700); font-weight: 600; }
+  .row__body { display: grid; gap: 0.55rem; }
+
+  /* The eyebrows themselves rely on the .eyebrow token class (mono, terracotta,
+     uppercase, wide tracking). We only stack and space them here. */
+  .eyebrow-stack { display: grid; gap: 0.95rem; }
+  .eyebrow-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--terracotta-600);
+  }
+  .eyebrow-line .tick {
+    display: inline-block;
+    width: 22px;
+    height: 1px;
+    background: var(--terracotta-500);
+    flex: none;
+  }
+  .eyebrow-line .eyebrow { margin: 0; }
+
+  /* A section heading shown the way a real H2 appears under its eyebrow. */
+  .section-demo { display: grid; gap: 0.35rem; }
+  .section-demo .h3 { margin: 0; color: var(--ink-900); }
+
+  /* Tech badges: small pinned notecards with a mono data-label. */
+  .badges { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    background: var(--paper-50);
+    border: 1px solid var(--paper-400);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-paper-sm);
+    color: var(--ink-600);
+    transition: box-shadow 180ms var(--ease-soft), border-color 180ms var(--ease-soft);
+  }
+  .badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-pill);
+    flex: none;
+    background: var(--signal-500);
+  }
+  .badge .dot--high { background: var(--mastery-high-stroke); }
+  .badge .dot--ochre { background: var(--ochre-500); }
+  .badge .data-label { margin: 0; color: inherit; }
+  .badge:focus-visible {
+    outline: none;
+    box-shadow: var(--shadow-signal);
+    border-color: var(--signal-500);
+  }
+
+  /* Inline blue data label, the one place royal blue is allowed in this card. */
+  .signal-label { color: var(--signal-700); }
+
+  .foot {
+    border-top: 1px solid var(--paper-300);
+    padding-top: 1rem;
+    color: var(--ink-400);
+    margin: 0;
+  }
+  .foot .mid { color: var(--terracotta-600); padding: 0 0.35rem; }
+
+  @media (max-width: 620px) {
+    .row { grid-template-columns: 1fr; gap: 0.75rem; }
+    .row__caption { border-top: none; border-left: 2px solid var(--terracotta-600); padding: 0 0 0 0.75rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .badge { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="specimen">
+    <header class="specimen__head">
+      <h1 class="h4">Eyebrows and section labels.</h1>
+      <p class="metadata">Type specimen · The Reading Room</p>
+    </header>
+
+    <section class="row">
+      <p class="row__caption metadata"><b>Eyebrows</b><br>Mono, terracotta, uppercase, wide tracking.</p>
+      <div class="row__body eyebrow-stack">
+        <span class="eyebrow-line"><span class="tick" aria-hidden="true"></span><span class="eyebrow">The mastery model for your classroom</span></span>
+        <span class="eyebrow-line"><span class="tick" aria-hidden="true"></span><span class="eyebrow">Our solution</span></span>
+        <span class="eyebrow-line"><span class="tick" aria-hidden="true"></span><span class="eyebrow">Proprietary engine</span></span>
+      </div>
+    </section>
+
+    <section class="row">
+      <p class="row__caption metadata"><b>In context</b><br>An eyebrow set above its section heading.</p>
+      <div class="row__body section-demo">
+        <span class="eyebrow">Proprietary engine</span>
+        <h2 class="h3">The Cognitive Core reads every student in the room.</h2>
+        <p class="body">Bayesian Knowledge Tracing turns each Canvas interaction into a live mastery estimate, so the <span class="signal-label data-label">SMI</span> tells you what to re-teach before the next class.</p>
+      </div>
+    </section>
+
+    <section class="row">
+      <p class="row__caption metadata"><b>Tech badges</b><br>Mono data labels on pinned paper.</p>
+      <div class="row__body badges">
+        <span class="badge" tabindex="0"><span class="dot" aria-hidden="true"></span><span class="data-label">Bayesian Knowledge Tracing</span></span>
+        <span class="badge" tabindex="0"><span class="dot dot--high" aria-hidden="true"></span><span class="data-label">Cognitive Core graph</span></span>
+        <span class="badge" tabindex="0"><span class="dot dot--ochre" aria-hidden="true"></span><span class="data-label">Sustainable Mastery Index</span></span>
+      </div>
+    </section>
+
+    <p class="foot metadata">Fraunces display <span class="mid" aria-hidden="true">·</span> Inter body <span class="mid" aria-hidden="true">·</span> JetBrains Mono labels</p>
+  </main>
+</body>
+</html>

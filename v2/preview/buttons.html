@@ -1,0 +1,237 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Buttons · Altera Reading Room</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <style>
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+
+    html, body { margin: 0; }
+
+    body {
+      background-color: var(--paper-100);
+      background-image: var(--paper-grain);
+      background-blend-mode: soft-light;
+      color: var(--ink-700);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      padding: 3rem 2.5rem 3.25rem;
+    }
+
+    .specimen {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    header.specimen-head {
+      margin-bottom: 2.25rem;
+    }
+
+    header.specimen-head .eyebrow {
+      margin: 0 0 0.65rem;
+    }
+
+    header.specimen-head .h2 {
+      margin: 0 0 0.4rem;
+    }
+
+    header.specimen-head .body {
+      margin: 0;
+      max-width: 52ch;
+      color: var(--ink-600);
+    }
+
+    .row-label {
+      margin: 0 0 0.9rem;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .row {
+      padding: 1.6rem 1.5rem;
+      border: 1px solid var(--paper-400);
+      border-radius: var(--radius-card);
+      background-color: var(--paper-50);
+      box-shadow: var(--shadow-paper-sm);
+    }
+
+    .row + .row { margin-top: 1.25rem; }
+
+    /* Base button */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-family: var(--font-sans);
+      font-size: 0.975rem;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.005em;
+      padding: 0.8rem 1.35rem;
+      border-radius: var(--radius-button);
+      border: 1px solid transparent;
+      cursor: pointer;
+      text-decoration: none;
+      transition:
+        transform 0.18s var(--ease-soft),
+        background-color 0.18s var(--ease-soft),
+        border-color 0.18s var(--ease-soft),
+        color 0.18s var(--ease-soft),
+        box-shadow 0.18s var(--ease-soft);
+    }
+
+    .btn:active { transform: translateY(0.5px); }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: var(--shadow-signal);
+    }
+
+    .btn .icon {
+      width: 1.05em;
+      height: 1.05em;
+      flex: 0 0 auto;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* Primary: deep ink fill, cream text */
+    .btn-primary {
+      background-color: var(--ink-900);
+      color: var(--paper-50);
+      box-shadow: var(--shadow-paper-sm);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--ink-700);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-paper);
+    }
+
+    /* Accent: terracotta fill */
+    .btn-accent {
+      background-color: var(--terracotta-600);
+      color: var(--paper-50);
+      box-shadow: var(--shadow-paper-sm);
+    }
+
+    .btn-accent:hover {
+      background-color: var(--terracotta-500);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-paper);
+    }
+
+    /* Secondary: ink outline on paper */
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--ink-700);
+      border-color: var(--ink-700);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--ink-900);
+      border-color: var(--ink-900);
+      color: var(--paper-50);
+      transform: translateY(-1px);
+    }
+
+    .state-note {
+      margin: 1.05rem 0 0;
+      color: var(--ink-500);
+    }
+
+    .state-note .mark {
+      color: var(--terracotta-600);
+      font-style: normal;
+    }
+
+    .divider {
+      height: 1px;
+      border: 0;
+      margin: 2rem 0;
+      background-color: var(--paper-300);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn,
+      .btn:hover,
+      .btn:active {
+        transition: none;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="specimen">
+    <header class="specimen-head">
+      <p class="eyebrow">Components · Buttons</p>
+      <h2 class="h2">Calls to action on paper.</h2>
+      <p class="body">
+        Three weights of intent. Deep ink leads, terracotta invites, and the
+        outline stays quiet until you reach for it. Every button carries a
+        visible focus ring for keyboard readers.
+      </p>
+    </header>
+
+    <section class="row">
+      <p class="row-label data-label">Default</p>
+      <div class="button-row">
+        <a class="btn btn-primary" href="#try-the-beta">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14" />
+            <path d="m13 6 6 6-6 6" />
+          </svg>
+          Try the Beta
+        </a>
+        <a class="btn btn-accent" href="#our-mission">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 19V5l8 4 8-4v14" />
+            <path d="m4 19 8-4 8 4" />
+          </svg>
+          Our Mission
+        </a>
+        <a class="btn btn-secondary" href="#read-the-research">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 5h11a3 3 0 0 1 3 3v11" />
+            <path d="M4 5v11a3 3 0 0 0 3 3h11" />
+          </svg>
+          Read the research
+        </a>
+      </div>
+    </section>
+
+    <section class="row">
+      <p class="row-label data-label">Focus visible · keyboard</p>
+      <div class="button-row">
+        <a class="btn btn-primary" href="#try-the-beta" autofocus>
+          Try the Beta
+        </a>
+        <a class="btn btn-accent" href="#our-mission">
+          Our Mission
+        </a>
+        <a class="btn btn-secondary" href="#read-the-research">
+          Read the research
+        </a>
+      </div>
+      <p class="state-note body">
+        <span class="mark">Tab</span> through the set to see the royal-blue
+        signal ring. Hover lifts each button by a single pixel.
+      </p>
+    </section>
+  </main>
+</body>
+</html>

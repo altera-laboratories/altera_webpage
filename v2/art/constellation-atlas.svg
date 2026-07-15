@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 600" role="img" aria-label="Constellation atlas of concept-node paper tiles stitched into a rising figure">
+  <defs>
+    <!-- painted paper grain -->
+    <filter id="paper" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="7" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0" result="grain"/>
+      <feComponentTransfer in="n" result="lit">
+        <feFuncA type="linear" slope="0.05" intercept="0"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="grain"/>
+      </feMerge>
+    </filter>
+    <!-- torn / rough edge displacement -->
+    <filter id="torn" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.03" numOctaves="2" seed="11" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="5.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="tornBig" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="4" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2.4" result="b"/>
+      <feOffset in="b" dx="0" dy="2.4" result="o"/>
+      <feComponentTransfer in="o" result="s"><feFuncA type="linear" slope="0.28"/></feComponentTransfer>
+      <feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <radialGradient id="vign" cx="50%" cy="42%" r="70%">
+      <stop offset="0%" stop-color="#f5edda"/>
+      <stop offset="70%" stop-color="#efe3ca"/>
+      <stop offset="100%" stop-color="#e7d9bd"/>
+    </radialGradient>
+  </defs>
+
+  <!-- cream paper ground -->
+  <rect width="640" height="600" fill="url(#vign)"/>
+  <rect width="640" height="600" fill="#000" opacity="0.015" filter="url(#paper)"/>
+
+  <!-- faint scattered far stars (dots) -->
+  <g fill="#1f1a14" opacity="0.18">
+    <circle cx="70" cy="90" r="2"/><circle cx="150" cy="55" r="1.6"/><circle cx="560" cy="70" r="2"/>
+    <circle cx="600" cy="160" r="1.6"/><circle cx="48" cy="240" r="1.8"/><circle cx="92" cy="430" r="1.6"/>
+    <circle cx="585" cy="360" r="2"/><circle cx="540" cy="500" r="1.6"/><circle cx="120" cy="540" r="1.8"/>
+    <circle cx="300" cy="40" r="1.6"/><circle cx="420" cy="560" r="1.6"/><circle cx="610" cy="270" r="1.8"/>
+    <circle cx="30" cy="360" r="1.6"/><circle cx="250" cy="560" r="1.5"/>
+  </g>
+  <g fill="#476ee3" opacity="0.22">
+    <circle cx="200" cy="120" r="1.6"/><circle cx="470" cy="200" r="1.6"/><circle cx="100" cy="180" r="1.5"/>
+    <circle cx="520" cy="430" r="1.6"/><circle cx="360" cy="500" r="1.5"/><circle cx="180" cy="470" r="1.5"/>
+  </g>
+
+  <!-- ============ STITCHED THREAD EDGES (constellation = rising figure) ============ -->
+  <!-- node anchor map (the figure): base arrow -> shoulders -> head -->
+  <g fill="none" stroke="#476ee3" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 9" opacity="0.85">
+    <!-- left wing of arrow up to apex -->
+    <path d="M120 470 L200 360 L320 150"/>
+    <!-- right wing -->
+    <path d="M520 470 L440 360 L320 150"/>
+    <!-- crossbar / shoulders -->
+    <path d="M200 360 L320 300 L440 360"/>
+    <!-- spine -->
+    <path d="M320 470 L320 300 L320 150"/>
+    <!-- head ring from apex -->
+    <path d="M320 150 L260 215 M320 150 L380 215 M260 215 L320 260 L380 215"/>
+  </g>
+  <!-- secondary ink threads (fainter, dashed) tying outliers -->
+  <g fill="none" stroke="#1f1a14" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 8" opacity="0.4">
+    <path d="M120 470 L70 540"/>
+    <path d="M520 470 L575 540"/>
+    <path d="M440 360 L545 300"/>
+    <path d="M200 360 L95 300"/>
+    <path d="M320 260 L320 200"/>
+  </g>
+
+  <!-- ============ CONCEPT-NODE PAPER TILES ============ -->
+  <!-- helper: each tile is an irregular polygon, torn-filtered, paper-grained, soft-shadowed, slightly rotated -->
+
+  <!-- APEX HEAD node (emerald = high mastery) -->
+  <g filter="url(#soft)" transform="rotate(-5 320 150)">
+    <g filter="url(#tornBig)">
+      <polygon points="288,121 350,116 357,176 296,184 282,150" fill="#0f7a52"/>
+      <polygon points="288,121 350,116 357,176 296,184 282,150" fill="#000" opacity="0.04" filter="url(#paper)"/>
+    </g>
+    <circle cx="319" cy="150" r="6" fill="#f5edda" opacity="0.9"/>
+    <circle cx="319" cy="150" r="3" fill="#0f7a52"/>
+  </g>
+
+  <!-- head ring tiles (left cheek / right cheek / jaw) -->
+  <g filter="url(#soft)" transform="rotate(6 260 215)">
+    <g filter="url(#torn)">
+      <polygon points="234,192 285,196 283,238 232,236 226,212" fill="#cf8a3b"/>
+      <polygon points="234,192 285,196 283,238 232,236 226,212" fill="#000" opacity="0.045" filter="url(#paper)"/>
+    </g>
+    <circle cx="259" cy="215" r="3.6" fill="#1f1a14" opacity="0.7"/>
+  </g>
+  <g filter="url(#soft)" transform="rotate(-7 380 215)">
+    <g filter="url(#torn)">
+      <polygon points="356,193 408,189 414,232 360,239 352,214" fill="#3f6b87"/>
+      <polygon points="356,193 408,189 414,232 360,239 352,214" fill="#000" opacity="0.045" filter="url(#paper)"/>
+    </g>
+    <circle cx="382" cy="214" r="3.6" fill="#f5edda" opacity="0.85"/>
+  </g>
+  <!-- chin / mid node (amber = mid mastery) -->
+  <g filter="url(#soft)" transform="rotate(4 320 260)">
+    <g filter="url(#torn)">
+      <polygon points="296,239 346,243 343,283 293,280 288,259" fill="#c0791f"/>
+      <polygon points="296,239 346,243 343,283 293,280 288,259" fill="#000" opacity="0.05" filter="url(#paper)"/>
+    </g>
+    <circle cx="319" cy="261" r="3.6" fill="#1f1a14" opacity="0.6"/>
+  </g>
+
+  <!-- shoulders / crossbar center node (spine junction) -->
+  <g filter="url(#soft)" transform="rotate(-3 320 300)">
+    <g filter="url(#tornBig)">
+      <polygon points="289,272 354,270 360,328 292,332 280,300" fill="#9c4a2f"/>
+      <polygon points="289,272 354,270 360,328 292,332 280,300" fill="#000" opacity="0.05" filter="url(#paper)"/>
+    </g>
+    <circle cx="320" cy="300" r="5" fill="#e7d9bd" opacity="0.9"/>
+  </g>
+
+  <!-- left shoulder node (sage) -->
+  <g filter="url(#soft)" transform="rotate(8 200 360)">
+    <g filter="url(#torn)">
+      <polygon points="172,334 229,330 234,386 176,392 164,362" fill="#6f8f5f"/>
+      <polygon points="172,334 229,330 234,386 176,392 164,362" fill="#000" opacity="0.05" filter="url(#paper)"/>
+    </g>
+    <circle cx="200" cy="361" r="4" fill="#1f1a14" opacity="0.55"/>
+  </g>
+  <!-- right shoulder node (rose = low mastery) -->
+  <g filter="url(#soft)" transform="rotate(-9 440 360)">
+    <g filter="url(#torn)">
+      <polygon points="412,333 470,331 474,388 414,393 404,360" fill="#b5341f"/>
+      <polygon points="412,333 470,331 474,388 414,393 404,360" fill="#000" opacity="0.05" filter="url(#paper)"/>
+    </g>
+    <circle cx="441" cy="361" r="4" fill="#f5edda" opacity="0.85"/>
+  </g>
+
+  <!-- spine mid node (parchment) -->
+  <g filter="url(#soft)" transform="rotate(3 320 405)">
+    <g filter="url(#torn)">
+      <polygon points="298,386 342,388 340,424 297,422 291,403" fill="#e7d9bd"/>
+      <polygon points="298,386 342,388 340,424 297,422 291,403" fill="#000" opacity="0.06" filter="url(#paper)"/>
+    </g>
+    <circle cx="318" cy="405" r="3.4" fill="#1f1a14" opacity="0.5"/>
+  </g>
+
+  <!-- base-left wing node (kraft) -->
+  <g filter="url(#soft)" transform="rotate(11 120 470)">
+    <g filter="url(#tornBig)">
+      <polygon points="90,440 152,436 158,500 96,506 80,470" fill="#b5722a"/>
+      <polygon points="90,440 152,436 158,500 96,506 80,470" fill="#000" opacity="0.05" filter="url(#paper)"/>
+    </g>
+    <circle cx="120" cy="471" r="4.4" fill="#1f1a14" opacity="0.55"/>
+  </g>
+  <!-- base-right wing node (denim) -->
+  <g filter="url(#soft)" transform="rotate(-10 520 470)">
+    <g filter="url(#tornBig)">
+      <polygon points="490,439 552,437 558,500 494,505 481,470" fill="#3f6b87"/>
+      <polygon points="490,439 552,437 558,500 494,505 481,470" fill="#000" opacity="0.05" filter="url(#paper)"/>
+    </g>
+    <circle cx="520" cy="470" r="4.4" fill="#f5edda" opacity="0.85"/>
+  </g>
+  <!-- base center node (slate) the arrow foot -->
+  <g filter="url(#soft)" transform="rotate(5 320 470)">
+    <g filter="url(#torn)">
+      <polygon points="294,448 348,450 345,492 293,490 287,468" fill="#5d6b7e"/>
+      <polygon points="294,448 348,450 345,492 293,490 287,468" fill="#000" opacity="0.05" filter="url(#paper)"/>
+    </g>
+    <circle cx="318" cy="470" r="3.8" fill="#e7d9bd" opacity="0.85"/>
+  </g>
+
+  <!-- outlier satellite tiles (smaller, off the figure) -->
+  <g filter="url(#soft)" transform="rotate(14 70 540)">
+    <g filter="url(#torn)">
+      <polygon points="52,524 88,522 90,556 54,558 46,540" fill="#ochre" fill-opacity="0"/>
+      <polygon points="52,524 88,522 90,556 54,558 46,540" fill="#cf8a3b"/>
+      <polygon points="52,524 88,522 90,556 54,558 46,540" fill="#000" opacity="0.06" filter="url(#paper)"/>
+    </g>
+  </g>
+  <g filter="url(#soft)" transform="rotate(-12 575 540)">
+    <g filter="url(#torn)">
+      <polygon points="558,523 593,525 591,558 556,556 552,538" fill="#6f8f5f"/>
+      <polygon points="558,523 593,525 591,558 556,556 552,538" fill="#000" opacity="0.06" filter="url(#paper)"/>
+    </g>
+  </g>
+  <g filter="url(#soft)" transform="rotate(7 95 300)">
+    <g filter="url(#torn)">
+      <polygon points="78,285 110,283 112,316 80,318 73,300" fill="#c0603a"/>
+      <polygon points="78,285 110,283 112,316 80,318 73,300" fill="#000" opacity="0.06" filter="url(#paper)"/>
+    </g>
+  </g>
+  <g filter="url(#soft)" transform="rotate(-8 545 300)">
+    <g filter="url(#torn)">
+      <polygon points="528,285 562,283 564,316 530,318 524,300" fill="#b5722a"/>
+      <polygon points="528,285 562,283 564,316 530,318 524,300" fill="#000" opacity="0.06" filter="url(#paper)"/>
+    </g>
+  </g>
+
+  <!-- small stitch tick marks where thread meets nodes -->
+  <g stroke="#1f1a14" stroke-width="1.4" opacity="0.45" stroke-linecap="round">
+    <line x1="316" y1="146" x2="324" y2="154"/>
+    <line x1="316" y1="296" x2="324" y2="304"/>
+    <line x1="196" y1="357" x2="204" y2="365"/>
+    <line x1="436" y1="357" x2="444" y2="365"/>
+    <line x1="116" y1="467" x2="124" y2="475"/>
+    <line x1="516" y1="467" x2="524" y2="475"/>
+  </g>
+
+  <!-- tiny mono caption -->
+  <text x="320" y="578" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="11" letter-spacing="3" fill="#1f1a14" opacity="0.55">COGNITIVE CORE</text>
+</svg>

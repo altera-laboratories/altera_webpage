@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 600" role="img" aria-label="Painted-paper collage Pegasus ascending">
+  <defs>
+    <!-- paper grain -->
+    <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0" result="grey"/>
+      <feComposite in="grey" in2="SourceGraphic" operator="in" result="g"/>
+      <feBlend in="SourceGraphic" in2="g" mode="multiply"/>
+    </filter>
+    <!-- coarse paper for big fields -->
+    <filter id="grain2" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.55 0.7" numOctaves="3" seed="14" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.09 0" result="grey"/>
+      <feComposite in="grey" in2="SourceGraphic" operator="in" result="g"/>
+      <feBlend in="SourceGraphic" in2="g" mode="multiply"/>
+    </filter>
+    <!-- torn edge displacement -->
+    <filter id="torn" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="3" seed="3" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="6.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="torn2" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="22" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <!-- soft layered shadow -->
+    <filter id="sh" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="1.5" dy="2.6" stdDeviation="2.4" flood-color="#1f1a14" flood-opacity="0.22"/>
+    </filter>
+    <filter id="shBig" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="2.2" dy="3.6" stdDeviation="3.6" flood-color="#1f1a14" flood-opacity="0.20"/>
+    </filter>
+    <!-- subtle painterly shading gradients -->
+    <radialGradient id="lift" cx="38%" cy="34%" r="72%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#1f1a14" stop-opacity="0.10"/>
+    </radialGradient>
+    <linearGradient id="featG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#1f1a14" stop-opacity="0.10"/>
+    </linearGradient>
+  </defs>
+
+  <!-- light cream ground (kept light; faint wash, not a dark bg) -->
+  <rect x="0" y="0" width="640" height="600" fill="#f3ead8"/>
+  <rect x="0" y="0" width="640" height="600" fill="#ebdec5" opacity="0.35"/>
+  <!-- a couple of faint torn paper drift pieces in the sky -->
+  <g opacity="0.5" filter="url(#torn2)">
+    <path d="M60 110 q60 -22 150 -8 q30 26 -10 44 q-90 14 -150 -6 z" fill="#e7d9bd"/>
+    <path d="M470 70 q70 -10 120 14 q4 30 -50 30 q-70 4 -90 -22 z" fill="#e7d9bd" opacity="0.8"/>
+  </g>
+
+  <!-- ===================== STITCH / THREAD EDGES (under figure where linking) ===================== -->
+  <g stroke="#476ee3" stroke-width="2.1" stroke-linecap="round" fill="none" opacity="0.9">
+    <path d="M250 300 L322 250" stroke-dasharray="2 7"/>
+    <path d="M322 250 L398 286" stroke-dasharray="2 7"/>
+    <path d="M250 300 L300 366" stroke-dasharray="2 7"/>
+    <path d="M398 286 L300 366" stroke-dasharray="2 7"/>
+  </g>
+
+  <!-- ===================== FAR WING (behind body) ===================== -->
+  <g filter="url(#shBig)">
+    <g filter="url(#torn)">
+      <g filter="url(#grain2)" transform="rotate(-3 360 200)">
+        <!-- back wing feather fan -->
+        <path d="M360 250 Q300 150 250 70 Q330 120 380 150 Q360 210 360 250 Z" fill="#5d6b7e"/>
+        <path d="M372 252 Q335 150 320 80 Q392 128 430 168 Q392 212 372 252 Z" fill="#3f6b87"/>
+        <path d="M386 256 Q372 160 388 92 Q452 150 484 196 Q430 224 386 256 Z" fill="#5d6b7e"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===================== HIND LEGS ===================== -->
+  <g filter="url(#sh)">
+    <g filter="url(#torn2)">
+      <g filter="url(#grain)">
+        <path d="M300 366 q24 12 30 56 q-2 40 -16 70 q-12 4 -18 -2 q6 -44 -2 -78 q-10 -28 -8 -44 z" fill="#9c4a2f" transform="rotate(6 312 430)"/>
+        <path d="M340 360 q30 18 40 60 q2 44 -10 78 q-12 6 -20 -2 q8 -40 -4 -76 q-16 -34 -22 -52 z" fill="#b5722a" transform="rotate(2 350 430)"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- ===================== BODY (composed of patch tiles) ===================== -->
+  <!-- main barrel -->
+  <g filter="url(#shBig)">
+    <g filter="url(#torn)">
+      <g filter="url(#grain2)" transform="rotate(-8 330 320)">
+        <path d="M236 312 q26 -54 96 -62 q70 -6 118 26 q26 22 8 52 q-30 40 -120 46 q-92 6 -110 -28 q-6 -18 8 -34 z" fill="#cf8a3b"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- patch tiles over the barrel: distinct swatch tones, each torn+grain+rotated -->
+  <!-- parchment shoulder -->
+  <g filter="url(#sh)"><g filter="url(#torn2)"><g filter="url(#grain)">
+    <path d="M252 296 q40 -30 86 -22 q14 24 -6 44 q-44 22 -86 8 q-12 -16 6 -30 z" fill="#e7d9bd" transform="rotate(-7 300 308)"/>
+  </g></g></g>
+  <!-- kraft midflank -->
+  <g filter="url(#sh)"><g filter="url(#torn)"><g filter="url(#grain)">
+    <path d="M328 286 q50 -10 80 8 q12 22 -10 38 q-44 16 -78 0 q-12 -26 8 -46 z" fill="#b5722a" transform="rotate(4 372 312)"/>
+  </g></g></g>
+  <!-- terracotta haunch -->
+  <g filter="url(#sh)"><g filter="url(#torn2)"><g filter="url(#grain)">
+    <path d="M384 320 q44 4 56 30 q-4 28 -40 34 q-44 4 -60 -18 q4 -34 44 -46 z" fill="#c0603a" transform="rotate(8 420 350)"/>
+  </g></g></g>
+  <!-- denim belly patch -->
+  <g filter="url(#sh)"><g filter="url(#torn)"><g filter="url(#grain)">
+    <path d="M270 340 q40 18 96 14 q10 18 -10 28 q-58 8 -96 -8 q-12 -18 10 -34 z" fill="#3f6b87" transform="rotate(-3 330 354)"/>
+  </g></g></g>
+
+  <!-- ===================== MASTERY CONCEPT NODES (sewn-on patches) ===================== -->
+  <!-- emerald (high) on shoulder -->
+  <g filter="url(#sh)"><g filter="url(#torn2)"><g filter="url(#grain)">
+    <path d="M250 300 m-22 0 q4 -22 24 -20 q22 2 20 22 q-2 22 -24 20 q-22 -2 -20 -22 z" fill="#0f7a52"/>
+  </g></g></g>
+  <circle cx="250" cy="300" r="20" fill="none" stroke="#1f1a14" stroke-width="1.6" stroke-dasharray="2.5 4" opacity="0.85"/>
+  <!-- amber (mid) on back -->
+  <g filter="url(#sh)"><g filter="url(#torn)"><g filter="url(#grain)">
+    <path d="M322 250 m-20 2 q2 -22 22 -20 q22 0 20 22 q-2 20 -22 20 q-22 -2 -20 -22 z" fill="#c0791f"/>
+  </g></g></g>
+  <circle cx="322" cy="250" r="19" fill="none" stroke="#1f1a14" stroke-width="1.6" stroke-dasharray="2.5 4" opacity="0.85"/>
+  <!-- rose (low) on haunch -->
+  <g filter="url(#sh)"><g filter="url(#torn2)"><g filter="url(#grain)">
+    <path d="M398 286 m-19 1 q1 -20 20 -19 q20 1 19 20 q-1 20 -20 19 q-20 -1 -19 -20 z" fill="#b5341f"/>
+  </g></g></g>
+  <circle cx="398" cy="286" r="18" fill="none" stroke="#1f1a14" stroke-width="1.6" stroke-dasharray="2.5 4" opacity="0.85"/>
+
+  <!-- ===================== FRONT LEGS (tucked, mid-gallop lift) ===================== -->
+  <g filter="url(#sh)">
+    <g filter="url(#torn2)"><g filter="url(#grain)">
+      <path d="M268 348 q-22 16 -30 42 q-2 22 14 30 q18 -2 16 -22 q-2 -26 18 -40 q-8 -14 -18 -10 z" fill="#9c4a2f" transform="rotate(-10 262 388)"/>
+      <path d="M296 352 q-14 20 -10 46 q4 18 20 18 q14 -6 8 -24 q-6 -24 8 -42 q-16 -8 -26 2 z" fill="#cf8a3b" transform="rotate(-4 296 392)"/>
+    </g></g>
+  </g>
+
+  <!-- ===================== NECK + HEAD ===================== -->
+  <!-- neck (sage) -->
+  <g filter="url(#shBig)"><g filter="url(#torn)"><g filter="url(#grain2)">
+    <path d="M236 312 q-22 -42 -10 -86 q14 -42 56 -54 q22 22 6 50 q-26 36 -22 78 q-18 22 -30 12 z" fill="#6f8f5f" transform="rotate(-4 240 270)"/>
+  </g></g></g>
+  <!-- mane patches (terracotta + ochre torn strips) -->
+  <g filter="url(#sh)"><g filter="url(#torn2)"><g filter="url(#grain)">
+    <path d="M226 232 q-20 -6 -26 14 q12 8 26 2 q4 -10 0 -16 z" fill="#9c4a2f" transform="rotate(-8 212 240)"/>
+    <path d="M236 200 q-22 -4 -30 16 q14 8 30 0 q4 -10 0 -16 z" fill="#c0603a"/>
+    <path d="M252 172 q-22 -2 -28 18 q14 6 30 -2 q2 -10 -2 -16 z" fill="#cf8a3b"/>
+  </g></g></g>
+  <!-- head (parchment) -->
+  <g filter="url(#sh)"><g filter="url(#torn)"><g filter="url(#grain)">
+    <path d="M276 176 q34 -10 54 8 q14 16 -2 30 q-6 18 -28 22 q-26 -2 -34 -22 q-8 -24 10 -38 z" fill="#e7d9bd" transform="rotate(-12 300 200)"/>
+  </g></g></g>
+  <!-- muzzle (kraft) -->
+  <g filter="url(#sh)"><g filter="url(#torn2)"><g filter="url(#grain)">
+    <path d="M318 206 q30 2 38 22 q-4 16 -26 16 q-20 -2 -24 -18 q2 -16 12 -20 z" fill="#b5722a" transform="rotate(-10 332 224)"/>
+  </g></g></g>
+  <!-- ear -->
+  <g filter="url(#sh)"><g filter="url(#torn2)"><g filter="url(#grain)">
+    <path d="M286 158 q4 -22 18 -28 q10 16 4 34 q-14 6 -22 -6 z" fill="#cf8a3b" transform="rotate(-6 296 150)"/>
+  </g></g></g>
+  <!-- eye -->
+  <circle cx="304" cy="196" r="4.4" fill="#1f1a14"/>
+  <circle cx="305.4" cy="194.6" r="1.3" fill="#f3ead8"/>
+
+  <!-- ===================== NEAR WING (great upswept fan, on top) ===================== -->
+  <g filter="url(#shBig)">
+    <!-- under-layer plumage -->
+    <g filter="url(#torn)"><g filter="url(#grain2)" transform="rotate(-2 380 210)">
+      <path d="M360 268 Q318 188 300 96 Q372 150 426 210 Q396 244 360 268 Z" fill="#cf8a3b"/>
+      <path d="M376 268 Q352 178 354 80 Q436 150 492 220 Q436 250 376 268 Z" fill="#cf8a3b" opacity="0.96"/>
+    </g></g>
+    <!-- individual feather tiles, distinct tones, each torn -->
+    <g filter="url(#torn2)">
+      <g filter="url(#grain)">
+        <path d="M356 262 Q330 196 322 132 Q360 178 384 224 Q372 248 356 262 Z" fill="#b5722a" transform="rotate(-4 350 200)"/>
+        <path d="M380 262 Q364 188 372 110 Q412 168 440 224 Q414 250 380 262 Z" fill="#c0603a" transform="rotate(-2 400 188)"/>
+        <path d="M406 258 Q400 178 420 104 Q460 170 488 224 Q452 248 406 258 Z" fill="#cf8a3b" transform="rotate(2 444 184)"/>
+        <path d="M432 252 Q436 176 470 110 Q502 178 522 232 Q484 250 432 252 Z" fill="#9c4a2f" transform="rotate(5 478 184)"/>
+        <path d="M458 246 Q472 178 514 124 Q540 190 552 240 Q512 250 458 246 Z" fill="#b5722a" transform="rotate(8 510 188)"/>
+        <!-- top short coverts -->
+        <path d="M352 236 Q338 200 340 166 Q364 192 372 224 Q364 234 352 236 Z" fill="#e7d9bd" transform="rotate(-6 352 200)"/>
+        <path d="M386 230 Q380 196 392 162 Q414 192 420 224 Q406 232 386 230 Z" fill="#6f8f5f" transform="rotate(-2 400 198)"/>
+        <path d="M420 226 Q420 192 440 160 Q458 192 460 222 Q444 230 420 226 Z" fill="#3f6b87" transform="rotate(3 440 196)"/>
+      </g>
+    </g>
+    <!-- wing leading-edge feather spines (ink stitching detail) -->
+    <g stroke="#1f1a14" stroke-width="1.3" fill="none" opacity="0.5" stroke-linecap="round">
+      <path d="M356 262 Q335 200 326 138"/>
+      <path d="M406 258 Q402 182 422 110"/>
+      <path d="M458 246 Q472 182 512 128"/>
+    </g>
+    <!-- soft sheen over wing -->
+    <path d="M300 96 Q500 130 522 232 Q420 270 356 262 Q318 188 300 96 Z" fill="url(#featG)" opacity="0.7"/>
+  </g>
+
+  <!-- ===================== TAIL (flowing torn streamers) ===================== -->
+  <g filter="url(#shBig)">
+    <g filter="url(#torn)"><g filter="url(#grain)">
+      <path d="M452 348 q56 6 96 -24 q34 -28 70 -26 q-22 28 -64 50 q14 6 40 -2 q-26 26 -70 30 q12 10 36 8 q-34 22 -86 12 q-30 -8 -22 -48 z" fill="#cf8a3b" transform="rotate(6 540 350)"/>
+      <path d="M452 360 q50 18 92 6 q34 -10 60 6 q-30 18 -70 18 q12 10 34 12 q-36 18 -78 4 q-30 -10 -38 -46 z" fill="#9c4a2f" transform="rotate(2 540 372)"/>
+    </g></g>
+  </g>
+
+  <!-- ===================== overall paper light/lift wash ===================== -->
+  <rect x="0" y="0" width="640" height="600" fill="url(#lift)" opacity="0.8"/>
+
+  <!-- a few drifting feather-flecks for motion -->
+  <g filter="url(#grain)" opacity="0.85">
+    <path d="M150 360 q14 -8 24 2 q-6 12 -22 10 q-8 -6 -2 -12 z" fill="#c0603a" transform="rotate(-18 162 366)"/>
+    <path d="M120 300 q12 -6 20 2 q-4 10 -18 8 q-6 -4 -2 -10 z" fill="#cf8a3b" transform="rotate(12 130 304)"/>
+    <path d="M540 470 q12 -6 20 2 q-4 10 -18 8 q-6 -4 -2 -10 z" fill="#6f8f5f" transform="rotate(20 550 474)"/>
+  </g>
+
+  <!-- tiny mono caption -->
+  <text x="34" y="566" font-family="ui-monospace,'SFMono-Regular',Menlo,monospace" font-size="12" letter-spacing="1.5" fill="#1f1a14" opacity="0.62">cognitive core // one model, many concepts</text>
+</svg>

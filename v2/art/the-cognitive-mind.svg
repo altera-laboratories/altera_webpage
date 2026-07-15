@@ -1,0 +1,264 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 600" width="640" height="600" role="img" aria-label="A human head in profile assembled from torn painted-paper concept tiles, with a stitched knowledge graph inside the mind">
+  <defs>
+    <!-- paper grain for warm tiles -->
+    <filter id="grain" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0" result="grit"/>
+      <feComposite in="grit" in2="SourceGraphic" operator="in" result="grain"/>
+      <feMerge>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="grain"/>
+      </feMerge>
+    </filter>
+
+    <!-- soft mottled lighting for a hand-painted, uneven wash -->
+    <filter id="paint" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="3" seed="11" result="bump"/>
+      <feDiffuseLighting in="bump" surfaceScale="2.4" diffuseConstant="1" lighting-color="#fffaf0" result="light">
+        <feDistantLight azimuth="235" elevation="62"/>
+      </feDiffuseLighting>
+      <feColorMatrix in="light" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.20 0" result="shade"/>
+      <feComposite in="shade" in2="SourceGraphic" operator="in" result="shaded"/>
+      <feMerge>
+        <feMergeNode in="SourceGraphic"/>
+        <feMergeNode in="shaded"/>
+      </feMerge>
+    </filter>
+
+    <!-- torn / rough paper edge -->
+    <filter id="torn" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.022" numOctaves="3" seed="4" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="tornFine" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05 0.06" numOctaves="2" seed="9" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="3.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <!-- soft layered shadow so pieces feel physical -->
+    <filter id="lift" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3.2" flood-color="#1f1a14" flood-opacity="0.20"/>
+    </filter>
+    <filter id="liftLg" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#1f1a14" flood-opacity="0.22"/>
+    </filter>
+
+    <!-- subtle tonal gradients to fake brush loading -->
+    <linearGradient id="gKraft" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c2812f"/><stop offset="1" stop-color="#a4641f"/>
+    </linearGradient>
+    <linearGradient id="gOchre" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d9974a"/><stop offset="1" stop-color="#c0792f"/>
+    </linearGradient>
+    <linearGradient id="gTerra" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c66743"/><stop offset="1" stop-color="#9c4a2f"/>
+    </linearGradient>
+    <linearGradient id="gParch" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ecdfc6"/><stop offset="1" stop-color="#ddccab"/>
+    </linearGradient>
+    <linearGradient id="gDenim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4a7896"/><stop offset="1" stop-color="#365b76"/>
+    </linearGradient>
+    <linearGradient id="gSage" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7c9b6b"/><stop offset="1" stop-color="#627f54"/>
+    </linearGradient>
+    <radialGradient id="gEm" cx="0.38" cy="0.34" r="0.85">
+      <stop offset="0" stop-color="#179066"/><stop offset="1" stop-color="#0c6543"/>
+    </radialGradient>
+    <radialGradient id="gAm" cx="0.38" cy="0.34" r="0.85">
+      <stop offset="0" stop-color="#d68d2c"/><stop offset="1" stop-color="#b06d18"/>
+    </radialGradient>
+    <radialGradient id="gRose" cx="0.38" cy="0.34" r="0.85">
+      <stop offset="0" stop-color="#c84a32"/><stop offset="1" stop-color="#a52d1a"/>
+    </radialGradient>
+
+    <!-- the head silhouette, three-quarter facing left, used as a clip for the inner graph -->
+    <path id="headPath" d="
+      M 372 96
+      C 300 78 232 96 196 150
+      C 168 192 168 232 158 268
+      C 150 298 128 314 120 338
+      C 113 360 132 372 150 376
+      C 158 396 154 420 168 436
+      C 158 452 168 470 186 474
+      C 196 502 220 520 252 528
+      C 300 540 352 532 392 512
+      C 430 494 456 462 470 422
+      C 486 376 488 322 480 274
+      C 472 222 452 160 412 124
+      C 400 112 386 102 372 96 Z"/>
+  </defs>
+
+  <!-- transparent cream ground (kept light; only a faint paper wash) -->
+  <rect x="0" y="0" width="640" height="600" fill="#f3ead8"/>
+  <rect x="0" y="0" width="640" height="600" fill="#ffffff" opacity="0.0"/>
+  <rect x="0" y="0" width="640" height="600" fill="#ebdec5" opacity="0.45" filter="url(#grain)"/>
+
+  <!-- faint torn paper accents scattered on the ground, very light -->
+  <g opacity="0.5" filter="url(#torn)">
+    <rect x="36" y="58" width="78" height="58" rx="4" fill="#e7d9bd" transform="rotate(-7 75 87)" opacity="0.55"/>
+    <rect x="520" y="486" width="92" height="64" rx="4" fill="#e7d9bd" transform="rotate(6 566 518)" opacity="0.5"/>
+    <rect x="548" y="70" width="60" height="44" rx="4" fill="#e7d9bd" transform="rotate(9 578 92)" opacity="0.45"/>
+  </g>
+
+  <!-- ===================== HEAD ===================== -->
+
+  <!-- back/under layer: a slightly larger offset paper behind head for depth -->
+  <g filter="url(#liftLg)">
+    <use href="#headPath" fill="#9c4a2f" transform="translate(7 9)" opacity="0.85" filter="url(#torn)"/>
+  </g>
+
+  <!-- base head tile (parchment), torn edge -->
+  <g filter="url(#torn)">
+    <use href="#headPath" fill="url(#gParch)"/>
+  </g>
+  <use href="#headPath" fill="none" filter="url(#paint)" opacity="0.9"/>
+  <use href="#headPath" fill="#000" opacity="0.0"/>
+
+  <!-- head built from a few large torn paper plates (face / crown / jaw / neck) -->
+  <g clip-path="url(#clipHead)">
+    <clipPath id="clipHead"><use href="#headPath"/></clipPath>
+
+    <!-- crown plate: kraft -->
+    <g filter="url(#tornFine)">
+      <path d="M196 150 C168 192 168 232 158 268 C188 256 240 246 300 248 C356 250 408 240 452 222 C440 176 420 142 392 118 C336 92 256 104 196 150 Z"
+            fill="url(#gKraft)" filter="url(#grain)"/>
+    </g>
+    <!-- forehead/face plate: ochre -->
+    <g filter="url(#tornFine)">
+      <path d="M158 268 C150 298 128 314 120 338 C113 360 132 372 150 376 C156 392 154 410 160 426 C214 414 268 408 320 396 C336 340 338 296 328 250 C268 246 210 254 158 268 Z"
+            fill="url(#gOchre)" filter="url(#grain)" opacity="0.97"/>
+    </g>
+    <!-- jaw plate: terracotta -->
+    <g filter="url(#tornFine)">
+      <path d="M160 426 C158 452 168 470 186 474 C196 502 220 520 252 528 C300 540 352 532 392 512 C356 480 320 452 300 412 C262 408 210 414 160 426 Z"
+            fill="url(#gTerra)" filter="url(#grain)" opacity="0.95"/>
+    </g>
+    <!-- cheek warm patch -->
+    <path d="M236 372 C268 360 300 360 322 376 C312 412 286 432 252 432 C228 426 224 396 236 372 Z"
+          fill="#cf8a3b" opacity="0.55" filter="url(#tornFine)"/>
+    <!-- temple shadow strip for form -->
+    <path d="M300 248 C356 250 408 240 452 222 C470 280 478 330 470 386 C432 372 392 360 352 356 C346 320 330 280 300 248 Z"
+          fill="#b5722a" opacity="0.5" filter="url(#tornFine)"/>
+  </g>
+
+  <!-- ink contour line of the profile (face front edge): hand-drawn brow, nose, lips, chin -->
+  <path d="M120 338 C130 332 138 326 150 326
+           C150 326 154 312 168 312
+           L150 350
+           C150 350 138 354 134 366
+           C146 364 156 360 164 360
+           L150 388
+           C150 388 142 392 144 402
+           L168 402
+           C168 402 156 420 138 426"
+        fill="none" stroke="#1f1a14" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round" opacity="0.92" filter="url(#tornFine)"/>
+
+  <!-- eye: small denim tile + ink -->
+  <g filter="url(#lift)" transform="rotate(-4 214 322)">
+    <rect x="196" y="308" width="44" height="26" rx="6" fill="url(#gDenim)" filter="url(#tornFine)"/>
+  </g>
+  <circle cx="216" cy="321" r="6.2" fill="#1f1a14"/>
+  <circle cx="218.4" cy="318.8" r="1.8" fill="#f3ead8"/>
+
+  <!-- ===================== INNER KNOWLEDGE GRAPH ===================== -->
+  <!-- clipped to the head so the mind is literally made of concept nodes -->
+  <g clip-path="url(#clipHead2)">
+    <clipPath id="clipHead2"><use href="#headPath"/></clipPath>
+
+    <!-- soft inner glow / paper wash behind the graph -->
+    <ellipse cx="332" cy="288" rx="150" ry="170" fill="#e7d9bd" opacity="0.42"/>
+
+    <!-- STITCHED THREAD EDGES (drawn first, under nodes) -->
+    <g fill="none" stroke="#476ee3" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 8" opacity="0.92">
+      <path d="M300 196 C320 222 326 244 350 256"/>
+      <path d="M350 256 C386 246 410 244 426 224"/>
+      <path d="M350 256 C338 296 340 320 322 348"/>
+      <path d="M322 348 C360 356 392 360 414 344"/>
+      <path d="M322 348 C300 376 286 396 262 404"/>
+      <path d="M350 256 C400 280 426 300 432 336"/>
+      <path d="M300 196 C262 214 248 246 256 286"/>
+      <path d="M256 286 C284 300 306 322 322 348"/>
+    </g>
+    <!-- a couple of ink thread edges for variety -->
+    <g fill="none" stroke="#1f1a14" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="1 7" opacity="0.6">
+      <path d="M256 286 C228 308 222 334 240 360"/>
+      <path d="M414 344 C434 366 436 392 418 412"/>
+    </g>
+
+    <!-- CONCEPT NODE TILES: irregular torn paper squares, each rotated/offset -->
+    <!-- node helper look: shadow + paper + grain + tiny mono dot -->
+
+    <!-- mid-amber mastery node (top) -->
+    <g filter="url(#lift)" transform="rotate(-8 300 196)">
+      <rect x="278" y="174" width="46" height="44" rx="5" fill="url(#gAm)" filter="url(#tornFine)"/>
+      <rect x="278" y="174" width="46" height="44" rx="5" fill="none" filter="url(#grain)"/>
+      <circle cx="301" cy="196" r="5.5" fill="#f3ead8" opacity="0.9"/>
+    </g>
+
+    <!-- central node: denim concept -->
+    <g filter="url(#lift)" transform="rotate(6 350 256)">
+      <rect x="324" y="230" width="52" height="50" rx="6" fill="url(#gDenim)" filter="url(#tornFine)"/>
+      <rect x="324" y="230" width="52" height="50" rx="6" fill="none" filter="url(#grain)"/>
+      <circle cx="350" cy="255" r="6" fill="#f3ead8" opacity="0.85"/>
+    </g>
+
+    <!-- high-emerald mastery node (lower center, the resolved concept) -->
+    <g filter="url(#liftLg)" transform="rotate(-5 322 348)">
+      <rect x="294" y="320" width="58" height="56" rx="7" fill="url(#gEm)" filter="url(#tornFine)"/>
+      <rect x="294" y="320" width="58" height="56" rx="7" fill="none" filter="url(#grain)"/>
+      <circle cx="323" cy="348" r="7" fill="#f3ead8" opacity="0.92"/>
+      <path d="M313 348 l7 7 12 -15" fill="none" stroke="#0c6543" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+
+    <!-- sage concept node (right) -->
+    <g filter="url(#lift)" transform="rotate(9 426 224)">
+      <rect x="404" y="204" width="44" height="40" rx="5" fill="url(#gSage)" filter="url(#tornFine)"/>
+      <rect x="404" y="204" width="44" height="40" rx="5" fill="none" filter="url(#grain)"/>
+      <circle cx="426" cy="224" r="5" fill="#f3ead8" opacity="0.85"/>
+    </g>
+
+    <!-- kraft concept node (right lower) -->
+    <g filter="url(#lift)" transform="rotate(-7 432 336)">
+      <rect x="410" y="314" width="46" height="44" rx="5" fill="url(#gKraft)" filter="url(#tornFine)"/>
+      <rect x="410" y="314" width="46" height="44" rx="5" fill="none" filter="url(#grain)"/>
+      <circle cx="433" cy="336" r="5" fill="#f3ead8" opacity="0.8"/>
+    </g>
+
+    <!-- low-rose mastery node (left, the struggling concept) -->
+    <g filter="url(#lift)" transform="rotate(7 256 286)">
+      <rect x="234" y="266" width="44" height="42" rx="5" fill="url(#gRose)" filter="url(#tornFine)"/>
+      <rect x="234" y="266" width="44" height="42" rx="5" fill="none" filter="url(#grain)"/>
+      <circle cx="256" cy="287" r="5" fill="#f3ead8" opacity="0.9"/>
+    </g>
+
+    <!-- terracotta small node (bottom left of graph) -->
+    <g filter="url(#lift)" transform="rotate(-10 262 404)">
+      <rect x="244" y="386" width="38" height="36" rx="5" fill="url(#gTerra)" filter="url(#tornFine)"/>
+      <rect x="244" y="386" width="38" height="36" rx="5" fill="none" filter="url(#grain)"/>
+      <circle cx="263" cy="404" r="4.4" fill="#f3ead8" opacity="0.8"/>
+    </g>
+
+    <!-- parchment small node (far right lower) -->
+    <g filter="url(#lift)" transform="rotate(5 418 412)">
+      <rect x="402" y="396" width="34" height="32" rx="4" fill="url(#gParch)" filter="url(#tornFine)"/>
+      <rect x="402" y="396" width="34" height="32" rx="4" fill="none" filter="url(#grain)"/>
+      <circle cx="419" cy="412" r="4" fill="#1f1a14" opacity="0.55"/>
+    </g>
+
+    <!-- tiny stitch cross-marks at a few joins for handmade thread feel -->
+    <g stroke="#1f1a14" stroke-width="1.6" opacity="0.5" stroke-linecap="round">
+      <path d="M348 254 l5 4 M353 254 l-5 4"/>
+      <path d="M320 346 l5 4 M325 346 l-5 4"/>
+      <path d="M254 284 l5 4 M259 284 l-5 4"/>
+    </g>
+  </g>
+
+  <!-- thin ink keyline around the whole head to seat it as one cut shape -->
+  <use href="#headPath" fill="none" stroke="#1f1a14" stroke-width="3" opacity="0.55" filter="url(#tornFine)"/>
+
+  <!-- tiny mono caption, lower-left, restrained -->
+  <text x="120" y="556" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" letter-spacing="2.5" fill="#1f1a14" opacity="0.6">cognitive core</text>
+  <!-- small thread underline tying caption to the craft -->
+  <path d="M120 564 H 252" stroke="#476ee3" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round" opacity="0.7"/>
+</svg>
