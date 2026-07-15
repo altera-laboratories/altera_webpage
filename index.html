@@ -609,12 +609,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 /* ---- 5. ONE ICON-CHIP FILL (blue signal) ---------------------
    .vp-icon (product) used neutral paper while core badges used
    blue. Unify every icon-chip to the blue signal fill. */
-.v2-product .vp-icon,
-.v2-core__badge,
-.v2-core__insighthead .ico {
-  background: rgba(71, 110, 227, .10) !important;
-  border: 1px solid rgba(71, 110, 227, .24) !important;
-}
+
 .v2-product .vp-icon i,
 .v2-product .vp-icon svg {
   color: var(--signal-700) !important;
@@ -778,6 +773,10 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   /* Bento card headers: eyebrows never wrap, logo row stays tidy */
   .v2-product .vp-card-eyebrow{ white-space:nowrap !important; }
   .v2-product .vp-canvas-img{ height:26px !important; }
+  /* Solution list + Socratic Insight icons: terracotta, not the cold blue */
+  .v2-solution .v2-sol-list .marker svg, .v2-solution .v2-sol-list .marker i{ color:var(--terracotta-600) !important; }
+  .v2-core__insighthead .ico{ background:rgba(156,74,47,.08) !important; border:1px solid rgba(156,74,47,.22) !important; }
+  .v2-core__insighthead .ico i, .v2-core__insighthead .ico svg{ color:var(--terracotta-600) !important; }
   /* Product bento icon chips: ink on paper, not blue (blue = data only) */
   .v2-product .vp-icon{ background:rgba(156,74,47,.08) !important; border:1px solid rgba(156,74,47,.22) !important; }
   .v2-product .vp-icon i, .v2-product .vp-icon svg{ color:var(--terracotta-600) !important; width:17px; height:17px; }
@@ -1249,9 +1248,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       display: grid;
       place-items: center;
       border-radius: var(--radius-md);
-      background: rgba(71,110,227,.10);
-      border: 1px solid rgba(71,110,227,.26);
-      color: var(--signal-700);
+      background: rgba(156,74,47,.08);
+      border: 1px solid rgba(156,74,47,.22);
+      color: var(--terracotta-600);
       transform: rotate(-3deg);
     }
     .v2-solution .v2-sol-list .marker svg { width: 15px; height: 15px; }
