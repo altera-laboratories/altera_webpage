@@ -712,6 +712,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   }
   /* AI-tutor chat avatar: size the injected lucide svg (the old `i` selector died when lucide replaced the tag) */
   .v2-product .vp-ai-av svg{ width:.75rem !important; height:.75rem !important; }
+  /* No reset ships with this page, so browser defaults leak: figure gets margin 1em 40px
+     (starved the problem-section stat cards to 160px) and p gets a font-size top margin
+     (the void above each stat number). Neutralize where fragments assumed a reset. */
+  .v2-problem .vp-fig{ margin:0 !important; }
+  .v2-problem .vp-fig .num{ margin-top:0 !important; }
+  .v2-problem .vp-stats{ align-items:start !important; }
 </style>
 </head>
 <body>
