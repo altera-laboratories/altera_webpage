@@ -402,8 +402,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .collage{ overflow:hidden !important; border-radius:8px !important; }
   .collage-img{ border:0 !important; border-radius:0 !important; box-shadow:none !important; -webkit-mask-image:none !important; mask-image:none !important; }
   /* partner logos: optical balance (each tuned to its proportions) */
-  .partners .partner:nth-child(1) .p-logo{ height:58px !important; }  /* JHU */
-  .partners .partner:nth-child(2) .p-logo{ height:62px !important; }  /* Pava Center */
+  .partners .partner:nth-child(1) .p-logo{ height:40px !important; }  /* JHU (trimmed, no baked-in padding) */
+  .partners .partner:nth-child(2) .p-logo{ height:56px !important; }  /* Pava Center */
   .partners .partner:nth-child(3) .p-logo{ height:48px !important; }  /* NVIDIA */
   .partners .partner:nth-child(4) .p-logo{ height:40px !important; }  /* Google Cloud */
   .partners .partner:nth-child(5) .p-logo{ height:40px !important; }  /* Canvas */
@@ -723,7 +723,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .nav-inner{ border-bottom:0 !important; }
   /* Center the built-with strip */
   .strip-inner{ justify-content:center !important; }
-  .partners{ justify-content:center !important; flex:0 1 auto !important; gap:24px 56px !important; }
+  .partners{ justify-content:center !important; flex:0 1 auto !important; gap:24px 44px !important; }
   /* Tone down the near-white: warm the lifted-paper token page-wide,
      sink the icon chips into their cards, center the timeline logo frames */
   :root{ --paper-50:#f7f0de; }
@@ -827,7 +827,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <span class="strip-label">Built with / backed by</span>
             <div class="partners">
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.svg" alt="JHU Pava Center" />
+                <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.trimmed.svg" alt="Johns Hopkins University" />
               </a>
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
                 <img class="p-logo" src="public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Marie LaPere Center for Entrepreneurship" />
