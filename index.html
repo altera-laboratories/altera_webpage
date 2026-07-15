@@ -2827,8 +2827,14 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       z-index: 3;
     }
     @media (min-width: 880px) {
-      /* center the dot on the card's top edge so it pins its card, not the floating pill */
-      .v2-traction .tr-node { left: 50%; top: 36px; }
+      /* date pill, dot, and card top share one line: the card's top edge */
+      .v2-traction .tr-node { left: 50%; top: 0; transform: translate(-50%, -50%); }
+      .v2-traction .tr-date {
+        position: absolute; top: 0; transform: translateY(-50%);
+        margin: 0 !important; z-index: 4; white-space: nowrap;
+      }
+      .v2-traction .tr-row.left .tr-date { right: calc(50% + 30px); left: auto; }
+      .v2-traction .tr-row.right .tr-date { left: calc(50% + 30px); right: auto; }
     }
 
     /* card column */
