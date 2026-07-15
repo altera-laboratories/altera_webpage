@@ -681,6 +681,38 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
      (the eyebrow-consistency override had made it see-through) */
   .v2-solution .v2-sol-quote .pin{ background:var(--paper-50) !important; padding:3px 11px !important; }
 </style>
+<style id="v2-nav-final">
+  /* Top bar: one 64px row, nothing wraps, links center, CTAs stay whole */
+  @media (min-width: 761px){
+    header.nav .nav-inner{
+      display:flex !important; flex-wrap:nowrap !important; align-items:center !important;
+      height:64px !important; min-height:64px !important; padding-top:0 !important; padding-bottom:0 !important;
+      gap:20px !important;
+    }
+    header.nav .wrap{ padding-left:32px !important; padding-right:32px !important; }
+    header.nav .brand{ flex:0 0 auto !important; }
+    header.nav .brand, header.nav .brand img, .brand img{ height:auto !important; }
+    header.nav .brand img{ height:56px !important; width:auto !important; display:block !important; }
+    .brand-name{ white-space:nowrap !important; font-size:21px !important; }
+    header.nav nav.links{
+      flex:1 1 auto !important; min-width:0 !important;
+      display:flex !important; justify-content:center !important; gap:4px !important;
+      overflow-x:auto !important; scrollbar-width:none !important;
+    }
+    header.nav nav.links::-webkit-scrollbar{ display:none !important; }
+    header.nav nav.links a.link{ white-space:nowrap !important; padding:8px 13px !important; }
+    header.nav .nav-cta{ flex:0 0 auto !important; gap:10px !important; }
+    header.nav .nav-cta .btn{ white-space:nowrap !important; padding:10px 16px !important; }
+  }
+  @media (max-width: 760px){
+    header.nav .nav-inner{ padding-top:10px !important; padding-bottom:10px !important; }
+    header.nav .brand img{ height:38px !important; }
+    .brand-name{ white-space:nowrap !important; }
+    header.nav .nav-cta .btn{ white-space:nowrap !important; }
+  }
+  /* AI-tutor chat avatar: size the injected lucide svg (the old `i` selector died when lucide replaced the tag) */
+  .v2-product .vp-ai-av svg{ width:.75rem !important; height:.75rem !important; }
+</style>
 </head>
 <body>
 
@@ -689,10 +721,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     <div class="wrap">
       <div class="nav-inner">
         <a class="brand" href="#" aria-label="Altera Labs home">
-          <span class="brand-mark" aria-hidden="true">
-            <span class="s1"></span><span class="s2"></span><span class="s3"></span><span class="dot"></span>
-          </span>
-          <span class="brand-name"><b>Altera</b> <span class="tail">Labs</span></span>
+          <img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs">
         </a>
 
         <nav class="links" aria-label="Primary">
@@ -703,8 +732,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         </nav>
 
         <div class="nav-cta">
-          <a class="btn btn-ghost" href="#problem">Sign in</a>
-          <a class="btn btn-clay" href="#beta">
+          <a class="btn btn-ghost" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">Sign in</a>
+          <a class="btn btn-clay" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">
             Try the Beta
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
           </a>
@@ -728,7 +757,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <p class="sub">Altera is the AI tutor that builds a <b>live mastery model</b> of every student in your Canvas course, so you know exactly what to re-teach before the next class.</p>
 
             <div class="hero-cta">
-              <a class="btn btn-primary" href="#beta">
+              <a class="btn btn-primary" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">
                 Try the Beta
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
               </a>
@@ -1451,7 +1480,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           </li>
           <li>
             <span class="marker" aria-hidden="true"><i data-lucide="plug"></i></span>
-            Integrated Tier Canvas Partner
+            Canvas LTI 1.3 Integration Partner
           </li>
         </ul>
 
@@ -1897,7 +1926,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <div>
           <div class="vp-head">
             <span class="vp-canvas-logo" aria-label="Canvas"><span class="swatch" aria-hidden="true">CV</span>Canvas</span>
-            <span class="vp-card-eyebrow">Certified Partner</span>
+            <span class="vp-card-eyebrow">Integration Partner</span>
           </div>
           <h4 class="h4-serif">Works Inside Canvas</h4>
           <p class="vp-body">
@@ -2860,8 +2889,24 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     <div class="tr-timeline">
       <div class="tr-spine" aria-hidden="true"></div>
 
-      <!-- Jan 16, 2026: Google Cloud for Startups -->
+      <!-- Jun 29, 2026: TEDCO BII award -->
       <div class="tr-row left">
+        <span class="tr-node" aria-hidden="true"></span>
+        <div class="tr-side">
+          <span class="tr-date">Jun 29, 2026</span>
+          <div class="tr-card">
+            <a class="tr-title" href="https://www.tedcomd.com/" target="_blank" rel="noopener noreferrer">
+              <h3 class="h3">TEDCO BII Grant Award</h3>
+            </a>
+            <p class="tr-body">
+              Awarded a <strong>$49,838</strong> TEDCO Baltimore Innovation Initiative grant for "Altera Core: Adaptive Knowledge Tracking for Canvas-Native STEM Higher Education", funding a 9-month build at JHU.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Jan 16, 2026: Google Cloud for Startups -->
+      <div class="tr-row right">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">Jan 16, 2026</span>
@@ -2873,14 +2918,14 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Accepted into the <strong>Google Cloud for Startups</strong> program, securing cloud infrastructure credits and technical support to scale our platform.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/Google/gcloud-cropped-white.png" alt="Google Cloud">
+              <img class="logo" src="./public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud">
             </div>
           </div>
         </div>
       </div>
 
       <!-- Jan 2, 2026: NVIDIA Inception -->
-      <div class="tr-row right">
+      <div class="tr-row left">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">Jan 2, 2026</span>
@@ -2892,33 +2937,33 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Accepted into <strong>NVIDIA Inception</strong>, gaining access to GPU cloud credits, DGX Cloud, and NVIDIA's deep learning ecosystem to accelerate our AI engine.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/NVIDIA/nvidia-inception-logo-cropped-white.png" alt="NVIDIA Inception">
+              <img class="logo" src="./public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception">
             </div>
           </div>
         </div>
       </div>
 
       <!-- Dec 17, 2025: Canvas -->
-      <div class="tr-row left">
+      <div class="tr-row right">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">Dec 17, 2025</span>
           <div class="tr-card">
             <a class="tr-title" href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer">
-              <h3 class="h3">Integrated Tier Partnership</h3>
+              <h3 class="h3">Canvas Integration Partner</h3>
             </a>
             <p class="tr-body">
-              Secured <strong>Integrated Tier Partnership</strong> with Instructure. Verified LTI 1.3 standards implementation for seamless institutional LMS integration.
+              Signed a commercial <strong>LTI 1.3 license</strong> with Instructure at the Integrated partner tier, so Altera ships inside any Canvas course and is listed in the Canvas partner directory.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped-white.png" alt="Canvas">
+              <img class="logo" src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas">
             </div>
           </div>
         </div>
       </div>
 
       <!-- Dec 7, 2025: JHU Fuel -->
-      <div class="tr-row right">
+      <div class="tr-row left">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">Dec 7, 2025</span>
@@ -2950,7 +2995,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       </div>
 
       <!-- Nov 2025: Faculty Champion -->
-      <div class="tr-row left">
+      <div class="tr-row right">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">Nov 2025</span>
@@ -2980,7 +3025,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       </div>
 
       <!-- Late 2025: Strategic Pivot -->
-      <div class="tr-row right">
+      <div class="tr-row left">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">Late 2025</span>
@@ -2994,7 +3039,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       </div>
 
       <!-- Sep 2025: Pava Center Fuel Accelerator -->
-      <div class="tr-row left">
+      <div class="tr-row right">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">Sep 2025</span>
@@ -3023,7 +3068,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       </div>
 
       <!-- May 2025: Research Publication -->
-      <div class="tr-row right">
+      <div class="tr-row left">
         <span class="tr-node" aria-hidden="true"></span>
         <div class="tr-side">
           <span class="tr-date">May 2025</span>
@@ -3084,9 +3129,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     /* ---- founder grid ---- */
     .v2-team .v2-founders {
       display: grid; gap: 1.75rem;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
-    @media (max-width: 900px) { .v2-team .v2-founders { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 1100px) { .v2-team .v2-founders { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .v2-team .v2-founders { grid-template-columns: 1fr; } }
 
     .v2-team .v2-card {
@@ -3220,7 +3265,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <span class="eyebrow">The Team</span>
       <h2 class="h2">Built by Altera Labs</h2>
       <p class="v2-team-sub">
-        Our founding team has raised over <strong>$190,000</strong> for previous ventures, and has progressed through the JHU Pava Center's Spark and Fuel accelerators and completed NSF I-Corps.
+        Altera is funded by a <strong>$49,838</strong> TEDCO Baltimore Innovation Initiative award. Our founding team has raised over <strong>$190,000</strong> for previous ventures, progressed through the JHU Pava Center's Spark and Fuel accelerators, and completed NSF I-Corps.
       </p>
     </div>
 
@@ -3273,22 +3318,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         </div>
       </article>
 
-      <!-- Chris -->
-      <article class="v2-card v2-reveal">
-        <div class="v2-card-top">
-          <h4 class="v2-card-name h3">Qiyue (Chris) Yao</h4>
-          <span class="v2-role">Carey Strategic Venture Fellow</span>
-        </div>
-        <div class="v2-photo">
-          <img src="./public/images/headshots/Chris.jpeg" alt="Qiyue (Chris) Yao" style="object-position:center 20%;" loading="lazy">
-        </div>
-        <div class="v2-card-body">
-          <p class="v2-school">Johns Hopkins University, Carey Business School</p>
-          <p class="v2-degree">MS, Business Analytics and Artificial Intelligence</p>
-          <p class="v2-bio">Strategic advisor specializing in business analytics, AI applications, and commercialization strategy.</p>
-        </div>
-      </article>
-
       <!-- Mercedes -->
       <article class="v2-card v2-reveal">
         <div class="v2-card-top">
@@ -3324,19 +3353,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <p class="v2-advisor-title">Mathematics Faculty, JHU</p>
             <p class="v2-advisor-tag">Faculty Champion & Pilot Data</p>
             <p class="v2-advisor-blurb">Primary Faculty Champion providing direct access to our pilot cohort and the ground-truth data to validate our BKT engine.</p>
-          </div>
-        </article>
-
-        <!-- Dr. Riehl -->
-        <article class="v2-advisor v2-reveal">
-          <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Dr_Riehl.png" alt="Dr. Emily Riehl" style="object-position:70% 5%;" loading="lazy">
-          </div>
-          <div>
-            <h4 class="v2-advisor-name h3">Dr. Emily Riehl</h4>
-            <p class="v2-advisor-title">Associate Professor of Mathematics, JHU</p>
-            <p class="v2-advisor-tag">Formal Verification & AI-Generated Math</p>
-            <p class="v2-advisor-blurb">Leading expert on mathlib and formal proof systems. Provides unmatched insight into competitor weaknesses in AI mathematics.</p>
           </div>
         </article>
 
