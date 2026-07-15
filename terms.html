@@ -1,241 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service | Altera Labs</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        zinc: {
-                            950: '#09090b',
-                            900: '#18181b',
-                            800: '#27272a',
-                            700: '#3f3f46',
-                            600: '#52525b',
-                            500: '#71717a',
-                            400: '#a1a1aa',
-                            100: '#f4f4f5'
-                        },
-                        royal: { blue: '#476ee3' },
-                        cyan: { 400: '#22d3ee' }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'Work Sans', 'system-ui', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    fontSize: {
-                        'tag': '12px',
-                        'label': '13px'
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Work+Sans:wght@400;500;600&display=swap');
-
-        :root {
-            /* Core Colors */
-            --color-royal-blue: #476ee3;
-            --color-zinc-950: #09090b;
-            --color-zinc-900: #18181b;
-            --color-zinc-800: #27272a;
-            --color-zinc-100: #f4f4f5;
-            --color-zinc-400: #a1a1aa;
-            --color-zinc-500: #71717a;
-
-            /* Mastery States */
-            --color-mastery-high: #059669;
-            --color-mastery-high-stroke: #34d399;
-            --color-mastery-med: #d97706;
-            --color-mastery-med-stroke: #fbbf24;
-            --color-mastery-low: #be123c;
-            --color-mastery-low-stroke: #f43f5e;
-
-            /* Standardized Font Sizes */
-            --font-size-tag: 12px;
-            --font-size-label: 13px;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service | Altera Labs</title>
+<meta name="description" content="The terms that govern use of Altera Labs, the AI tutor that works inside your Canvas course.">
+<link rel="icon" href="./public/images/logos/Altera/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper-50:#faf5ea; --paper-100:#f3ead8; --paper-200:#ebdec5; --paper-300:#ddccac; --paper-400:#c9b793;
+    --ink-900:#1f1a14; --ink-700:#3d3528; --ink-600:#5a4f3e; --ink-500:#7a6c56; --ink-400:#9c8c72;
+    --terracotta-600:#9c4a2f; --terracotta-500:#c0603a; --ochre-600:#b5722a; --signal-700:#2f4fb0;
+    --font-display:'Fraunces',serif; --font-sans:'Inter',sans-serif; --font-mono:'JetBrains Mono',monospace;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--paper-100); color:var(--ink-600); font-family:var(--font-sans); line-height:1.7; font-size:16.5px; }
+  a{ color:var(--terracotta-600); text-decoration:none; }
+  a:hover{ color:var(--terracotta-500); text-decoration:underline; text-underline-offset:2px; }
+  .top{ border-bottom:1px solid var(--paper-300); background:var(--paper-100); }
+  .top-inner{ max-width:880px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; justify-content:space-between; }
+  .top-inner img{ height:48px; width:auto; display:block; }
+  .top-inner .back{ font-family:var(--font-mono); font-size:12.5px; letter-spacing:.08em; text-transform:uppercase; }
+  main{ max-width:880px; margin:0 auto; padding:56px 28px 90px; }
+  .eyebrow{ font-family:var(--font-mono); font-size:12px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--terracotta-600); }
+  h1{ font-family:var(--font-display); font-weight:600; font-size:clamp(2.1rem,5vw,3rem); color:var(--ink-900); letter-spacing:-.01em; margin:.35em 0 .3em; line-height:1.12; }
+  .meta{ font-family:var(--font-mono); font-size:12.5px; color:var(--ink-400); margin-bottom:40px; }
+  h2{ font-family:var(--font-display); font-weight:600; font-size:1.5rem; color:var(--ink-900); margin:2.2em 0 .55em; line-height:1.25; }
+  h2 .no{ font-family:var(--font-mono); font-size:.72em; font-weight:500; color:var(--ochre-600); margin-right:.7em; letter-spacing:.06em; }
+  p{ margin:0 0 1em; }
+  ul{ margin:0 0 1.2em; padding-left:1.25em; }
+  li{ margin:.35em 0; }
+  strong{ color:var(--ink-900); font-weight:600; }
+  footer{ border-top:1px solid var(--paper-300); }
+  .foot-inner{ max-width:880px; margin:0 auto; padding:22px 28px; display:flex; gap:22px; flex-wrap:wrap; font-family:var(--font-mono); font-size:12.5px; color:var(--ink-400); }
+</style>
 </head>
-
-<body class="bg-zinc-950 text-zinc-100 selection:bg-blue-500/30">
-    <div class="max-w-3xl mx-auto py-24 px-8">
-        <header class="mb-16 border-b border-zinc-900 pb-8">
-            <h1 class="text-4xl font-bold tracking-tight mb-4">Terms of Service</h1>
-            <p class="text-zinc-500 font-medium uppercase tracking-widest text-xs">Effective date: November 24, 2025
-            </p>
-        </header>
-
-        <div class="prose prose-invert max-w-none space-y-12">
-            <section>
-                <p class="text-lg text-zinc-400 leading-relaxed">
-                    Welcome to Altera Labs. These Terms of Service ("Terms") govern your access to and use of the Altera
-                    Labs services, including the web application, LTI Canvas integration, instructor dashboards, and
-                    associated APIs (collectively, the "Service"). By accessing or using the Service, you agree to be
-                    bound by these Terms. If you do not agree, do not use the Service.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">01</span>
-                    Who may use the Service
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    The Service is intended for use by educational institutions, instructors, students, and
-                    administrators. You represent and warrant that you have the authority to accept these Terms on
-                    behalf of yourself or the organization you represent.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">02</span>
-                    Account registration & access
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    Certain features require an account or integration via your institution's LMS (for example, Canvas
-                    via LTI 1.3). You are responsible for maintaining the security of login credentials. For LMS
-                    integrations we rely on standards such as LTI 1.3 (OIDC/OAuth2) and Assignment & Grade Services
-                    (AGS); your institution's IT policies may apply.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">03</span>
-                    License & acceptable use
-                </h2>
-                <div class="space-y-4 text-zinc-400 leading-relaxed text-sm">
-                    <p>Subject to your compliance with these Terms, Altera Labs grants you a limited, non-exclusive,
-                        non-transferable license to access and use the Service for educational purposes. You agree not
-                        to:</p>
-                    <ul class="list-disc pl-5 space-y-2">
-                        <li>circumvent security or attempt unauthorized access;</li>
-                        <li>reverse-engineer proprietary components;</li>
-                        <li>use the Service to distribute malware or infringing content;</li>
-                        <li>misrepresent academic work or facilitate academic dishonesty.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">04</span>
-                    Content and user submissions
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    The Service permits submission of course materials, student responses, assignments, and
-                    user-generated content ("Submissions"). Students retain ownership of their original work. By
-                    submitting content, you grant Altera Labs a non-exclusive license to process, analyze, store, and
-                    display that content as necessary to provide the Service (for example: to generate quizzes, update
-                    the Bayesian Knowledge Tracing model, or display analytics on instructor dashboards).
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">05</span>
-                    Use of verification & third-party services
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    Altera Labs uses internal verification modules (the "Mathematical Judge") and may use third-party
-                    providers for AI services and hosting (for example, Google Vertex AI for vector embeddings or other
-                    retrieval services). We will only use such services as described in our Privacy Policy and where
-                    permitted by institutional agreements. You consent to such third-party processing as described in
-                    the Privacy Policy.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">06</span>
-                    Fees & billing
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    Some features of the Service may be offered on a paid basis. Any paid features will be subject to
-                    separate pricing terms and an order or subscription agreement.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">07</span>
-                    Disclaimers & limitation of liability
-                </h2>
-                <div class="space-y-4 text-zinc-400 leading-relaxed text-sm">
-                    <p><strong>Disclaimer:</strong> THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE." ALTERA LABS DOES
-                        NOT GUARANTEE THAT THE SERVICE WILL BE ERROR-FREE OR UNINTERRUPTED. THE SERVICE OFFERS
-                        PEDAGOGICAL SUPPORT AND ANALYTICS BUT DOES NOT REPLACE INSTRUCTOR JUDGMENT.</p>
-                    <p><strong>Limitation of liability:</strong> TO THE MAXIMUM EXTENT PERMITTED BY LAW, ALTERA LABS'
-                        TOTAL LIABILITY ARISING FROM OR RELATING TO THESE TERMS OR THE SERVICE SHALL NOT EXCEED DIRECT
-                        DAMAGES OF $100 (OR THE AMOUNT PAID BY YOU IN THE PRIOR 12 MONTHS, IF GREATER) — EXCEPT WHERE
-                        SUCH LIMITS ARE PROHIBITED BY APPLICABLE LAW.</p>
-                </div>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">08</span>
-                    Termination
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    Either party may terminate access for breach of these Terms. On termination we may disable your
-                    access and delete your data in accordance with our retention policy; instructors and institutions
-                    should export any required records prior to termination as described in our Privacy Policy.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">09</span>
-                    Governing law
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    These Terms are governed by the laws of the State of Maryland, USA, without regard to
-                    conflict-of-law principles.
-                </p>
-            </section>
-
-            <section>
-                <h2 class="text-xl font-bold mb-6 text-zinc-100 flex items-center gap-3">
-                    <span class="text-royal-blue font-mono text-sm leading-none">10</span>
-                    Changes to these Terms
-                </h2>
-                <p class="text-zinc-400 leading-relaxed text-sm">
-                    We may update these Terms from time to time. We will post the updated Terms and indicate the
-                    effective date. Continued use after changes constitutes acceptance.
-                </p>
-            </section>
-
-            <section class="border-t border-zinc-900 pt-12">
-                <h2 class="text-xl font-bold mb-6 text-zinc-100">Contact</h2>
-                <p class="text-zinc-400 text-sm mb-8">
-                    For questions about these Terms or to report abuse, contact:
-                    <a href="mailto:akira@altera-labs.com"
-                        class="text-royal-blue hover:underline">akira@altera-labs.com</a>
-                </p>
-                <a href="index.html"
-                    class="inline-flex items-center gap-2 text-zinc-100 font-bold text-xs uppercase tracking-widest hover:text-royal-blue transition-colors">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Return Home
-                </a>
-            </section>
-        </div>
+<body>
+  <header class="top">
+    <div class="top-inner">
+      <a href="/" aria-label="Altera Labs home"><img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs"></a>
+      <a class="back" href="/">Back to site</a>
     </div>
-</body>
+  </header>
 
+  <main>
+    <span class="eyebrow">Legal</span>
+    <h1>Terms of service.</h1>
+    <p class="meta">Effective July 14, 2026 · Supersedes the November 24, 2025 terms</p>
+
+    <p>These terms govern your use of Altera Labs' websites and applications, including the AI tutor at app.altera-labs.com and our Canvas integration (together, the "Service"). By using the Service you agree to them. If you use Altera through your institution, the agreement between Altera Labs and your institution also applies, and where the two conflict for education records, that agreement wins.</p>
+
+    <h2><span class="no">01</span>The service.</h2>
+    <p>Altera is an AI tutor that builds a live mastery model of each student in a Canvas course so instructors know what to re-teach. The Service is currently offered in a <strong>beta</strong> stage: features may change, and availability is not guaranteed.</p>
+
+    <h2><span class="no">02</span>Accounts and eligibility.</h2>
+    <p>You need an account to use the Service, usually created through your institution's Canvas launch. Keep your credentials to yourself and tell us promptly about any unauthorized use. The Service is built for higher education and is not directed to children under 13.</p>
+
+    <h2><span class="no">03</span>Your content and your records.</h2>
+    <p>You and your institution own your content: conversations, uploaded materials, and learning records. You grant Altera Labs a limited license to process that content solely to operate, secure, and improve the Service for your course. Our handling of education records is governed by FERPA and our institutional data processing agreements, as described in the <a href="privacy.html">Privacy Policy</a>. We do not sell your content and we do not permit it to be used to train foundation models.</p>
+
+    <h2><span class="no">04</span>Acceptable use.</h2>
+    <ul>
+      <li>Follow your institution's academic integrity policies. Altera is built to teach, not to complete assessed work for you.</li>
+      <li>Do not probe, disable, or circumvent security or rate limits, or access another person's records.</li>
+      <li>Do not use the Service to harass, or to submit content that is unlawful or infringes others' rights.</li>
+      <li>Do not scrape the Service or resell access without a written agreement with us.</li>
+    </ul>
+
+    <h2><span class="no">05</span>AI-generated output.</h2>
+    <p>The tutor's responses are generated by AI. They can be wrong, incomplete, or misleading, and mastery estimates are statistical estimates, not certifications of knowledge. Verify important information independently; instructors remain responsible for grading and pedagogical decisions.</p>
+
+    <h2><span class="no">06</span>Intellectual property.</h2>
+    <p>The Service, including its software, design, and branding, belongs to Altera Labs and its licensors. These terms grant you no rights in it beyond the access needed to use the Service.</p>
+
+    <h2><span class="no">07</span>Termination.</h2>
+    <p>You can stop using the Service and delete your data at any time (see the <a href="privacy.html">Privacy Policy</a> for how deletion works). We may suspend or end access for breach of these terms, or when your institution's agreement ends, in which case education records are handled per that agreement.</p>
+
+    <h2><span class="no">08</span>Disclaimers and liability.</h2>
+    <p>The Service is provided "as is" and "as available", without warranties of any kind, express or implied, including merchantability, fitness for a particular purpose, and non-infringement. To the maximum extent permitted by law, Altera Labs is not liable for indirect, incidental, special, consequential, or punitive damages, and our total liability for any claim is limited to the greater of $100 or the amount you paid us in the twelve months before the claim. Nothing here limits liability that cannot be limited by law, or your institution's rights under its agreement with us.</p>
+
+    <h2><span class="no">09</span>Governing law.</h2>
+    <p>These terms are governed by the laws of the State of Maryland, without regard to conflict-of-law rules. Disputes will be resolved in the state or federal courts located in Maryland.</p>
+
+    <h2><span class="no">10</span>Changes.</h2>
+    <p>We may update these terms; the effective date above will change when we do. Continued use after a change means you accept the updated terms. For material changes affecting an active pilot we will notify the institution.</p>
+
+    <h2><span class="no">11</span>Contact.</h2>
+    <p>Questions about these terms: <a href="mailto:akira@altera-labs.com">akira@altera-labs.com</a>.</p>
+  </main>
+
+  <footer>
+    <div class="foot-inner">
+      <span>Altera Labs</span>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="/">alteralabs.com</a>
+    </div>
+  </footer>
+</body>
 </html>
