@@ -748,6 +748,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
      sink the icon chips into their cards, center the timeline logo frames */
   :root{ --paper-50:#f7f0de; }
   .v2-traction .tr-logo-frame{ justify-content:center !important; }
+  /* Canvas card header: logo stacked above the eyebrow, aligned with the other chips */
+  .v2-product .vp-head:has(.vp-canvas-img){ flex-direction:column !important; align-items:flex-start !important; gap:9px !important; }
   /* Bento card headers: eyebrows never wrap, logo row stays tidy */
   .v2-product .vp-card-eyebrow{ white-space:nowrap !important; }
   .v2-product .vp-canvas-img{ height:26px !important; }
@@ -3500,12 +3502,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
    .v2-footer{position:relative;z-index:1;padding:54px 40px;background:var(--paper-200);border-top:1px solid var(--border-hairline,rgba(31,26,20,.12));}
    .v2-footer .wrap{max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;}
    .v2-footer .brand{font-family:var(--font-display);font-weight:600;font-size:1.1rem;color:var(--ink-900);}
-   .v2-footer .copy{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-400);letter-spacing:.04em;margin-left:14px;}
+   .v2-footer .brandcol{display:flex;flex-direction:column;gap:5px;align-items:flex-start;}
+   .v2-footer .copy{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-400);letter-spacing:.04em;}
    .v2-footer nav a{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-500);text-decoration:none;margin-left:26px;}
    .v2-footer nav a:hover{color:var(--terracotta-600);}
   </style>
   <div class="wrap">
-    <div><span class="brand">Altera Labs</span><span class="copy">© 2026 Altera Labs.</span></div>
+    <div class="brandcol"><span class="brand">Altera Labs</span><span class="copy">© 2026 Altera Labs</span></div>
     <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
   </div>
 </footer>
