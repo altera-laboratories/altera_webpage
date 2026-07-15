@@ -649,8 +649,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 /* ---- 5. Traction timeline: snap cadence to the 8px scale
    (76/60/14 -> 72/56/16) ---- */
 .v2-traction .tr-head { margin-bottom: 72px !important; }
-.v2-traction .tr-row { margin-bottom: 56px !important; }
+.v2-traction .tr-row { margin-bottom: 40px !important; }
 .v2-traction .tr-row:last-child { margin-bottom: 0 !important; }
+/* interleave the alternating cards so each row nests beside its neighbor */
+@media (min-width: 901px){
+  .v2-traction .tr-row + .tr-row { margin-top: -130px !important; }
+}
 .v2-traction .tr-date { margin-bottom: 16px !important; }
 </style>
 <style id="v2-mobile-safety">
