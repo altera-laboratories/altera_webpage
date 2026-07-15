@@ -3525,6 +3525,8 @@ document.addEventListener('DOMContentLoaded', function(){
     var rows = Array.prototype.slice.call(document.querySelectorAll('#traction .tr-row'));
     if (!rows.length) return;
     rows.forEach(function(r){ r.style.marginTop = ''; });
+    var host0 = document.querySelector('#traction .tr-timeline');
+    if (host0) host0.style.paddingBottom = '';
     if (window.innerWidth < 901) return;
     var heights = rows.map(function(r){ return r.offsetHeight; });
     var sides = rows.map(function(r){ return r.classList.contains('left') ? 'L' : 'R'; });
@@ -3540,6 +3542,13 @@ document.addEventListener('DOMContentLoaded', function(){
       var naturalTop = tops[j-1] + heights[j-1] + BASE;
       rows[j].style.marginTop = (tops[j] - naturalTop) + 'px';
     }
+    // the flow ends after the DOM-last row, but a taller earlier card may
+    // reach lower; pad the container so nothing bleeds into the next section
+    var flowBottom = tops[rows.length-1] + heights[rows.length-1];
+    var maxBottom = 0;
+    for (var k = 0; k < rows.length; k++) maxBottom = Math.max(maxBottom, tops[k] + heights[k]);
+    var host = document.querySelector('#traction .tr-timeline');
+    if (host) host.style.paddingBottom = Math.max(0, maxBottom - flowBottom) + 'px';
   }
   var t1; window.addEventListener('resize', function(){ clearTimeout(t1); t1 = setTimeout(layoutTimeline, 120); });
   window.addEventListener('load', layoutTimeline);
