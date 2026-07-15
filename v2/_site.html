@@ -402,10 +402,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .collage{ overflow:hidden !important; border-radius:8px !important; }
   .collage-img{ border:0 !important; border-radius:0 !important; box-shadow:none !important; -webkit-mask-image:none !important; mask-image:none !important; }
   /* partner logos: optical balance (each tuned to its proportions) */
-  .partners .partner:nth-child(1) .p-logo{ height:34px !important; }  /* JHU */
-  .partners .partner:nth-child(2) .p-logo{ height:30px !important; }  /* NVIDIA */
-  .partners .partner:nth-child(3) .p-logo{ height:25px !important; }  /* Google Cloud */
-  .partners .partner:nth-child(4) .p-logo{ height:25px !important; }  /* Canvas */
+  .partners .partner:nth-child(1) .p-logo{ height:44px !important; }  /* JHU */
+  .partners .partner:nth-child(2) .p-logo{ height:52px !important; }  /* Pava Center */
+  .partners .partner:nth-child(3) .p-logo{ height:40px !important; }  /* NVIDIA */
+  .partners .partner:nth-child(4) .p-logo{ height:33px !important; }  /* Google Cloud */
+  .partners .partner:nth-child(5) .p-logo{ height:33px !important; }  /* Canvas */
+  .partners .partner:nth-child(6) .p-logo{ height:44px !important; }  /* TEDCO */
+  .partner .p-logo{ max-width:220px !important; }
 
   /* seamless cream: hero matches the flat sections (no tonal bar at the boundary) */
   .hero{ background-color:#f3ead8 !important; }
@@ -725,8 +728,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .v2-product .vp-head{ display:flex; align-items:center; gap:10px; }
   /* Cognitive Core header: pill sits tight above the H2 like every other section */
   .v2-core__rail .eyebrow{ display:inline-flex; margin:0 0 18px !important; }
-  /* TEDCO in the partner strip */
-  .partners .partner:nth-child(5) .p-logo{ height:34px !important; }
   /* Problem section: stats run full-width beneath the copy/mockup columns */
   .v2-problem .vp-stats-row{ grid-template-columns:repeat(4,1fr) !important; margin-top:44px !important; }
   @media (max-width:900px){ .v2-problem .vp-stats-row{ grid-template-columns:repeat(2,1fr) !important; } }
@@ -815,6 +816,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <div class="partners">
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
                 <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.svg" alt="JHU Pava Center" />
+              </a>
+              <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
+                <img class="p-logo" src="public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Marie LaPere Center for Entrepreneurship" />
               </a>
               <a class="partner" href="https://www.nvidia.com/en-us/startups/" target="_blank" rel="noopener noreferrer">
                 <img class="p-logo" src="public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" />
