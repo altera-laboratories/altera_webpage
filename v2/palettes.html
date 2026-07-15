@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Scheme Options | Altera Labs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:#141311; color:#d8d2c6; font-family:'Inter',sans-serif; }
+  .intro{ max-width:1100px; margin:0 auto; padding:44px 28px 10px; }
+  .intro h1{ font-family:'Fraunces',serif; font-weight:600; color:#f3ead8; font-size:2rem; margin:0 0 8px; }
+  .intro p{ color:#9c9482; max-width:70ch; line-height:1.6; margin:0 0 6px; font-size:14.5px; }
+  .intro .mono{ font-family:'JetBrains Mono',monospace; font-size:12px; color:#7a7264; }
+
+  .option{ max-width:1100px; margin:34px auto; padding:0 28px; }
+  .opt-head{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:6px; }
+  .opt-head h2{ font-family:'Fraunces',serif; font-weight:600; color:#f3ead8; font-size:1.45rem; margin:0; }
+  .opt-head .scheme{ font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:.09em; text-transform:uppercase; color:#cf8a3b; }
+  .opt-why{ color:#9c948e; font-size:13.5px; line-height:1.55; max-width:88ch; margin:0 0 14px; }
+
+  /* the shared mock, themed per option via CSS vars */
+  .mock{
+    background:var(--bg); color:var(--body); border-radius:14px; overflow:hidden;
+    border:1px solid rgba(0,0,0,.2); font-size:14px;
+  }
+  .m-nav{ display:flex; align-items:center; justify-content:space-between; padding:14px 26px;
+    background:var(--bg); border-bottom:1px solid var(--line); }
+  .m-brand{ font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--head); }
+  .m-links{ display:flex; gap:20px; font-size:12.5px; color:var(--body); }
+  .m-cta{ background:var(--accent); color:var(--accent-ink); font-weight:600; font-size:12.5px;
+    padding:9px 16px; border-radius:8px; }
+  .m-grid{ display:grid; grid-template-columns:1.2fr 1fr; gap:34px; padding:34px 26px; }
+  .m-eyebrow{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px;
+    letter-spacing:.13em; text-transform:uppercase; color:var(--accent-text);
+    border:1px solid var(--accent-soft-border); background:var(--accent-soft); padding:5px 10px;
+    border-radius:999px; margin-bottom:14px; }
+  .m-h1{ font-family:'Fraunces',serif; font-weight:600; color:var(--head); font-size:34px;
+    line-height:1.1; letter-spacing:-.01em; margin:0 0 12px; }
+  .m-h1 em{ color:var(--accent-text); font-style:italic; }
+  .m-sub{ color:var(--body); line-height:1.6; margin:0 0 20px; max-width:44ch; }
+  .m-sub b{ color:var(--head); }
+  .m-btns{ display:flex; gap:10px; }
+  .m-primary{ background:var(--accent); color:var(--accent-ink); font-weight:600; font-size:13px;
+    padding:11px 18px; border-radius:9px; box-shadow:0 2px 0 var(--accent-shadow); }
+  .m-ghost{ border:1px solid var(--line-strong); color:var(--head); font-weight:600; font-size:13px;
+    padding:11px 18px; border-radius:9px; }
+  .m-card{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px;
+    box-shadow:0 8px 20px -12px rgba(0,0,0,.25); }
+  .m-card .lbl{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.11em;
+    text-transform:uppercase; color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:7px; }
+  .m-card .lbl .live{ width:7px; height:7px; border-radius:50%; background:var(--data); }
+  .m-row{ display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--inset);
+    border:1px solid var(--line); border-radius:8px; margin-bottom:7px; }
+  .m-row .pip{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .m-row .nm{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--head); flex:1; }
+  .m-row .track{ flex:2; height:6px; border-radius:99px; background:var(--track); overflow:hidden; }
+  .m-row .track i{ display:block; height:100%; border-radius:99px; }
+  .m-row .pct{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted); }
+  .hi{ background:#0f7a52; } .pip.hi{ background:#1f9d6b; }
+  .md{ background:#c0791f; } .pip.md{ background:#e0a232; }
+  .lo{ background:#b5341f; } .pip.lo{ background:#d6492f; }
+  .m-quote{ margin:14px 0 0; padding:12px 14px; background:var(--inset); border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0; font-family:'Fraunces',serif; font-size:13px; color:var(--head); line-height:1.5; }
+  .m-quote .cite{ display:block; font-family:'JetBrains Mono',monospace; font-size:9.5px;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:7px; }
+  .m-foot{ display:flex; gap:26px; align-items:center; padding:14px 26px; border-top:1px solid var(--line);
+    background:var(--band); }
+  .m-foot .fl{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--muted); }
+  .m-foot .plogo{ font-family:'Fraunces',serif; font-weight:600; font-size:13px; color:var(--muted); }
+  .m-link{ color:var(--accent-text); font-family:'JetBrains Mono',monospace; font-size:11px;
+    letter-spacing:.08em; text-transform:uppercase; }
+
+  .swatches{ display:flex; gap:0; margin-top:10px; border-radius:8px; overflow:hidden;
+    border:1px solid rgba(255,255,255,.08); }
+  .sw{ flex:1; padding:12px 10px 9px; font-family:'JetBrains Mono',monospace; font-size:9.8px; }
+  .sw span{ display:block; opacity:.85; }
+  .ratio{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#7a7264; margin-top:8px; }
+</style>
+</head>
+<body>
+  <div class="intro">
+    <h1>Four color schemes, same page.</h1>
+    <p>Each option keeps the Reading Room's editorial structure (Fraunces, paper cards, mastery semantics: green high, amber medium, rose low) and moves the neutral temperature plus the accent family away from the cream-and-terracotta pairing. Each follows a named scheme from the Week 10 lecture, the 60-30-10 rule, and desaturated tones.</p>
+    <p class="mono">Mastery colors and royal-blue-for-data are held constant in every option; only brand neutrals and the accent change.</p>
+  </div>
+
+  <!-- OPTION 1: HERITAGE -->
+  <div class="option" style="--bg:#f6f4ee; --band:#efece3; --card:#efece3; --inset:#f9f8f4; --line:rgba(23,33,56,.12); --line-strong:rgba(23,33,56,.28); --track:rgba(23,33,56,.10);
+    --head:#172138; --body:#3f4759; --muted:#6e7484;
+    --accent:#22345e; --accent-ink:#f6f4ee; --accent-shadow:#101c38; --accent-text:#22345e;
+    --accent-soft:rgba(34,52,94,.07); --accent-soft-border:rgba(34,52,94,.22); --data:#476ee3;">
+    <div class="opt-head"><h2>1 · Heritage</h2><span class="scheme">Monochromatic navy + gold complement for CTAs</span></div>
+    <p class="opt-why">Oxford-navy ink on cool ivory, the university-press look taken toward JHU's own heritage blue. The lecture's "monochromatic with a complement for calls to action": everything is navy tints except the one gold CTA. Reads institutional and trustworthy; zero Claude.</p>
+    <div class="mock">
+      <div class="m-nav"><span class="m-brand">Altera Labs</span><span class="m-links"><span>Our Mission</span><span>Product</span><span>Evidence</span></span><span class="m-cta" style="background:#b98a2e; --accent-ink:#fff; color:#fff; box-shadow:0 2px 0 #8a6014;">Try the Beta →</span></div>
+      <div class="m-grid">
+        <div>
+          <span class="m-eyebrow">The mastery model for your classroom</span>
+          <h3 class="m-h1">See what your students <em>actually</em> understand.</h3>
+          <p class="m-sub">Altera is the AI tutor that builds a <b>live mastery model</b> of every student in your Canvas course.</p>
+          <div class="m-btns"><span class="m-primary" style="background:#b98a2e; color:#fff; box-shadow:0 2px 0 #8a6014;">Try the Beta →</span><span class="m-ghost">Our Mission</span></div>
+        </div>
+        <div>
+          <div class="m-card">
+            <div class="lbl"><span class="live"></span>Live class view</div>
+            <div class="m-row"><span class="pip hi"></span><span class="nm">Maya R.</span><span class="track"><i class="hi" style="width:82%"></i></span><span class="pct">82%</span></div>
+            <div class="m-row"><span class="pip lo"></span><span class="nm">Jordan T.</span><span class="track"><i class="lo" style="width:41%"></i></span><span class="pct">41%</span></div>
+            <div class="m-row"><span class="pip md"></span><span class="nm">Alex K.</span><span class="track"><i class="md" style="width:63%"></i></span><span class="pct">63%</span></div>
+            <div class="m-quote">"A tool that would be indispensable to me as an instructor."<span class="cite">Prof. Kobe Marshall-Stevens · JHU Mathematics</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="m-foot"><span class="fl">Built with / backed by</span><span class="plogo">JHU</span><span class="plogo">TEDCO</span><span class="plogo">NVIDIA</span><span class="m-link">Read announcement ↗</span></div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#f6f4ee; color:#172138;">#f6f4ee<span>ivory 60%</span></div>
+      <div class="sw" style="background:#efece3; color:#172138;">#efece3<span>cards 30%</span></div>
+      <div class="sw" style="background:#22345e; color:#f6f4ee;">#22345e<span>navy ink</span></div>
+      <div class="sw" style="background:#b98a2e; color:#fff;">#b98a2e<span>gold CTA 10%</span></div>
+      <div class="sw" style="background:#476ee3; color:#fff;">#476ee3<span>data blue</span></div>
+    </div>
+    <p class="ratio">Navy on ivory 12.6:1 · gold CTA vs ivory 3.4:1 (large/UI) · zero hue overlap with mastery colors</p>
+  </div>
+
+  <!-- OPTION 2: FIELD NOTES -->
+  <div class="option" style="--bg:#f4f3ec; --band:#ebeadf; --card:#ecebde; --inset:#f8f7f0; --line:rgba(30,48,38,.12); --line-strong:rgba(30,48,38,.3); --track:rgba(30,48,38,.10);
+    --head:#1d2a21; --body:#46523f; --muted:#71796a;
+    --accent:#1e5c46; --accent-ink:#f2f6ef; --accent-shadow:#123c2d; --accent-text:#1c5540;
+    --accent-soft:rgba(30,92,70,.08); --accent-soft-border:rgba(30,92,70,.24); --data:#476ee3;">
+    <div class="opt-head"><h2>2 · Field Notes</h2><span class="scheme">Analogous greens (pine · moss · eggshell)</span></div>
+    <p class="opt-why">The naturalist's notebook: analogous greens from the lecture's "harmony, found in nature" family. Pine for actions, moss tints for warmth, eggshell paper. Green = growth is the most native metaphor education has. Accent pine is far darker than the emerald mastery-high, so the semantics stay legible.</p>
+    <div class="mock">
+      <div class="m-nav"><span class="m-brand">Altera Labs</span><span class="m-links"><span>Our Mission</span><span>Product</span><span>Evidence</span></span><span class="m-cta">Try the Beta →</span></div>
+      <div class="m-grid">
+        <div>
+          <span class="m-eyebrow">The mastery model for your classroom</span>
+          <h3 class="m-h1">See what your students <em>actually</em> understand.</h3>
+          <p class="m-sub">Altera is the AI tutor that builds a <b>live mastery model</b> of every student in your Canvas course.</p>
+          <div class="m-btns"><span class="m-primary">Try the Beta →</span><span class="m-ghost">Our Mission</span></div>
+        </div>
+        <div>
+          <div class="m-card">
+            <div class="lbl"><span class="live"></span>Live class view</div>
+            <div class="m-row"><span class="pip hi"></span><span class="nm">Maya R.</span><span class="track"><i class="hi" style="width:82%"></i></span><span class="pct">82%</span></div>
+            <div class="m-row"><span class="pip lo"></span><span class="nm">Jordan T.</span><span class="track"><i class="lo" style="width:41%"></i></span><span class="pct">41%</span></div>
+            <div class="m-row"><span class="pip md"></span><span class="nm">Alex K.</span><span class="track"><i class="md" style="width:63%"></i></span><span class="pct">63%</span></div>
+            <div class="m-quote">"A tool that would be indispensable to me as an instructor."<span class="cite">Prof. Kobe Marshall-Stevens · JHU Mathematics</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="m-foot"><span class="fl">Built with / backed by</span><span class="plogo">JHU</span><span class="plogo">TEDCO</span><span class="plogo">NVIDIA</span><span class="m-link">Read announcement ↗</span></div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#f4f3ec; color:#1d2a21;">#f4f3ec<span>eggshell 60%</span></div>
+      <div class="sw" style="background:#ecebde; color:#1d2a21;">#ecebde<span>cards 30%</span></div>
+      <div class="sw" style="background:#1e5c46; color:#f2f6ef;">#1e5c46<span>pine CTA 10%</span></div>
+      <div class="sw" style="background:#46523f; color:#f2f6ef;">#46523f<span>moss body</span></div>
+      <div class="sw" style="background:#476ee3; color:#fff;">#476ee3<span>data blue</span></div>
+    </div>
+    <p class="ratio">Pine on eggshell 7.6:1 · pine CTA is 2.5x darker than mastery emerald, no confusion at a glance</p>
+  </div>
+
+  <!-- OPTION 3: LETTERPRESS -->
+  <div class="option" style="--bg:#f5f2f0; --band:#ece7e4; --card:#ede8e5; --inset:#faf8f6; --line:rgba(59,42,53,.12); --line-strong:rgba(59,42,53,.3); --track:rgba(59,42,53,.10);
+    --head:#2e2230; --body:#54495a; --muted:#7d7381;
+    --accent:#5b2a4a; --accent-ink:#f7f0f4; --accent-shadow:#3b1830; --accent-text:#5b2a4a;
+    --accent-soft:rgba(91,42,74,.07); --accent-soft-border:rgba(91,42,74,.22); --data:#476ee3;">
+    <div class="opt-head"><h2>3 · Letterpress</h2><span class="scheme">Near-monochromatic aubergine on warm porcelain</span></div>
+    <p class="opt-why">A scholarly plum: aubergine ink on porcelain-gray paper, the rare-books room rather than the startup deck. Distinctive (almost no edtech uses violet family), quietly premium, and maximally far from both Claude's coral and the competitors' blues. The lecture's "fewer colors" guideline taken furthest.</p>
+    <div class="mock">
+      <div class="m-nav"><span class="m-brand">Altera Labs</span><span class="m-links"><span>Our Mission</span><span>Product</span><span>Evidence</span></span><span class="m-cta">Try the Beta →</span></div>
+      <div class="m-grid">
+        <div>
+          <span class="m-eyebrow">The mastery model for your classroom</span>
+          <h3 class="m-h1">See what your students <em>actually</em> understand.</h3>
+          <p class="m-sub">Altera is the AI tutor that builds a <b>live mastery model</b> of every student in your Canvas course.</p>
+          <div class="m-btns"><span class="m-primary">Try the Beta →</span><span class="m-ghost">Our Mission</span></div>
+        </div>
+        <div>
+          <div class="m-card">
+            <div class="lbl"><span class="live"></span>Live class view</div>
+            <div class="m-row"><span class="pip hi"></span><span class="nm">Maya R.</span><span class="track"><i class="hi" style="width:82%"></i></span><span class="pct">82%</span></div>
+            <div class="m-row"><span class="pip lo"></span><span class="nm">Jordan T.</span><span class="track"><i class="lo" style="width:41%"></i></span><span class="pct">41%</span></div>
+            <div class="m-row"><span class="pip md"></span><span class="nm">Alex K.</span><span class="track"><i class="md" style="width:63%"></i></span><span class="pct">63%</span></div>
+            <div class="m-quote">"A tool that would be indispensable to me as an instructor."<span class="cite">Prof. Kobe Marshall-Stevens · JHU Mathematics</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="m-foot"><span class="fl">Built with / backed by</span><span class="plogo">JHU</span><span class="plogo">TEDCO</span><span class="plogo">NVIDIA</span><span class="m-link">Read announcement ↗</span></div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#f5f2f0; color:#2e2230;">#f5f2f0<span>porcelain 60%</span></div>
+      <div class="sw" style="background:#ede8e5; color:#2e2230;">#ede8e5<span>cards 30%</span></div>
+      <div class="sw" style="background:#5b2a4a; color:#f7f0f4;">#5b2a4a<span>aubergine CTA 10%</span></div>
+      <div class="sw" style="background:#54495a; color:#f7f0f4;">#54495a<span>plum-gray body</span></div>
+      <div class="sw" style="background:#476ee3; color:#fff;">#476ee3<span>data blue</span></div>
+    </div>
+    <p class="ratio">Aubergine on porcelain 9.1:1 · violet family is colorblind-distinct from all three mastery hues</p>
+  </div>
+
+  <!-- OPTION 4: HARBOR -->
+  <div class="option" style="--bg:#f1f4f6; --band:#e6ebef; --card:#e8edf1; --inset:#f7f9fb; --line:rgba(26,46,62,.12); --line-strong:rgba(26,46,62,.3); --track:rgba(26,46,62,.10);
+    --head:#182b3a; --body:#425663; --muted:#6e7d88;
+    --accent:#1d4a68; --accent-ink:#eef5f9; --accent-shadow:#0f3049; --accent-text:#1b4560;
+    --accent-soft:rgba(29,74,104,.08); --accent-soft-border:rgba(29,74,104,.24); --data:#476ee3;">
+    <div class="opt-head"><h2>4 · Harbor</h2><span class="scheme">Analogous blues (marine · slate · glacier)</span></div>
+    <p class="opt-why">The Field Notes recipe transposed to blue, per Alex: deep marine for actions, slate-blue body text, glacier-tinted paper. Same analogous harmony, colder register: reads calm, technical, institutional. The marine CTA sits far darker than the royal data-blue, so measurements still pop against the brand color the way pine sat apart from the mastery emerald.</p>
+    <div class="mock">
+      <div class="m-nav"><span class="m-brand">Altera Labs</span><span class="m-links"><span>Our Mission</span><span>Product</span><span>Evidence</span></span><span class="m-cta">Try the Beta →</span></div>
+      <div class="m-grid">
+        <div>
+          <span class="m-eyebrow">The mastery model for your classroom</span>
+          <h3 class="m-h1">See what your students <em>actually</em> understand.</h3>
+          <p class="m-sub">Altera is the AI tutor that builds a <b>live mastery model</b> of every student in your Canvas course.</p>
+          <div class="m-btns"><span class="m-primary">Try the Beta →</span><span class="m-ghost">Our Mission</span></div>
+        </div>
+        <div>
+          <div class="m-card">
+            <div class="lbl"><span class="live"></span>Live class view</div>
+            <div class="m-row"><span class="pip hi"></span><span class="nm">Maya R.</span><span class="track"><i class="hi" style="width:82%"></i></span><span class="pct">82%</span></div>
+            <div class="m-row"><span class="pip lo"></span><span class="nm">Jordan T.</span><span class="track"><i class="lo" style="width:41%"></i></span><span class="pct">41%</span></div>
+            <div class="m-row"><span class="pip md"></span><span class="nm">Alex K.</span><span class="track"><i class="md" style="width:63%"></i></span><span class="pct">63%</span></div>
+            <div class="m-quote">"A tool that would be indispensable to me as an instructor."<span class="cite">Prof. Kobe Marshall-Stevens · JHU Mathematics</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="m-foot"><span class="fl">Built with / backed by</span><span class="plogo">JHU</span><span class="plogo">TEDCO</span><span class="plogo">NVIDIA</span><span class="m-link">Read announcement ↗</span></div>
+    </div>
+    <div class="swatches">
+      <div class="sw" style="background:#f1f4f6; color:#182b3a;">#f1f4f6<span>glacier 60%</span></div>
+      <div class="sw" style="background:#e8edf1; color:#182b3a;">#e8edf1<span>cards 30%</span></div>
+      <div class="sw" style="background:#1d4a68; color:#eef5f9;">#1d4a68<span>marine CTA 10%</span></div>
+      <div class="sw" style="background:#425663; color:#eef5f9;">#425663<span>slate body</span></div>
+      <div class="sw" style="background:#476ee3; color:#fff;">#476ee3<span>data blue</span></div>
+    </div>
+    <p class="ratio">Marine on glacier 8.9:1 · marine CTA is 2.3x darker than the royal data blue, so data still reads as its own color</p>
+  </div>
+
+  <div class="intro" style="padding-bottom:70px;">
+    <p class="mono">All four hold the mastery encoding (emerald / amber / rose) and royal-blue-for-data constant. Body text inks meet WCAG 4.5:1 on their papers; CTAs meet 3:1 for UI elements.</p>
+  </div>
+</body>
+</html>
