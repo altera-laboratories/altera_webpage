@@ -679,7 +679,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   html{ background-image:none !important; }
 </style>
 <style id="collage-final">
-  .hero-grid{ grid-template-columns: 1fr 440px !important; gap:48px !important; align-items:center !important; }
+  @media (min-width: 761px){
+    .hero-grid{ grid-template-columns: 1fr 440px !important; gap:48px !important; align-items:center !important; }
+  }
   .collage{ aspect-ratio:auto !important; overflow:hidden !important; border:0 !important; box-shadow:none !important; background:transparent !important; }
   .collage-img{ display:block !important; width:100% !important; height:auto !important; object-fit:fill !important; object-position:50% 50% !important; -webkit-mask-image:none !important; mask-image:none !important; margin:0 !important; border:0 !important; border-radius:0 !important; }
 </style>
@@ -726,6 +728,19 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   /* Kill the tinted band that read as a shadow under the nav */
   body{ background-image:none !important; }
   .nav-inner{ border-bottom:0 !important; }
+  /* Mobile: nothing may widen the page; scale the collage, scroll the math */
+  @media (max-width:760px){
+    html, body{ overflow-x:clip !important; }
+    .collage-frame{ max-width:100% !important; width:auto !important; }
+    .collage, .collage-img{ max-width:100% !important; height:auto !important; }
+    .vp-inset, .v2-core__panel{ overflow-x:auto !important; }
+    .katex-display{ overflow-x:auto !important; overflow-y:hidden !important; padding-bottom:4px; }
+    .katex-display > .katex{ white-space:nowrap; }
+  }
+  @media (max-width:480px){
+    /* scale display math to the card instead of clipping at scroll position 0 */
+    .katex-display .katex{ font-size:.62em !important; }
+  }
   /* Center the built-with strip */
   .strip-inner{ justify-content:center !important; }
   .partners{ justify-content:center !important; flex:0 1 auto !important; gap:24px 44px !important; }
