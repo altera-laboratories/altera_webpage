@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+  /* Apply the theme before first paint; chart scripts read tokens at init.
+     ?theme=day|lamplit|board deep-links a mode and persists it. */
+  (function(){
+    var q = new URLSearchParams(location.search).get('theme');
+    var t = (q === 'day' || q === 'lamplit' || q === 'board') ? q : localStorage.getItem('altera-theme');
+    if (q) localStorage.setItem('altera-theme', q);
+    if (t && t !== 'day') document.documentElement.dataset.theme = t;
+  })();
+</script>
+
 <style id="design-tokens">
 :root{
   --paper-50:#faf5ea; --paper-100:#f3ead8; --paper-200:#ebdec5; --paper-300:#ddccac; --paper-400:#c9b793;
@@ -780,6 +791,81 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .v2-problem .vp-fig .num{ margin-top:0 !important; }
   .v2-problem .vp-stats{ align-items:start !important; }
 </style>
+
+<!-- ================= NIGHT THEMES =================
+     Two dark expressions of the Reading Room, switched by data-theme on <html>:
+       lamplit : the reading room at night (warm umber, ember terracotta)
+       board   : the blackboard after class (pine green-black, chalk)
+     Token-first: everything below overrides the :root vocabularies; the short
+     special-cases section at the end handles the few hardcoded patches.
+     Cascade note: keep this the LAST style block in <head>. -->
+<style id="night-themes">
+/* ---------- lamplit: token overrides ---------- */
+html[data-theme="lamplit"]{
+  --paper-50:#3a3229; --paper-100:#272119; --paper-200:#2f2820; --paper-300:#4a3f31; --paper-400:#5d4f3e;
+  --ink-900:#f4ecd9; --ink-700:#e6dcc4; --ink-600:#c7b99c; --ink-500:#a2937a; --ink-400:#837460; --ink-soft:#a2937a;
+  --signal-300:#b7c8fa; --signal-500:#82a0f2; --signal-700:#5f82e8;
+  --terracotta:#c96e46; --terracotta-400:#e29a72; --terracotta-500:#d07a4f; --terracotta-600:#c96e46;
+  --ochre-500:#dfa050; --ochre-600:#c98b3d; --sage:#8fae7d;
+  --mastery-high-fill:#27a874; --mastery-high-stroke:#4cc796;
+  --mastery-med-fill:#d99b2b; --mastery-med-stroke:#efbb4e;
+  --mastery-low-fill:#d4553c; --mastery-low-stroke:#e8745c;
+  --status-async-fg:#7fb0cd; --status-async-bg:rgba(127,176,205,.14); --status-async-border:rgba(127,176,205,.34);
+  --status-ok-fg:#4cc796; --status-ok-bg:rgba(76,199,150,.13); --status-ok-border:rgba(76,199,150,.32);
+  --status-warn-fg:#dfa050; --status-warn-bg:rgba(223,160,80,.13); --status-warn-border:rgba(223,160,80,.32);
+  --status-err-fg:#e8745c; --status-err-bg:rgba(232,116,92,.12); --status-err-border:rgba(232,116,92,.32);
+  --shadow-paper-sm:0 1px 2px rgba(0,0,0,.35);
+  --shadow-paper:0 2px 6px rgba(0,0,0,.35),0 18px 36px -22px rgba(0,0,0,.6);
+  --shadow-pin:0 12px 32px -14px rgba(0,0,0,.65);
+  --shadow-signal:0 0 0 3px rgba(130,160,242,.25);
+  --border-hairline:rgba(244,236,217,.10); --border-soft:rgba(244,236,217,.17); --border-ink:rgba(244,236,217,.30);
+  --paper:#272119; --paper-2:#2f2820; --paper-edge:#4a3f31;
+  --ink:#f4ecd9; --ink-faint:#a2937a;
+  --terracotta-2:#d98a5e; --ochre:#dfa050; --royal:#82a0f2; --royal-deep:#5f82e8;
+  --denim:#7fa5c2; --kraft:#b3906b;
+  --line:rgba(244,236,217,.14); --line-2:rgba(244,236,217,.08); --shadow:rgba(0,0,0,.5);
+}
+/* ---------- board: token overrides ---------- */
+html[data-theme="board"]{
+  --paper-50:#28362e; --paper-100:#141f19; --paper-200:#1b2921; --paper-300:#31453a; --paper-400:#42574a;
+  --ink-900:#eef3ec; --ink-700:#dbe4d8; --ink-600:#b4c2b2; --ink-500:#8fa090; --ink-400:#75857a; --ink-soft:#8fa090;
+  --signal-300:#b9d0f7; --signal-500:#86a8ef; --signal-700:#6389e4;
+  --terracotta:#cf7a52; --terracotta-400:#efae8c; --terracotta-500:#e29873; --terracotta-600:#cf7a52;
+  --ochre-500:#e2c06a; --ochre-600:#cfa94e; --sage:#a3c8af;
+  --mastery-high-fill:#3dbd85; --mastery-high-stroke:#68d9a8;
+  --mastery-med-fill:#d9b23c; --mastery-med-stroke:#ecd06a;
+  --mastery-low-fill:#d96a4a; --mastery-low-stroke:#ef8e6e;
+  --status-async-fg:#8fb3c9; --status-async-bg:rgba(143,179,201,.14); --status-async-border:rgba(143,179,201,.34);
+  --status-ok-fg:#68d9a8; --status-ok-bg:rgba(104,217,168,.12); --status-ok-border:rgba(104,217,168,.30);
+  --status-warn-fg:#e2c06a; --status-warn-bg:rgba(226,192,106,.12); --status-warn-border:rgba(226,192,106,.30);
+  --status-err-fg:#ef8e6e; --status-err-bg:rgba(239,142,110,.12); --status-err-border:rgba(239,142,110,.30);
+  --shadow-paper-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow-paper:0 2px 6px rgba(0,0,0,.4),0 18px 36px -22px rgba(0,0,0,.65);
+  --shadow-pin:0 12px 32px -14px rgba(0,0,0,.7);
+  --shadow-signal:0 0 0 3px rgba(134,168,239,.25);
+  --border-hairline:rgba(238,243,236,.11); --border-soft:rgba(238,243,236,.18); --border-ink:rgba(238,243,236,.32);
+  --paper:#141f19; --paper-2:#1b2921; --paper-edge:#31453a;
+  --ink:#eef3ec; --ink-faint:#8fa090;
+  --terracotta-2:#e29873; --ochre:#e2c06a; --royal:#86a8ef; --royal-deep:#6389e4;
+  --denim:#8fb3c9; --kraft:#b39a72;
+  --line:rgba(238,243,236,.13); --line-2:rgba(238,243,236,.08); --shadow:rgba(0,0,0,.55);
+}
+/* ---------- special cases (the few hardcoded patches) ---------- */
+.brand .logo-night{ display:none !important; }
+html[data-theme] .brand .logo-day{ display:none !important; }
+html[data-theme] .brand .logo-night{ display:block !important; }
+html[data-theme="lamplit"] header.nav .nav-inner{ background:#272119 !important; }
+html[data-theme="board"] header.nav .nav-inner{ background:#141f19 !important; }
+html[data-theme="lamplit"] header.nav, html[data-theme="lamplit"] .hero{ background:#272119 !important; }
+html[data-theme="board"] header.nav, html[data-theme="board"] .hero{ background:#141f19 !important; }
+html[data-theme] .collage-frame img{ filter:brightness(.84) saturate(.92); }
+html[data-theme] .chip.hi{ color:#a9c79a; background:rgba(143,174,125,.16); }
+html[data-theme] .chip.mid{ color:#e3b878; background:rgba(223,160,80,.16); }
+html[data-theme] .chip.lo{ color:#e8967e; background:rgba(232,116,92,.14); }
+/* partner/press logos are dark-on-transparent; give them paper plates at night */
+html[data-theme] .partner, html[data-theme] .tr-logo-frame{ background:#f3ead8; }
+html[data-theme] .vp-canvas-img, html[data-theme] .p-logo{ background:#f3ead8; border-radius:6px; padding:4px 8px; }
+</style>
 </head>
 <body>
 
@@ -788,7 +874,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     <div class="wrap">
       <div class="nav-inner">
         <a class="brand" href="#" aria-label="Altera Labs home">
-          <img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs">
+          <img class="logo-day" src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs">
+          <img class="logo-night" src="./public/images/logos/Altera/Altera-Logo-readingroom-night.svg" alt="Altera Labs">
         </a>
 
         <nav class="links" aria-label="Primary">
@@ -3553,6 +3640,34 @@ document.addEventListener('DOMContentLoaded', function(){
   layoutTimeline();
   setTimeout(layoutTimeline, 600);
 });
+</script>
+
+<!-- night-theme toggle (demo affordance; relocate to a settings surface when night ships) -->
+<div id="theme-toggle" role="group" aria-label="Color theme">
+  <button data-set="day">Day</button><button data-set="lamplit">Lamp</button><button data-set="board">Board</button>
+</div>
+<style>
+  #theme-toggle{ position:fixed; right:18px; bottom:18px; z-index:9999; display:flex; gap:2px;
+    padding:3px; border-radius:999px; background:rgba(31,26,20,.82); backdrop-filter:blur(6px);
+    border:1px solid rgba(243,234,216,.25); box-shadow:0 8px 24px rgba(0,0,0,.35); }
+  #theme-toggle button{ font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+    color:#d8cfba; background:none; border:0; border-radius:999px; padding:6px 12px; cursor:pointer; }
+  #theme-toggle button.active{ background:#c0603a; color:#fff5ec; }
+  @media print{ #theme-toggle{ display:none !important; } }
+</style>
+<script>
+  (function(){
+    var cur = localStorage.getItem('altera-theme') || 'day';
+    var btns = document.querySelectorAll('#theme-toggle button');
+    btns.forEach(function(b){
+      if (b.dataset.set === cur) b.classList.add('active');
+      b.addEventListener('click', function(){
+        if (b.dataset.set === cur) return;
+        localStorage.setItem('altera-theme', b.dataset.set);
+        location.reload(); /* chart scripts read tokens at init, so re-init on switch */
+      });
+    });
+  })();
 </script>
 </body>
 </html>
