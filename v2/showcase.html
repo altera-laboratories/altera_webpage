@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>20 Directions | Altera Labs</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:#131313; color:#d6d3cd; font-family:'Inter',sans-serif; }
+  .intro{ max-width:1140px; margin:0 auto; padding:44px 28px 4px; }
+  .intro h1{ font-family:'Fraunces',serif; font-weight:600; color:#f2efe9; font-size:2rem; margin:0 0 8px; }
+  .intro p{ color:#98948c; max-width:78ch; line-height:1.6; margin:0 0 6px; font-size:14.5px; }
+  .toc{ max-width:1140px; margin:8px auto 0; padding:0 28px 8px; display:flex; flex-wrap:wrap; gap:7px; }
+  .toc a{ font-family:'JetBrains Mono',monospace; font-size:11px; color:#b8b3a9; text-decoration:none;
+    border:1px solid #33312d; border-radius:999px; padding:5px 11px; }
+  .toc a:hover{ color:#fff; border-color:#5a574f; }
+
+  .option{ max-width:1140px; margin:40px auto; padding:0 28px; }
+  .opt-head{ display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:5px; }
+  .opt-head h2{ font-family:'Fraunces',serif; font-weight:600; color:#f2efe9; font-size:1.4rem; margin:0; }
+  .opt-head .scheme{ font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:#c9a15d; }
+  .opt-why{ color:#98948c; font-size:13.5px; line-height:1.55; max-width:90ch; margin:0 0 13px; }
+  .parts{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:#6d6a63; margin:0 0 8px; }
+
+  .mock{ background:var(--bg); color:var(--body); border-radius:14px; overflow:hidden;
+    border:1px solid rgba(0,0,0,.25); font-size:14px; }
+  .sec{ border-bottom:1px solid var(--line); }
+  .sec:last-child{ border-bottom:0; }
+
+  /* nav */
+  .c-nav{ display:flex; align-items:center; justify-content:space-between; padding:13px 24px; background:var(--bg); }
+  .c-brand{ font-family:'Fraunces',serif; font-weight:600; font-size:16px; color:var(--head); }
+  .c-links{ display:flex; gap:18px; font-size:12px; color:var(--body); }
+  .c-cta{ background:var(--accent); color:var(--accentInk); font-weight:600; font-size:12px; padding:8px 15px; border-radius:8px; box-shadow:0 2px 0 var(--accentShadow); }
+
+  /* hero */
+  .c-hero{ padding:30px 24px 26px; }
+  .c-eyebrow{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.13em; text-transform:uppercase;
+    color:var(--accentText); border:1px solid var(--accentSoftBorder); background:var(--accentSoft); padding:5px 10px; border-radius:999px; margin-bottom:13px; }
+  .c-h1{ font-family:'Fraunces',serif; font-weight:600; color:var(--head); font-size:31px; line-height:1.12; letter-spacing:-.01em; margin:0 0 10px; max-width:20ch; }
+  .c-h1 em{ color:var(--accentText); }
+  .c-sub{ color:var(--body); line-height:1.6; margin:0 0 16px; max-width:52ch; }
+  .c-sub b{ color:var(--head); }
+  .c-primary{ display:inline-block; background:var(--accent); color:var(--accentInk); font-weight:600; font-size:12.5px; padding:10px 17px; border-radius:9px; box-shadow:0 2px 0 var(--accentShadow); margin-right:9px; }
+  .c-ghost{ display:inline-block; border:1px solid var(--lineStrong); color:var(--head); font-weight:600; font-size:12.5px; padding:10px 17px; border-radius:9px; }
+
+  /* stats */
+  .c-stats{ padding:24px; display:grid; grid-template-columns:repeat(4,1fr); gap:11px; }
+  .c-fig{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 13px; }
+  .c-fig .rule{ width:22px; height:3px; border-radius:2px; background:var(--accent); margin-bottom:9px; }
+  .c-fig .num{ font-family:'Fraunces',serif; font-weight:600; font-size:26px; color:var(--head); }
+  .c-fig .num s{ text-decoration:none; color:var(--accentText); font-size:.6em; }
+  .c-fig .cap{ font-family:'JetBrains Mono',monospace; font-size:8.6px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); line-height:1.5; margin-top:5px; }
+
+  /* class view */
+  .c-class{ padding:24px; }
+  .c-card{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; max-width:430px; }
+  .c-lbl{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted); margin-bottom:11px; display:flex; align-items:center; gap:7px; }
+  .c-lbl .live{ width:7px; height:7px; border-radius:50%; background:#476ee3; }
+  .c-row{ display:flex; align-items:center; gap:9px; padding:7px 9px; background:var(--inset); border:1px solid var(--line); border-radius:8px; margin-bottom:6px; }
+  .c-row .pip{ width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .c-row .nm{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--head); flex:1; }
+  .c-row .track{ flex:2; height:6px; border-radius:99px; background:var(--track); overflow:hidden; }
+  .c-row .track i{ display:block; height:100%; border-radius:99px; }
+  .c-row .pct{ font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); }
+  .hi{ background:#0f7a52; } .pip.hi{ background:#1f9d6b; }
+  .md{ background:#c0791f; } .pip.md{ background:#e0a232; }
+  .lo{ background:#b5341f; } .pip.lo{ background:#d6492f; }
+
+  /* chat */
+  .c-chat{ padding:24px; }
+  .c-chatbox{ background:var(--inset); border:1px solid var(--line); border-radius:12px; padding:15px; max-width:430px; }
+  .c-mode{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:8.6px; letter-spacing:.1em; text-transform:uppercase;
+    color:#2f4fb0; background:rgba(71,110,227,.10); border:1px solid rgba(71,110,227,.3); border-radius:999px; padding:4px 9px; margin-bottom:10px; }
+  .c-bub{ max-width:88%; padding:8px 11px; border-radius:9px; font-size:12px; line-height:1.5; margin-bottom:7px; }
+  .c-bub.stu{ background:rgba(71,110,227,.09); border:1px solid rgba(71,110,227,.25); color:var(--head); margin-left:auto; }
+  .c-bub.tut{ background:var(--card); border:1px solid var(--line); color:var(--body); }
+  .c-bub.tut b{ color:var(--head); }
+
+  /* timeline card */
+  .c-tl{ padding:24px; display:flex; gap:18px; }
+  .c-tl .spine{ width:2px; background:var(--track); position:relative; flex-shrink:0; margin:4px 0; }
+  .c-tl .dot{ position:absolute; top:6px; left:50%; transform:translateX(-50%); width:12px; height:12px; border-radius:50%; background:#476ee3; border:2px solid var(--bg); }
+  .c-tlcard{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; flex:1; max-width:470px; }
+  .c-date{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.09em; color:var(--accentText);
+    border:1px solid var(--accentSoftBorder); background:var(--accentSoft); border-radius:999px; padding:3px 9px; margin-bottom:9px; }
+  .c-tlh{ font-family:'Fraunces',serif; font-weight:600; font-size:18px; color:var(--head); margin:0 0 7px; }
+  .c-tlb{ font-size:12.5px; line-height:1.55; color:var(--body); margin:0 0 9px; }
+  .c-tlb b{ color:var(--head); }
+  .c-ext{ font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--accentText); }
+
+  /* team card */
+  .c-team{ padding:24px; display:flex; gap:14px; }
+  .c-tcard{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 16px; text-align:center; width:200px; }
+  .c-tcard .ava{ width:52px; height:52px; border-radius:50%; margin:0 auto 10px; background:linear-gradient(135deg, var(--accent), var(--accentShadow)); opacity:.85; }
+  .c-tcard .tn{ font-family:'Fraunces',serif; font-weight:600; font-size:15px; color:var(--head); }
+  .c-tcard .tr{ font-family:'JetBrains Mono',monospace; font-size:8.6px; letter-spacing:.1em; text-transform:uppercase; color:var(--accentText); margin:4px 0 8px; }
+  .c-tcard .tb{ font-size:11px; line-height:1.5; color:var(--body); }
+
+  /* quote */
+  .c-quote{ padding:24px; }
+  .c-qbox{ background:var(--card); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:0 12px 12px 0; padding:16px 18px; max-width:470px; }
+  .c-qt{ font-family:'Fraunces',serif; font-size:15px; color:var(--head); line-height:1.5; margin:0 0 8px; }
+  .c-qc{ font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+
+  .swatches{ display:flex; margin-top:10px; border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,.09); }
+  .sw{ flex:1; padding:11px 9px 8px; font-family:'JetBrains Mono',monospace; font-size:9.4px; }
+  .sw span{ display:block; opacity:.85; }
+</style>
+</head>
+<body>
+  <div class="intro">
+    <h1>Twenty directions.</h1>
+    <p>Every option holds the constants (Fraunces + editorial structure, mastery encoding emerald/amber/rose, royal blue for data) and changes only the brand neutrals and accent. Each option is shown on two or three different parts of the real site, rotating so every section appears across the set.</p>
+  </div>
+  <div class="toc" id="toc"></div>
+  <div id="root"></div>
+  <div class="intro" style="padding-bottom:70px;"><p style="font-family:'JetBrains Mono',monospace; font-size:11.5px;">Body ink vs page contrast is annotated per option. Dark directions are marked.</p></div>
+
+<script>
+const DIRECTIONS = [{"key": "oxford", "name": "Bodleian", "tagline": "Navy ink, ivory stock, old gold seal", "why": "A single deep Oxford navy carries the entire typographic voice on cool ivory paper, the palette of a university press catalog rather than an AI startup. One antique old-gold, darker and more olive than the mastery amber, is rationed to CTAs like a foil-stamped seal, so buttons read as deliberate and rare. Nothing here echoes cream and terracotta, and the restraint reads equally well to a procurement committee and a VC partner meeting.", "dark": false, "tokens": {"bg": "#f7f6f1", "band": "#efede3", "card": "#fdfcf8", "inset": "#f1efe7", "line": "rgba(28, 42, 68, 0.14)", "lineStrong": "rgba(28, 42, 68, 0.26)", "track": "rgba(28, 42, 68, 0.10)", "head": "#16233c", "body": "#2c3a54", "muted": "#5a6579", "accent": "#7d5e14", "accentInk": "#fffcf2", "accentShadow": "#5c450c", "accentText": "#6d5210", "accentSoft": "rgba(125, 94, 20, 0.10)", "accentSoftBorder": "rgba(125, 94, 20, 0.28)"}}, {"key": "harbor-white", "dark": false, "name": "Fathom", "tagline": "Deep marine ink on pure white", "why": "Pure white canvas with strictly neutral gray surfaces reads as clean, technical, and procurement-safe, while a single deep marine accent signals rigor without a trace of Anthropic cream or coral. The marine CTA sits far darker and more cyan-leaning than the royal data blue, so charts and focus states stay unmistakable against the brand. Slate-blue body text keeps long reading calm and quietly ties the type to the accent without tinting the surfaces.", "tokens": {"bg": "#ffffff", "band": "#f5f5f5", "card": "#fafafa", "inset": "#efefef", "line": "rgba(17, 17, 17, 0.10)", "lineStrong": "rgba(17, 17, 17, 0.20)", "track": "rgba(17, 17, 17, 0.08)", "head": "#122a3a", "body": "#3d5466", "muted": "#5c6b7a", "accent": "#1c4f6e", "accentInk": "#ffffff", "accentShadow": "#123549", "accentText": "#205e80", "accentSoft": "rgba(28, 79, 110, 0.08)", "accentSoftBorder": "rgba(28, 79, 110, 0.30)"}}, {"key": "marginalia", "name": "Marginalia", "tagline": "Letterpress charcoal with a grader's red pencil", "why": "This is the palette of a well-set textbook: dense charcoal ink on cool near-white paper, with one deep madder red used sparingly, the way a professor marks in the margin. It reads as rigor and trust to a procurement committee while the single confident accent keeps it memorable in a VC deck. Nothing here echoes cream or terracotta, and the wine-dark accent sits far from the bright orangey rose used for low mastery.", "dark": false, "tokens": {"bg": "#f4f3f0", "band": "#e9e7e1", "card": "#fbfaf8", "inset": "#eeece7", "line": "rgba(43, 42, 39, 0.14)", "lineStrong": "rgba(43, 42, 39, 0.26)", "track": "rgba(43, 42, 39, 0.10)", "head": "#211f1c", "body": "#2e2c28", "muted": "#67635b", "accent": "#833c47", "accentInk": "#faf7f5", "accentShadow": "#5e2a33", "accentText": "#7c3641", "accentSoft": "rgba(131, 60, 71, 0.10)", "accentSoftBorder": "rgba(131, 60, 71, 0.28)"}}, {"key": "pine", "name": "Herbarium", "tagline": "Deep pine and moss on eggshell paper", "why": "Green is the one color that already means growth, and this direction claims it at a register the mastery emerald never touches: a near-black pine for actions, moss-inked prose, and warm eggshell paper that reads like a naturalist's field guide rather than a SaaS dashboard. It keeps the editorial gravity the serif headlines want while feeling nothing like cream and terracotta. Procurement sees institutional calm; a VC deck sees a brand with a real point of view about learning.", "dark": false, "tokens": {"bg": "#f4f2e8", "band": "#eae8d9", "card": "#fbfaf3", "inset": "#efecdd", "line": "rgba(46, 60, 48, 0.14)", "lineStrong": "rgba(46, 60, 48, 0.30)", "track": "rgba(46, 60, 48, 0.12)", "head": "#1c2a1e", "body": "#2e3c30", "muted": "#5c6a58", "accent": "#1e4632", "accentInk": "#f2f5ec", "accentShadow": "#132d1f", "accentText": "#235239", "accentSoft": "rgba(30, 70, 50, 0.08)", "accentSoftBorder": "rgba(30, 70, 50, 0.22)"}}, {"key": "aubergine", "name": "Marginalia (Aubergine)", "tagline": "Scholarly plum ink on porcelain paper", "why": "Deep plum is the ink of annotated first editions and university seals, yet no edtech brand owns it, so Altera reads as established rather than derivative. The porcelain-gray field keeps the page cool and neutral, which makes the emerald, amber, and rose mastery colors pop cleanly without hue collision. It photographs well in a VC deck and feels like something a provost would sign off on.", "dark": false, "tokens": {"bg": "#f4f3f5", "band": "#eae7ec", "card": "#fdfcfd", "inset": "#efedf1", "line": "rgba(60, 45, 72, 0.14)", "lineStrong": "rgba(60, 45, 72, 0.28)", "track": "rgba(60, 45, 72, 0.10)", "head": "#2b2233", "body": "#3e3546", "muted": "#6d6476", "accent": "#5d3a6e", "accentInk": "#ffffff", "accentShadow": "#452a53", "accentText": "#5a3769", "accentSoft": "rgba(93, 58, 110, 0.08)", "accentSoftBorder": "rgba(93, 58, 110, 0.24)"}}, {"key": "chalkboard", "dark": true, "name": "Chalk Hour", "tagline": "Blackboard green, chalk white, dusty yellow", "why": "This is the room where teaching actually happens: a matte blackboard green-black instead of generic tech black, with soft chalk-white type that reads like handwriting under warm light. The single dusty yellow accent recalls chalk sticks and desk lamps, giving CTAs warmth without borrowing the orange of the mastery scale or drifting near the terracotta the cofounders rejected. It photographs seriously in a VC deck and signals academic gravitas to procurement, while staying completely flat and glow-free.", "tokens": {"bg": "#0f1c17", "band": "#13221c", "card": "#182a22", "inset": "#0b1511", "line": "rgba(236, 241, 232, 0.10)", "lineStrong": "rgba(236, 241, 232, 0.18)", "track": "rgba(236, 241, 232, 0.08)", "head": "#f2f4ee", "body": "#d3dcd2", "muted": "#94a49a", "accent": "#d7ba6e", "accentInk": "#241d0c", "accentShadow": "#6f5c2a", "accentText": "#e3c880", "accentSoft": "rgba(215, 186, 110, 0.12)", "accentSoftBorder": "rgba(215, 186, 110, 0.30)"}}, {"key": "atlas", "dark": true, "name": "Astrolabe", "tagline": "Midnight navy star charts, brass instrument lines", "why": "Astrolabe reads like a university observatory atlas: deep midnight navy pages, ivory type, and a single antique brass accent used like engraved instrument markings. It signals precision and heritage without borrowing anyone's warm-cream look, and it photographs beautifully in a VC deck on a dark stage. The mastery colors (emerald, amber, rose) and royal blue data accents sit on these near-black navy surfaces with full separation, since the brass is far lighter and yellower than the amber and nothing else competes in hue.", "tokens": {"bg": "#0d1424", "band": "#111a30", "card": "#14203a", "inset": "#0a1120", "line": "rgba(232, 226, 210, 0.10)", "lineStrong": "rgba(232, 226, 210, 0.22)", "track": "rgba(232, 226, 210, 0.12)", "head": "#f2ede1", "body": "#d6d1c4", "muted": "#9aa0b0", "accent": "#c9a866", "accentInk": "#1c1608", "accentShadow": "#8a6f3a", "accentText": "#d4b678", "accentSoft": "rgba(201, 168, 102, 0.14)", "accentSoftBorder": "rgba(201, 168, 102, 0.34)"}}, {"key": "bauhaus", "name": "Dessau Ochre", "tagline": "Graphite geometry with one ochre signal", "why": "Cool graphite grays read as engineering rigor, the kind of restraint procurement committees and VCs both trust. A single mustard-ochre accent brings warmth and Bauhaus workshop energy without drifting anywhere near cream or terracotta. The yellow sits far from the emerald, amber, rose, and royal blue encodings, so mastery data always reads as the loudest color on the page.", "dark": false, "tokens": {"bg": "#f2f3f4", "band": "#e8eaec", "card": "#ffffff", "inset": "#edeef0", "line": "rgba(30, 34, 38, 0.12)", "lineStrong": "rgba(30, 34, 38, 0.24)", "track": "rgba(30, 34, 38, 0.10)", "head": "#1e2226", "body": "#33383d", "muted": "#5d646b", "accent": "#a3821a", "accentInk": "#221a08", "accentShadow": "#6e570e", "accentText": "#7c6410", "accentSoft": "rgba(163, 130, 26, 0.12)", "accentSoftBorder": "rgba(163, 130, 26, 0.32)"}}, {"key": "lawreview", "name": "Oxblood Docket", "tagline": "Graphite and oxblood on cool gray stock", "why": "This reads like a law review masthead: cool gray stock, graphite ink, and one deep oxblood accent used sparingly for seals, links, and the primary button. It signals institutional seriousness that lands with provosts and procurement while still photographing well in a VC deck. The oxblood sits far from the emerald, amber, rose, and royal blue encodings in both hue depth and value, so mastery data stays unambiguous.", "dark": false, "tokens": {"bg": "#f2f3f5", "band": "#e8eaee", "card": "#ffffff", "inset": "#eceef1", "line": "rgba(29, 33, 38, 0.12)", "lineStrong": "rgba(29, 33, 38, 0.24)", "track": "rgba(29, 33, 38, 0.09)", "head": "#1d2126", "body": "#2e343b", "muted": "#5b636d", "accent": "#6f2030", "accentInk": "#ffffff", "accentShadow": "#4a1220", "accentText": "#6f2030", "accentSoft": "rgba(111, 32, 48, 0.08)", "accentSoftBorder": "rgba(111, 32, 48, 0.24)"}}, {"key": "klein", "name": "Kunsthalle", "tagline": "Gallery-white neutrals, one Klein blue signature", "why": "Everything on the page is quiet, precise grayscale, so the single deep cobalt reads as the brand itself, the way a Klein blue canvas owns a white gallery wall. It photographs like a serious institution in a procurement deck and like a confident design decision in a VC deck. The accent sits far darker than the royal-blue data color and nowhere near the emerald, amber, or rose mastery hues, so charts stay unambiguous.", "dark": false, "tokens": {"bg": "#f7f7f8", "band": "#eeeef1", "card": "#ffffff", "inset": "#f1f1f4", "line": "rgba(20, 20, 26, 0.10)", "lineStrong": "rgba(20, 20, 26, 0.20)", "track": "rgba(20, 20, 26, 0.08)", "head": "#141419", "body": "#33333b", "muted": "#5f5f68", "accent": "#253d94", "accentInk": "#ffffff", "accentShadow": "#182861", "accentText": "#2743a6", "accentSoft": "rgba(37, 61, 148, 0.08)", "accentSoftBorder": "rgba(37, 61, 148, 0.24)"}}, {"key": "sage", "name": "Herbarium (Sage)", "tagline": "Sage paper, pine ink, clay-rose warmth", "why": "Herbarium reads like a well-kept botany archive: pale sage paper, deep pine ink, and soft clay-rose plaster bands that keep the page humane rather than clinical. It signals care and calm to students while the restrained, desaturated tones photograph well in a procurement deck. The dark pine accent sits far from the emerald, amber, rose, and royal blue encodings in both saturation and value, so mastery colors stay unambiguous on every chart.", "dark": false, "tokens": {"bg": "#eef0e8", "band": "#ece1da", "card": "#f6f7f1", "inset": "#e6eade", "line": "rgba(43, 58, 48, 0.14)", "lineStrong": "rgba(43, 58, 48, 0.26)", "track": "rgba(43, 58, 48, 0.10)", "head": "#1c2b22", "body": "#2b3a30", "muted": "#55645a", "accent": "#3d5a47", "accentInk": "#f4f6ee", "accentShadow": "#253a2c", "accentText": "#35513f", "accentSoft": "rgba(61, 90, 71, 0.12)", "accentSoftBorder": "rgba(61, 90, 71, 0.28)"}}, {"key": "lilac", "dark": false, "name": "Violet Registrar", "tagline": "Lavender paper, deep violet ink", "why": "A faint lavender paper keeps the editorial calm of the current site while reading unmistakably modern, and the single deep violet accent gives CTAs and links a confident academic voice that no other AI brand owns. Violet sits far from the emerald, amber, rose, and royal blue already reserved for data, so mastery states and focus rings stay legible on top of it. The result feels like a university press that hired a good product designer: warm enough for students, buttoned-up enough for procurement and a VC deck.", "tokens": {"bg": "#f7f5fb", "band": "#efecf7", "card": "#ffffff", "inset": "#f2eff9", "line": "rgba(60, 44, 110, 0.12)", "lineStrong": "rgba(60, 44, 110, 0.24)", "track": "rgba(60, 44, 110, 0.10)", "head": "#241b3d", "body": "#372c55", "muted": "#6b6285", "accent": "#5b3fa8", "accentInk": "#ffffff", "accentShadow": "#43307a", "accentText": "#4f3a8f", "accentSoft": "rgba(91, 63, 168, 0.10)", "accentSoftBorder": "rgba(91, 63, 168, 0.25)"}}, {"key": "newsprint", "name": "Cold Type", "tagline": "Newsprint grays with one proofing-cyan mark", "why": "This is the newspaper of record treatment: true grays do all the structural work, so the site reads as serious, credible, and print-grade to a provost or a partner meeting. The single process cyan behaves like an editor's proof mark, appearing only on actions and key highlights, which makes every call to action feel deliberate. Because the chrome is colorless, the emerald, amber, and rose mastery encodings and the royal blue data color pop with zero hue competition.", "dark": false, "tokens": {"bg": "#f4f4f2", "band": "#eaeae7", "card": "#ffffff", "inset": "#ececea", "line": "rgba(23, 24, 26, 0.12)", "lineStrong": "rgba(23, 24, 26, 0.26)", "track": "rgba(23, 24, 26, 0.08)", "head": "#17181a", "body": "#33363a", "muted": "#686c72", "accent": "#0e7490", "accentInk": "#ffffff", "accentShadow": "#0a4a5c", "accentText": "#0b5c72", "accentSoft": "rgba(14, 116, 144, 0.10)", "accentSoftBorder": "rgba(14, 116, 144, 0.28)"}}, {"key": "tealcopper", "name": "Patina", "tagline": "Deep teal ink, burnished copper detailing", "why": "Patina takes its cue from oxidized copper: a deep desaturated teal carries headlines and CTAs, while thin burnished copper hairlines add crafted warmth on a near-neutral warm white. The teal sits far from the emerald, amber, rose, and royal blue encodings, so mastery data always reads as data and never as brand. The result feels like a university press crossed with a precision instrument, credible to procurement and sharp in a VC deck.", "dark": false, "tokens": {"bg": "#f9f8f5", "band": "#f1efe9", "card": "#ffffff", "inset": "#f4f2ed", "line": "rgba(96, 78, 60, 0.16)", "lineStrong": "rgba(122, 74, 46, 0.34)", "track": "rgba(18, 54, 59, 0.10)", "head": "#14363a", "body": "#2c4247", "muted": "#566a6c", "accent": "#135b63", "accentInk": "#ffffff", "accentShadow": "#0c3d43", "accentText": "#115259", "accentSoft": "rgba(19, 91, 99, 0.09)", "accentSoftBorder": "rgba(19, 91, 99, 0.24)"}}, {"key": "swiss", "name": "Basel Grid", "tagline": "White space, black ink, one working blue", "why": "This is the Swiss playbook: a white page, near-black ink, and quiet gray structure, with the royal data blue promoted to be the single accent so the whole site speaks one color. Nothing competes with the mastery encodings because there is nothing else on the page. It photographs like a Braun manual and reads as confident infrastructure, which lands equally well in a procurement review and a VC deck.", "dark": false, "tokens": {"bg": "#ffffff", "band": "#f4f5f7", "card": "#ffffff", "inset": "#eef0f3", "line": "rgba(22, 26, 35, 0.10)", "lineStrong": "rgba(22, 26, 35, 0.18)", "track": "rgba(22, 26, 35, 0.08)", "head": "#14161b", "body": "#26292f", "muted": "#5b6069", "accent": "#476ee3", "accentInk": "#ffffff", "accentShadow": "#32509c", "accentText": "#3a5ecf", "accentSoft": "rgba(71, 110, 227, 0.08)", "accentSoftBorder": "rgba(71, 110, 227, 0.28)"}}, {"key": "rowhouse", "name": "Formstone", "tagline": "Brick red civic pride on formstone gray", "why": "Baltimore's rowhouse blocks are the visual of institutions that last: dark brick set against formstone gray, dignified and local without being folksy. The deep brick accent reads serious and established, nothing like Anthropic's coral, and it sits far from the mastery rose in both darkness and brownness so status colors stay unambiguous. Warm-gray surfaces keep the editorial paper feel while landing clearly gray, not cream, which photographs well in a procurement PDF and a pitch deck alike; the painted-screen green survives only as a whisper in illustration accents, never in the UI tokens.", "dark": false, "tokens": {"bg": "#f2f1ee", "band": "#e9e7e2", "card": "#fbfaf8", "inset": "#edebe6", "line": "rgba(61, 52, 48, 0.14)", "lineStrong": "rgba(61, 52, 48, 0.28)", "track": "rgba(61, 52, 48, 0.10)", "head": "#2b211e", "body": "#3d3430", "muted": "#6f645e", "accent": "#7e352a", "accentInk": "#fdf9f6", "accentShadow": "#5e261e", "accentText": "#6f2e24", "accentSoft": "rgba(126, 53, 42, 0.09)", "accentSoftBorder": "rgba(126, 53, 42, 0.28)"}}, {"key": "nocturne", "name": "Lamplit Carrel", "tagline": "Midnight study surfaces under one warm lamp", "why": "This is the library after hours: warm charcoal-brown surfaces that feel like wood and shadow rather than tech-dashboard black, with parchment text that keeps the editorial voice. One shaded-lamp gold accent carries every call to action, reading as focus and quiet rigor instead of startup neon. Against these deep grounds the emerald, amber, rose, and royal blue mastery encodings glow like annotations on a desk, so the product data becomes the brightest thing on the page.", "dark": true, "tokens": {"bg": "#211c16", "band": "#181410", "card": "#2b241c", "inset": "#171310", "line": "rgba(236, 223, 199, 0.12)", "lineStrong": "rgba(236, 223, 199, 0.24)", "track": "rgba(236, 223, 199, 0.14)", "head": "#f1e8d6", "body": "#d8cdb8", "muted": "#a3967d", "accent": "#d9a860", "accentInk": "#2a1d09", "accentShadow": "#775826", "accentText": "#dfb376", "accentSoft": "rgba(217, 168, 96, 0.13)", "accentSoftBorder": "rgba(217, 168, 96, 0.34)"}}, {"key": "glacier", "name": "Fjord Ink", "tagline": "Icy Nordic paper, deep petrol resolve", "why": "A pale ice-blue page with deep petrol ink reads as calm Scandinavian institutional design, closer to a Nordic university press than to any AI brand. The petrol accent is dark and blue-green, so it sits far from the bright royal data blue and from all three mastery hues while still feeling decisive as a CTA. Everything is desaturated and airy, which photographs well in a VC deck and feels trustworthy in a procurement review.", "dark": false, "tokens": {"bg": "#eef2f5", "band": "#e3eaee", "card": "#ffffff", "inset": "#e9eef2", "line": "rgba(23, 48, 61, 0.12)", "lineStrong": "rgba(23, 48, 61, 0.26)", "track": "rgba(23, 48, 61, 0.10)", "head": "#102b36", "body": "#24414d", "muted": "#546a75", "accent": "#16576b", "accentInk": "#ffffff", "accentShadow": "#0c3b49", "accentText": "#145566", "accentSoft": "rgba(22, 87, 107, 0.09)", "accentSoftBorder": "rgba(22, 87, 107, 0.28)"}}, {"key": "indigochartreuse", "name": "Midnight Citron", "tagline": "Deep indigo ink with a citron spark", "why": "Deep indigo surfaces read as serious institutional infrastructure, the opposite of warm cream, and they make the emerald-amber-rose mastery colors glow like instrument readouts. A single restrained citron is reserved for highlights and marks, giving the site a jolt of academic electricity without ever feeling neon. The result is premium and confident enough for a procurement committee and memorable enough for a VC deck.", "dark": true, "tokens": {"bg": "#131529", "band": "#171a33", "card": "#1c1f3a", "inset": "#101222", "line": "rgba(255, 255, 255, 0.08)", "lineStrong": "rgba(255, 255, 255, 0.16)", "track": "rgba(255, 255, 255, 0.10)", "head": "#f2f3fa", "body": "#c9cde3", "muted": "#8f94b8", "accent": "#cdc95e", "accentInk": "#1a1c30", "accentShadow": "#6f6a26", "accentText": "#d9d474", "accentSoft": "rgba(205, 201, 94, 0.12)", "accentSoftBorder": "rgba(205, 201, 94, 0.30)"}}, {"key": "archive", "dark": false, "name": "Provenance", "tagline": "Stone paper, umber ink, sienna seal", "why": "This reads like an acid-free archive box, not a cream startup site: the ground is a cool-leaning stone gray rather than warm cream, the ink is deep umber brown, and the single accent is a dry burnt sienna that sits far browner and darker than coral or terracotta. It keeps the editorial academic-press character the site already has while signaling permanence and careful record keeping, which is exactly the promise of a mastery model. The accent stays clearly apart from the emerald, amber, rose, and royal blue encodings by being darker and earthier than all four, so mastery colors keep full semantic ownership.", "tokens": {"bg": "#e7e4de", "band": "#dcd8d0", "card": "#f4f2ed", "inset": "#edeae4", "line": "rgba(62, 50, 40, 0.14)", "lineStrong": "rgba(62, 50, 40, 0.28)", "track": "rgba(62, 50, 40, 0.10)", "head": "#2e241c", "body": "#3d3229", "muted": "#6d6156", "accent": "#964f25", "accentInk": "#faf6f0", "accentShadow": "#6e3717", "accentText": "#7a3f1b", "accentSoft": "rgba(150, 79, 37, 0.12)", "accentSoftBorder": "rgba(150, 79, 37, 0.30)"}}];
+
+const NAV = () => `
+  <div class="sec c-nav"><span class="c-brand">Altera Labs</span>
+    <span class="c-links"><span>Our Mission</span><span>Product</span><span>Cognitive Core</span><span>Evidence</span></span>
+    <span class="c-cta">Try the Beta →</span></div>`;
+
+const COMPONENTS = {
+  hero: { label: 'Hero', html: () => `
+    <div class="sec c-hero">
+      <span class="c-eyebrow">The mastery model for your classroom</span>
+      <h3 class="c-h1">See what your students <em>actually</em> understand.</h3>
+      <p class="c-sub">Altera is the AI tutor that builds a <b>live mastery model</b> of every student in your Canvas course, so you know exactly what to re-teach before the next class.</p>
+      <span class="c-primary">Try the Beta →</span><span class="c-ghost">Our Mission</span>
+    </div>` },
+  stats: { label: 'Problem stats', html: () => `
+    <div class="sec c-stats">
+      <div class="c-fig"><div class="rule"></div><div class="num">92<s>%</s></div><div class="cap">of students use AI in their studies.</div></div>
+      <div class="c-fig"><div class="rule"></div><div class="num">88<s>%</s></div><div class="cap">use AI on assessed work.</div></div>
+      <div class="c-fig"><div class="rule"></div><div class="num">17<s>%</s></div><div class="cap">lower exam scores once AI is removed.</div></div>
+      <div class="c-fig"><div class="rule"></div><div class="num">90<s>%</s></div><div class="cap">of faculty: AI will diminish critical thinking.</div></div>
+    </div>` },
+  classview: { label: 'Teacher command center', html: () => `
+    <div class="sec c-class">
+      <div class="c-card">
+        <div class="c-lbl"><span class="live"></span>Live class view</div>
+        <div class="c-row"><span class="pip hi"></span><span class="nm">Maya R.</span><span class="track"><i class="hi" style="width:82%"></i></span><span class="pct">82%</span></div>
+        <div class="c-row"><span class="pip lo"></span><span class="nm">Jordan T.</span><span class="track"><i class="lo" style="width:41%"></i></span><span class="pct">41%</span></div>
+        <div class="c-row"><span class="pip md"></span><span class="nm">Alex K.</span><span class="track"><i class="md" style="width:63%"></i></span><span class="pct">63%</span></div>
+      </div>
+    </div>` },
+  chat: { label: 'AI tutor chat', html: () => `
+    <div class="sec c-chat">
+      <div class="c-chatbox">
+        <span class="c-mode">Personalized to this student</span>
+        <div class="c-bub stu">How do I solve for displacement?</div>
+        <div class="c-bub tut">You've <b>mastered velocity (94%)</b>, but <b>area under the curve is still shaky (38%)</b>. Let's start there: can you sketch what the area under a v(t) curve represents?</div>
+      </div>
+    </div>` },
+  timeline: { label: 'Traction timeline', html: () => `
+    <div class="sec c-tl">
+      <div class="spine"><span class="dot"></span></div>
+      <div class="c-tlcard">
+        <span class="c-date">JUN 29, 2026</span>
+        <h4 class="c-tlh">TEDCO BII Grant Award</h4>
+        <p class="c-tlb">Awarded a <b>$49,838</b> TEDCO Baltimore Innovation Initiative grant, funding a 9-month build at JHU.</p>
+        <span class="c-ext">Read Announcement ↗</span>
+      </div>
+    </div>` },
+  team: { label: 'Team + quote', html: () => `
+    <div class="sec c-team">
+      <div class="c-tcard"><div class="ava"></div><div class="tn">Peter Seelman</div><div class="tr">CEO</div><div class="tb">Background in AI systems at JHU APL and NASA.</div></div>
+      <div class="c-qbox" style="flex:1;">
+        <p class="c-qt">"A tool that would be indispensable to me as an instructor."</p>
+        <span class="c-qc">Prof. Kobe Marshall-Stevens · JHU Mathematics</span>
+      </div>
+    </div>` },
+};
+
+// rotation: every option shows nav + 2 different sections; all sections cycle across the 20
+const KEYS = ['hero','stats','classview','chat','timeline','team'];
+function partsFor(i){
+  const a = KEYS[i % 6], b = KEYS[(i + 2 + Math.floor(i/6)) % 6];
+  return b === a ? [a, KEYS[(i+3)%6]] : [a, b];
+}
+
+function lum(hex){ const c=[1,3,5].map(o=>parseInt(hex.slice(o,o+2),16)/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)); return .2126*c[0]+.7152*c[1]+.0722*c[2]; }
+function ratio(a,b){ const [x,y]=[lum(a),lum(b)].sort((p,q)=>q-p); return ((x+.05)/(y+.05)).toFixed(1); }
+
+const root = document.getElementById('root');
+const toc = document.getElementById('toc');
+DIRECTIONS.forEach((d, i) => {
+  const t = d.tokens;
+  const vars = `--bg:${t.bg}; --band:${t.band}; --card:${t.card}; --inset:${t.inset}; --line:${t.line}; --lineStrong:${t.lineStrong}; --track:${t.track}; --head:${t.head}; --body:${t.body}; --muted:${t.muted}; --accent:${t.accent}; --accentInk:${t.accentInk}; --accentShadow:${t.accentShadow}; --accentText:${t.accentText}; --accentSoft:${t.accentSoft}; --accentSoftBorder:${t.accentSoftBorder};`;
+  const parts = partsFor(i);
+  const el = document.createElement('div');
+  el.className = 'option'; el.id = 'opt-' + (i+1);
+  el.innerHTML = `
+    <div class="opt-head"><h2>${i+1} · ${d.name}${d.dark ? ' 🌑' : ''}</h2><span class="scheme">${d.tagline}</span></div>
+    <p class="opt-why">${d.why}</p>
+    <p class="parts">Showing: ${parts.map(p=>COMPONENTS[p].label).join(' · ')}</p>
+    <div class="mock" style="${vars}">${NAV()}${parts.map(p=>COMPONENTS[p].html()).join('')}</div>
+    <div class="swatches">
+      <div class="sw" style="background:${t.bg}; color:${t.head};">${t.bg}<span>surface 60%</span></div>
+      <div class="sw" style="background:${t.card}; color:${t.head};">${t.card}<span>cards 30%</span></div>
+      <div class="sw" style="background:${t.accent}; color:${t.accentInk};">${t.accent}<span>accent 10%</span></div>
+      <div class="sw" style="background:${t.body}; color:${t.bg};">${t.body}<span>body ink · ${ratio(t.body, t.bg)}:1</span></div>
+      <div class="sw" style="background:#476ee3; color:#fff;">#476ee3<span>data blue (constant)</span></div>
+    </div>`;
+  root.appendChild(el);
+  const a = document.createElement('a');
+  a.href = '#opt-' + (i+1); a.textContent = (i+1) + ' ' + d.name + (d.dark ? ' 🌑' : '');
+  toc.appendChild(a);
+});
+</script>
+</body>
+</html>
