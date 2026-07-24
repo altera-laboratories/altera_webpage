@@ -1,3 +1,9 @@
 /node_modules
 /.venv
 .DS_Store
+
+# Internal grant/application working files must never be published
+# (the repo root is the public site: every tracked file is world-readable)
+Altera_Core_BII_*
+Blaze_Application*
+kg_system_audit_prompt*
