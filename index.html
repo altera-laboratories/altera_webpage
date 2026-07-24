@@ -823,8 +823,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .nav-toggle { display: inline-flex !important; order: 3 !important; }
 
     /* --- the menu: overlays the page, so the bar height never moves ---
-       .wrap is position:relative, so this anchors to .wrap's padding box;
-       the -22px pull cancels its gutter and lets the panel run edge to edge. */
+       The containing block here is .nav-inner, which is position:relative and
+       sits INSIDE .wrap's 22px gutter (331px at x=22). So the -22px pull is
+       what makes the panel full-bleed, and its own 22px padding then puts the
+       labels back on the body's gutter. Measured: panel 0..375, labels at 22,
+       same as h1 and the lede. (v2/_site.html anchors to .wrap instead and
+       therefore uses left/right 0 -- do not copy these offsets between files.) */
     header.nav nav.links {
       display: none !important;
       position: absolute !important;
