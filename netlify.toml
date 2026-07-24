@@ -20,6 +20,13 @@
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
 
+# Images change rarely and are renamed (or ?v= bumped) when they do, so let
+# phones keep them for a month instead of revalidating on every visit.
+[[headers]]
+  for = "/public/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, stale-while-revalidate=604800"
+
 # The v2 design workshop and the archived v1 page stay reachable for the
 # team but must not be indexed or surface in search/social previews.
 [[headers]]

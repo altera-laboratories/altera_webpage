@@ -69,6 +69,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="preload" as="image" type="image/webp"
+      imagesrcset="public/images/hero/cognitive-collage-480.webp 480w, public/images/hero/cognitive-collage-760.webp 760w, public/images/hero/cognitive-collage-1040.webp 1040w"
+      imagesizes="(max-width: 564px) calc(100vw - 44px), (max-width: 1080px) 520px, 440px">
 <style>
   :root {
     /* Reading Room palette */
@@ -380,10 +383,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .smi-bar > i { width: 74%; }
   }
 </style>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css">
+  <!-- KaTeX renders via deferred JS, so its stylesheet must not block first paint -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css"></noscript>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- All d3/lucide consumers poll or guard on DOMContentLoaded, so both can defer -->
+  <script defer src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@latest"></script>
 <style id="v2-spacing-normalize">
   /* Uniform vertical rhythm across all content sections (post-assembly normalization) */
   section[id] { padding-top: 80px !important; padding-bottom: 80px !important; }
@@ -474,47 +480,38 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   #v2core-legend .lg-row{ flex-wrap:wrap !important; }
 }
 
-/* ===== Mobile nav (<=760px): replace display:none nav.links with CSS-only hor ===== */
+/* ===== Mobile nav (<=760px): replace display:none nav.links with CSS-only wrap ===== */
 /* Mobile nav fix: <=760px previously hid nav.links entirely, leaving phones
-   with no navigation. Convert the existing nav into a horizontally-scrollable
-   strip. CSS only, no markup change. >=44px tap targets preserved. */
+   with no navigation. The first fix was a horizontal scroll strip, but it
+   hard-clipped labels mid-word at the screen edge ("Cognitive C…"), which
+   read as broken. Wrap the links into a centered pill row instead: every
+   label fully visible, no scroll, no mask. >=44px tap targets preserved. */
 @media (max-width: 760px) {
   /* Override the display:none that removed all phone navigation */
   nav.links {
     display: flex !important;
-    flex-wrap: nowrap !important;
+    flex-wrap: wrap !important;
     align-items: center !important;
-    gap: 4px !important;
-    /* Span the full nav row beneath brand + CTA so it can scroll on its own line */
+    justify-content: center !important;
+    gap: 2px 4px !important;
+    /* Span the full nav row beneath brand + CTA on its own line */
     order: 3 !important;
     flex: 0 0 100% !important;
     width: 100% !important;
-    margin-top: 10px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    scroll-snap-type: x proximity !important;
-    /* Hide scrollbar (Firefox + legacy) while keeping it scrollable */
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    /* Soft fade hint that content scrolls horizontally */
-    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%) !important;
-            mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%) !important;
+    margin-top: 6px !important;
   }
-  nav.links::-webkit-scrollbar { display: none !important; }
 
-  /* Allow the nav row to wrap the scroll strip onto a second line */
+  /* Allow the nav row to wrap the link row onto a second line */
   .nav-inner { flex-wrap: wrap !important; }
 
   nav.links a.link {
     flex: 0 0 auto !important;
     white-space: nowrap !important;
-    scroll-snap-align: start !important;
     /* >=44px tap target height while staying visually compact */
     min-height: 44px !important;
     display: inline-flex !important;
     align-items: center !important;
-    padding: 0 14px !important;
+    padding: 0 12px !important;
     font-size: 14.5px !important;
   }
 }
@@ -741,8 +738,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     header.nav .nav-cta .btn{ white-space:nowrap !important; padding:10px 16px !important; }
   }
   @media (max-width: 760px){
-    header.nav .nav-inner{ padding-top:10px !important; padding-bottom:10px !important; }
-    header.nav .brand img{ height:56px !important; }
+    header.nav .nav-inner{ padding-top:8px !important; padding-bottom:8px !important; }
+    header.nav .brand img{ height:48px !important; }
     .brand-name{ white-space:nowrap !important; }
     header.nav .nav-cta .btn{ white-space:nowrap !important; }
   }
@@ -862,7 +859,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
             <!-- ornaments: hand-cut paper books, bulb, atom, globe -->
 
-            <img src="public/images/hero/cognitive-collage.png?v=2" alt="A torn painted-paper collage of a human head in profile; the mind is an embroidered brain stitched in royal-blue thread, the Cognitive Core assembling many concepts into one mastery model." style="display:block;width:100%;height:auto;border-radius:8px;" />
+            <picture>
+              <source type="image/webp"
+                      srcset="public/images/hero/cognitive-collage-480.webp 480w, public/images/hero/cognitive-collage-760.webp 760w, public/images/hero/cognitive-collage-1040.webp 1040w"
+                      sizes="(max-width: 564px) calc(100vw - 44px), (max-width: 1080px) 520px, 440px">
+              <img src="public/images/hero/cognitive-collage-1040.jpg" width="1040" height="1307" fetchpriority="high" decoding="async" alt="A torn painted-paper collage of a human head in profile; the mind is an embroidered brain stitched in royal-blue thread, the Cognitive Core assembling many concepts into one mastery model." style="display:block;width:100%;height:auto;border-radius:8px;" />
+            </picture>
           </div>
 
         </div>
@@ -873,22 +875,22 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <span class="strip-label">Built with / backed by</span>
             <div class="partners">
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.trimmed.svg" alt="Johns Hopkins University" />
+                <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.trimmed.svg" alt="Johns Hopkins University" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Marie LaPere Center for Entrepreneurship" />
+                <img class="p-logo" src="public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Marie LaPere Center for Entrepreneurship" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://www.nvidia.com/en-us/startups/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" />
+                <img class="p-logo" src="public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://cloud.google.com/startup" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud for Startups" />
+                <img class="p-logo" src="public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud for Startups" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" />
+                <img class="p-logo" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://www.tedcomd.com/news-events/press-releases/2026/tedcos-maryland-innovation-initiative-announces-664448-granted" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO" />
+                <img class="p-logo" src="public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO" loading="lazy" decoding="async">
               </a>
             </div>
           </div>
@@ -1582,7 +1584,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="pin eyebrow">Faculty Endorsement</span>
           <div class="quote-body">
             <span class="headshot">
-              <img src="./public/images/headshots/Dr_Marshall-Stevens.jpg" alt="Prof. Kobe Marshall-Stevens" />
+              <img src="./public/images/headshots/Dr_Marshall-Stevens.webp" alt="Prof. Kobe Marshall-Stevens" loading="lazy" decoding="async">
             </span>
             <div>
               <blockquote>
@@ -2020,7 +2022,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c4">
         <div>
           <div class="vp-head">
-            <img class="vp-canvas-img" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas">
+            <img class="vp-canvas-img" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
             <span class="vp-card-eyebrow">Integration Partner</span>
           </div>
           <h4 class="h4-serif">Works Inside Canvas</h4>
@@ -3000,7 +3002,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Read Announcement <i data-lucide="external-link"></i>
             </a>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO">
+              <img class="logo" src="./public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO" loading="lazy" decoding="async">
             </div>
           </div>
         </div>
@@ -3019,7 +3021,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Accepted into the <strong>Google Cloud for Startups</strong> program, securing cloud infrastructure credits and technical support to scale our platform.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud">
+              <img class="logo" src="./public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud" loading="lazy" decoding="async">
             </div>
           </div>
         </div>
@@ -3038,7 +3040,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Accepted into <strong>NVIDIA Inception</strong>, gaining access to GPU cloud credits, DGX Cloud, and NVIDIA's deep learning ecosystem to accelerate our AI engine.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception">
+              <img class="logo" src="./public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" loading="lazy" decoding="async">
             </div>
           </div>
         </div>
@@ -3057,7 +3059,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Signed a commercial <strong>LTI 1.3 license</strong> with Instructure at the Integrated partner tier, so Altera ships inside any Canvas course and is listed in the Canvas partner directory.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas">
+              <img class="logo" src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
             </div>
           </div>
         </div>
@@ -3080,11 +3082,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             </a>
             <div class="tr-photo video">
               <span class="frame-inner">
-                <img src="./public/images/logos/FUEL.JPEG" alt="JHU Fuel Demo Day Win">
+                <img src="./public/images/logos/FUEL.webp" alt="JHU Fuel Demo Day Win" loading="lazy" decoding="async">
               </span>
             </div>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Center">
+              <img class="logo" src="./public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Center" loading="lazy" decoding="async">
               <span class="seam" aria-hidden="true"></span>
               <span class="tr-pava-name">
                 <span>Pava Marie LaPere Center</span>
@@ -3108,7 +3110,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <div class="tr-quote">
               <div class="q-row">
                 <span class="q-avatar">
-                  <img src="./public/images/headshots/Dr_Marshall-Stevens.jpg" alt="Prof. Kobe Marshall-Stevens">
+                  <img src="./public/images/headshots/Dr_Marshall-Stevens.webp" alt="Prof. Kobe Marshall-Stevens" loading="lazy" decoding="async">
                 </span>
                 <div>
                   <blockquote>
@@ -3153,11 +3155,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             </p>
             <div class="tr-photo portrait">
               <span class="frame-inner">
-                <img src="./public/images/Pava-Center-Wrap-Up-2025-Main-photo-980x654.jpg" alt="2025 Fuel Cohort">
+                <img src="./public/images/Pava-Center-Wrap-Up-2025-Main-photo-980x654.webp" alt="2025 Fuel Cohort" loading="lazy" decoding="async">
               </span>
             </div>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Center">
+              <img class="logo" src="./public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Center" loading="lazy" decoding="async">
               <span class="seam" aria-hidden="true"></span>
               <span class="tr-pava-name">
                 <span>Pava Marie LaPere Center</span>
@@ -3378,7 +3380,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="v2-role">CEO</span>
         </div>
         <div class="v2-photo">
-          <img src="./public/images/headshots/Peter.jpg" alt="Peter Seelman" style="object-position:center 15%;" loading="lazy">
+          <img src="./public/images/headshots/Peter.webp" alt="Peter Seelman" style="object-position:center 15%;" loading="lazy">
         </div>
         <div class="v2-card-body">
           <p class="v2-school">Johns Hopkins University</p>
@@ -3394,7 +3396,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="v2-role">CFO, R&D Lead</span>
         </div>
         <div class="v2-photo">
-          <img src="./public/images/headshots/Alex.jpeg" alt="Alex Kroumov" style="object-position:center 10%;" loading="lazy">
+          <img src="./public/images/headshots/Alex.webp" alt="Alex Kroumov" style="object-position:center 10%;" loading="lazy">
         </div>
         <div class="v2-card-body">
           <p class="v2-school">Johns Hopkins University</p>
@@ -3410,7 +3412,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="v2-role">CTO, Lead Developer</span>
         </div>
         <div class="v2-photo">
-          <img src="./public/images/headshots/Akira.jpeg" alt="Akira Lonske" style="object-position:center 45%;" loading="lazy">
+          <img src="./public/images/headshots/Akira.webp" alt="Akira Lonske" style="object-position:center 45%;" loading="lazy">
         </div>
         <div class="v2-card-body">
           <p class="v2-school">Johns Hopkins University</p>
@@ -3426,7 +3428,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="v2-role">Outreach & Equity Lead</span>
         </div>
         <div class="v2-photo">
-          <img src="./public/images/headshots/Mercedes.png" alt="Mercedes Rend" style="object-position:center 18%;" loading="lazy">
+          <img src="./public/images/headshots/Mercedes.webp" alt="Mercedes Rend" style="object-position:center 18%;" loading="lazy">
         </div>
         <div class="v2-card-body">
           <p class="v2-school">Johns Hopkins University</p>
@@ -3447,7 +3449,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- Dr. Marshall-Stevens -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Dr_Marshall-Stevens.jpg" alt="Dr. Kobe Marshall-Stevens" loading="lazy">
+            <img src="./public/images/headshots/Dr_Marshall-Stevens.webp" alt="Dr. Kobe Marshall-Stevens" loading="lazy">
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Dr. Kobe Marshall-Stevens</h4>
@@ -3460,7 +3462,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- Dr. Brown -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Dr_Brown.png" alt="Dr. Richard Brown" loading="lazy">
+            <img src="./public/images/headshots/Dr_Brown.webp" alt="Dr. Richard Brown" loading="lazy">
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Dr. Richard Brown</h4>
@@ -3473,7 +3475,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- Jennifer Harvey -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Jen_Harvey.jpeg" alt="Jennifer Harvey" loading="lazy">
+            <img src="./public/images/headshots/Jen_Harvey.webp" alt="Jennifer Harvey" loading="lazy">
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Jennifer Harvey</h4>
@@ -3486,7 +3488,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- Iris Gupta -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Iris.jpeg" alt="Iris Gupta" loading="lazy">
+            <img src="./public/images/headshots/Iris.webp" alt="Iris Gupta" loading="lazy">
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Iris Gupta</h4>
