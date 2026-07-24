@@ -480,41 +480,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   #v2core-legend .lg-row{ flex-wrap:wrap !important; }
 }
 
-/* ===== Mobile nav (<=760px): replace display:none nav.links with CSS-only wrap ===== */
-/* Mobile nav fix: <=760px previously hid nav.links entirely, leaving phones
-   with no navigation. The first fix was a horizontal scroll strip, but it
-   hard-clipped labels mid-word at the screen edge ("Cognitive C…"), which
-   read as broken. Wrap the links into a centered pill row instead: every
-   label fully visible, no scroll, no mask. >=44px tap targets preserved. */
-@media (max-width: 760px) {
-  /* Override the display:none that removed all phone navigation */
-  nav.links {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 2px 4px !important;
-    /* Span the full nav row beneath brand + CTA on its own line */
-    order: 3 !important;
-    flex: 0 0 100% !important;
-    width: 100% !important;
-    margin-top: 6px !important;
-  }
-
-  /* Allow the nav row to wrap the link row onto a second line */
-  .nav-inner { flex-wrap: wrap !important; }
-
-  nav.links a.link {
-    flex: 0 0 auto !important;
-    white-space: nowrap !important;
-    /* >=44px tap target height while staying visually compact */
-    min-height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    padding: 0 12px !important;
-    font-size: 14.5px !important;
-  }
-}
+/* Mobile nav (<=760px) now lives in the #v2-mobile-nav layer at the end of head:
+   the wrapping pill row that stood here grew the sticky bar to 229px. */
 
 /* ===== Component consistency (eyebrow / button / pill-badge / card-radius / i ===== */
 /* ============================================================
@@ -797,6 +764,127 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .v2-problem .vp-fig .num{ margin-top:0 !important; }
   .v2-problem .vp-stats{ align-items:start !important; }
 </style>
+<style id="v2-mobile-nav">
+  /* ============================================================
+     MOBILE NAV + DENSITY (<=760px)  -- last layer, so it wins
+     ------------------------------------------------------------
+     History of this bar on phones, in order:
+       1. nav.links display:none        -> no navigation at all
+       2. horizontal scroll strip       -> clipped labels mid-word ("Cognitive C...")
+       3. wrapping centered pill row    -> every label visible, but the sticky
+                                           bar became 229px: 28% of a 812px
+                                           viewport, gone on every screen of a
+                                           40-screen page, and section anchors
+                                           (scroll-margin-top:94px) landed their
+                                           headings underneath it.
+     4 (here). One 64px row + a disclosure menu. No clipping, no wrap, the bar
+     costs 8% instead of 28%, and the menu turns a long scroll into a jump.
+     ============================================================ */
+
+  /* The toggle is phone-only; it stays out of the desktop bar entirely. */
+  .nav-toggle {
+    display: none;
+    flex: 0 0 44px; width: 44px; height: 44px;
+    align-items: center; justify-content: center;
+    padding: 0; cursor: pointer;
+    background: transparent; color: var(--ink);
+    border: 1px solid rgba(31,26,20,.16); border-radius: 10px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-toggle svg { display: block; width: 22px; height: 22px; }
+  .nav-toggle .icon-close { display: none; }
+  .nav-toggle[aria-expanded="true"] .icon-open  { display: none; }
+  .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+  /* Sign in rides in the menu on phones only; the desktop bar has its own. */
+  .links .link-signin { display: none; }
+
+  @media (max-width: 760px) {
+    /* The bar sat in a 48px gutter while the page body uses 22px, so the logo
+       hung inboard of every headline beneath it. Match the body gutter. */
+    header.nav .wrap { padding-left: 22px !important; padding-right: 22px !important; }
+
+    /* --- the bar: one row, nothing wraps --- */
+    header.nav .nav-inner {
+      flex-wrap: nowrap !important;
+      align-items: center !important;
+      gap: 10px !important;
+      min-height: 64px !important;
+      padding-top: 0 !important; padding-bottom: 0 !important;
+    }
+    /* #nav-size pins the brand ANCHOR to 70px, not just its img; left alone it
+       sets the floor for the whole bar and min-height:64px never takes. */
+    header.nav .brand {
+      flex: 0 0 auto !important; height: auto !important;
+      display: flex !important; align-items: center !important;
+    }
+    header.nav .brand img { height: 40px !important; width: auto !important; }
+    header.nav .nav-cta { order: 2 !important; margin-left: auto !important; }
+    header.nav .nav-cta .btn-clay { padding: 9px 14px !important; font-size: 14px !important; }
+    .nav-toggle { display: inline-flex !important; order: 3 !important; }
+
+    /* --- the menu: overlays the page, so the bar height never moves ---
+       .wrap is position:relative, so this anchors to .wrap's padding box;
+       the -22px pull cancels its gutter and lets the panel run edge to edge. */
+    header.nav nav.links {
+      display: none !important;
+      position: absolute !important;
+      top: 100% !important; left: -22px !important; right: -22px !important;
+      flex-direction: column !important; align-items: stretch !important;
+      gap: 0 !important; margin: 0 !important;
+      padding: 4px 22px 12px !important;
+      background: #f3ead8 !important;
+      border-bottom: 1px solid rgba(31,26,20,.10) !important;
+      box-shadow: 0 18px 28px -20px rgba(31,26,20,.45) !important;
+    }
+    header.nav .nav-inner.is-open nav.links { display: flex !important; }
+    header.nav nav.links a.link {
+      display: flex !important; align-items: center !important;
+      min-height: 48px !important; padding: 0 2px !important;
+      font-size: 16px !important; white-space: nowrap !important;
+      border-bottom: 1px solid rgba(31,26,20,.07) !important;
+    }
+    header.nav nav.links a.link:last-child { border-bottom: 0 !important; }
+    .links .link-signin { display: flex !important; }
+
+    /* --- anchors must clear the 64px bar, not the old 229px one --- */
+    section[id] { scroll-margin-top: 76px !important; }
+
+    /* --- hero: the eyebrow pill fit on one line at .08em, not .14em, and the
+           lede reads as 7 lines instead of 8 --- */
+    .hero .eyebrow { letter-spacing: .08em !important; padding: 6px 11px !important; }
+    .hero p.sub { font-size: 17px !important; line-height: 1.55 !important; }
+
+    /* --- concept rows: "Related Rates" and "Optimization" were ellipsised at
+           86px. A narrower track buys the label the ~13px it was short. --- */
+    .v2-product .vp-row { gap: .55rem !important; padding: .7rem .8rem !important; }
+    .v2-product .vp-row .track { width: 3.6rem !important; }
+    .v2-product .vp-row .nm {
+      overflow: visible !important; text-overflow: clip !important;
+    }
+  }
+</style>
+<noscript>
+  <!-- No JS means no toggle, so fall back to the wrapping row: a tall bar beats
+       a bar whose only navigation is behind a button that cannot open. -->
+  <style>
+    @media (max-width: 760px) {
+      .nav-toggle { display: none !important; }
+      header.nav .nav-inner { flex-wrap: wrap !important; }
+      header.nav nav.links {
+        display: flex !important; position: static !important;
+        flex-flow: row wrap !important; justify-content: center !important;
+        flex: 0 0 100% !important; width: 100% !important;
+        padding: 0 0 8px !important; margin-top: 4px !important;
+        box-shadow: none !important; border-bottom: 0 !important;
+        background: transparent !important;
+      }
+      header.nav nav.links a.link {
+        min-height: 44px !important; padding: 0 10px !important;
+        font-size: 14.5px !important; border-bottom: 0 !important;
+      }
+    }
+  </style>
+</noscript>
 </head>
 <body>
 
@@ -808,12 +896,15 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs">
         </a>
 
-        <nav class="links" aria-label="Primary">
+        <nav class="links" id="nav-links" aria-label="Primary">
           <a class="link" href="#problem">Our Mission</a>
           <a class="link" href="#product">Product</a>
           <a class="link" href="#core">Cognitive Core</a>
           <a class="link" href="#traction">Evidence</a>
           <a class="link" href="#team">Team</a>
+          <!-- phone-only: the desktop bar carries Sign in beside the CTA, but that
+               button is hidden <=760px, so the menu is its only home on a phone -->
+          <a class="link link-signin" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">Sign in</a>
         </nav>
 
         <div class="nav-cta">
@@ -823,6 +914,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
           </a>
         </div>
+
+        <button class="nav-toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Open navigation menu">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>
+        </button>
       </div>
     </div>
   </header>
@@ -3539,6 +3635,36 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
   </div>
 </footer>
+<script>
+/* Mobile nav disclosure (<=760px). Styling lives in the #v2-mobile-nav layer;
+   this only owns the open/closed state and the aria that goes with it. */
+document.addEventListener('DOMContentLoaded', function(){
+  var bar = document.querySelector('header.nav .nav-inner');
+  var btn = bar && bar.querySelector('.nav-toggle');
+  if (!bar || !btn) return;
+
+  function setOpen(open){
+    bar.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+  }
+
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(!bar.classList.contains('is-open'));
+  });
+
+  /* Tapping a link navigates, so the menu must not stay open over the target. */
+  Array.prototype.forEach.call(bar.querySelectorAll('nav.links a.link'), function(a){
+    a.addEventListener('click', function(){ setOpen(false); });
+  });
+
+  document.addEventListener('click', function(e){ if (!bar.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setOpen(false); });
+  /* Rotating to landscape can cross the breakpoint with the menu still open. */
+  window.addEventListener('resize', function(){ if (window.innerWidth > 760) setOpen(false); });
+});
+</script>
 <script>document.addEventListener("DOMContentLoaded",function(){(function go(){if(window.lucide){lucide.createIcons();}else{setTimeout(go,80);}})();});</script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
