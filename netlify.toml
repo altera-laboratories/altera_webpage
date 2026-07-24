@@ -2,8 +2,32 @@
   publish = "."
   command = ""
 
+# /info was the November 24, 2025 combined legal page; the July 14, 2026
+# privacy.html and terms.html supersede it.
+[[redirects]]
+  from = "/info"
+  to = "/terms.html"
+  status = 301
+
+[[redirects]]
+  from = "/info/*"
+  to = "/terms.html"
+  status = 301
+
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
+
+# The v2 design workshop and the archived v1 page stay reachable for the
+# team but must not be indexed or surface in search/social previews.
+[[headers]]
+  for = "/v2/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/v1.html"
+  [headers.values]
+    X-Robots-Tag = "noindex"
