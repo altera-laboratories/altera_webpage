@@ -224,6 +224,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     font-weight: 500;
     color: var(--terracotta);
     position: relative;
+    /* inline-block keeps this one word in a SINGLE inline fragment. As a plain
+       inline it splits in two whenever it lands on a line-break boundary, and
+       an absolutely positioned ::after inside a fragmented inline collapses to
+       width:0, silently dropping the underline swatch below. The old headline
+       happened to sit mid-line so it never showed; any rewrite could trip it. */
+    display: inline-block;
   }
   /* hand-painted underline swatch under the emphasized word */
   h1.headline em::after {
@@ -893,6 +899,42 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     /* body: keep the size, tighten only the leading */
     .v2-product .vp-body { font-size: 17.5px !important; line-height: 1.55 !important; }
     .tr-body, .v2-bio, .v2-advisor-blurb { line-height: 1.5 !important; }
+
+    /* ---------- open hero ----------
+       Measured against studyfetch.com at 375x812: it opens with 22 words, ONE
+       action, and the headline sitting 444px down, so the first thing the page
+       does is hold its breath. Ours opened with 55 words, three actions and a
+       seven-line paragraph starting at 103px. Words per screen were nearly
+       identical (52 vs 59), so the difference was never density. It was room.
+
+       The sub-paragraph stays: "recall, apply, and analyze" is what keeps the
+       claim Bloom's-safe, "zero extra work for you" answers the faculty
+       exhaustion complaint almost verbatim, and since the eyebrow came out it
+       is the only thing carrying the course-level framing. So buy the openness
+       with space and sequence instead of deletion: headline, then the single
+       action, then the paragraph as the reward for scrolling. */
+    .hero { padding-top: 116px !important; }
+
+    .hero-copy {
+      display: flex !important; flex-direction: column !important;
+      text-align: center !important;
+    }
+    .hero-copy h1.headline { order: 1 !important; }
+    .hero-copy .hero-cta   { order: 2 !important; margin-top: 2px !important; }
+    /* Tried holding the whole first screen (min-height + margin-top:auto to drop
+       this to the fold). It opened a ~200px void under the button that read as a
+       bug, and the paragraph stayed on screen one regardless. Natural spacing
+       wins. A centred seven-line paragraph is unreadable, so this block opts
+       out of the centring above. */
+    .hero-copy p.sub {
+      order: 3 !important; text-align: left !important; margin-top: 34px !important;
+    }
+
+    /* one action in the hero. Our Mission is still in the menu and still the
+       second button on desktop; it just stops competing above the fold. */
+    .hero-cta { justify-content: center !important; }
+    .hero-cta .btn-ghost { display: none !important; }
+    .hero-cta .btn-primary { flex: 0 0 auto !important; padding: 15px 32px !important; }
   }
 </style>
 <noscript>
@@ -963,11 +1005,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
           <!-- LEFT: editorial copy -->
           <div class="hero-copy">
-            <span class="eyebrow"><span class="pulse" aria-hidden="true"></span>Course-level evidence of learning</span>
-
             <h1 class="headline" id="hero-h1">See what your students can <em>actually</em> do.</h1>
 
-            <p class="sub">Altera is not another AI chatbot. It shows you, concept by concept, what the students in your Canvas course can <b>recall, apply, and analyze</b>. You see where the course is getting through and where it needs a different approach, with zero extra work for you.</p>
+            <p class="sub">Altera shows you, concept by concept, what the students in your Canvas course can <b>recall, apply, and analyze</b>. You see where the course is getting through and where it needs a different approach, with zero extra work for you.</p>
 
             <div class="hero-cta">
               <a class="btn btn-primary" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">
