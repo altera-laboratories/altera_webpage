@@ -941,9 +941,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
        action, then the paragraph as the reward for scrolling. */
     .hero { padding-top: 116px !important; }
 
+    /* Boxes centred, text inside them flush left. align-items centres each
+       child as a BLOCK while text-align keeps the words ragged-right, so the
+       headline and lede read as normal left-aligned copy but the column sits
+       centred, and the single button centres with it. */
     .hero-copy {
       display: flex !important; flex-direction: column !important;
-      align-items: flex-start !important;
+      align-items: center !important;
       text-align: left !important;
     }
     .hero-copy h1.headline { order: 1 !important; }
