@@ -941,23 +941,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
        action, then the paragraph as the reward for scrolling. */
     .hero { padding-top: 116px !important; }
 
-    /* Boxes centred, text inside them flush left. align-items centres each
-       child as a BLOCK while text-align keeps the words ragged-right, so the
-       headline and lede read as normal left-aligned copy but the column sits
-       centred, and the single button centres with it. */
     .hero-copy {
       display: flex !important; flex-direction: column !important;
       align-items: center !important;
-      text-align: left !important;
+      text-align: center !important;
     }
-    /* Centre the headline BLOCK with its text still ragged-left inside it.
-       A wrapped block will not hug its own lines: max-content here is one long
-       unwrapped line (~700px), so width:fit-content resolves to the full 361px
-       column and centring becomes a no-op. It needs an explicit measure.
-       6.8em holds the natural three-line break with ~10px of slack past the
-       longest line (233px), and em keeps it tied to the clamp()ed font size.
-       align-items:center on .hero-copy then centres the narrowed box. */
-    .hero-copy h1.headline { order: 1 !important; max-width: 6.8em !important; }
+    .hero-copy h1.headline { order: 1 !important; }
     .hero-copy .hero-cta   { order: 2 !important; margin-top: 2px !important; }
     /* Tried holding the whole first screen (min-height + margin-top:auto to drop
        this to the fold). It opened a ~200px void under the button that read as a
@@ -970,7 +959,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
     /* one action in the hero. Our Mission is still in the menu and still the
        second button on desktop; it just stops competing above the fold. */
-    .hero-cta { justify-content: flex-start !important; }
+    .hero-cta { justify-content: center !important; }
     .hero-cta .btn-ghost { display: none !important; }
     .hero-cta .btn-primary { flex: 0 0 auto !important; padding: 15px 32px !important; }
   }
