@@ -950,7 +950,14 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       align-items: center !important;
       text-align: left !important;
     }
-    .hero-copy h1.headline { order: 1 !important; }
+    /* Centre the headline BLOCK with its text still ragged-left inside it.
+       A wrapped block will not hug its own lines: max-content here is one long
+       unwrapped line (~700px), so width:fit-content resolves to the full 361px
+       column and centring becomes a no-op. It needs an explicit measure.
+       6.8em holds the natural three-line break with ~10px of slack past the
+       longest line (233px), and em keeps it tied to the clamp()ed font size.
+       align-items:center on .hero-copy then centres the narrowed box. */
+    .hero-copy h1.headline { order: 1 !important; max-width: 6.8em !important; }
     .hero-copy .hero-cta   { order: 2 !important; margin-top: 2px !important; }
     /* Tried holding the whole first screen (min-height + margin-top:auto to drop
        this to the fold). It opened a ~200px void under the button that read as a
