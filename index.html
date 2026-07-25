@@ -805,9 +805,23 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .links .link-signin { display: none; }
 
   @media (max-width: 760px) {
-    /* The bar sat in a 48px gutter while the page body uses 22px, so the logo
-       hung inboard of every headline beneath it. Match the body gutter. */
-    header.nav .wrap { padding-left: 22px !important; padding-right: 22px !important; }
+    /* ONE mobile gutter, so the bar, the menu panel and the content cannot
+       drift apart. 16px is 75% of the 22px this page shipped with, giving the
+       column back ~12px of width on a 375px screen. Anything that needs to sit
+       flush to the screen edge cancels it with a negative margin of the same
+       token, never a hardcoded number. */
+    :root { --gutter-m: 16px; }
+
+    .wrap, .vp-wrap, .v2-core__wrap, .v2-sol-wrap, .tr-wrap, .v2-team-inner {
+      padding-left: var(--gutter-m) !important;
+      padding-right: var(--gutter-m) !important;
+    }
+    /* The bar sat in a 48px gutter while the body used 22px, so the logo hung
+       inboard of every headline beneath it. Same token now. */
+    header.nav .wrap {
+      padding-left: var(--gutter-m) !important;
+      padding-right: var(--gutter-m) !important;
+    }
 
     /* --- the bar: one row, nothing wraps --- */
     header.nav .nav-inner {
@@ -840,18 +854,20 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
     /* --- the menu: overlays the page, so the bar height never moves ---
        The containing block here is .nav-inner, which is position:relative and
-       sits INSIDE .wrap's 22px gutter (331px at x=22). So the -22px pull is
-       what makes the panel full-bleed, and its own 22px padding then puts the
-       labels back on the body's gutter. Measured: panel 0..375, labels at 22,
-       same as h1 and the lede. (v2/_site.html anchors to .wrap instead and
+       sits INSIDE .wrap's gutter. So the negative pull is what makes the panel
+       full-bleed, and its own padding then puts the labels back on the body's
+       text grid. Both come from --gutter-m, so changing the gutter keeps the
+       panel flush automatically. (v2/_site.html anchors to .wrap instead and
        therefore uses left/right 0 -- do not copy these offsets between files.) */
     header.nav nav.links {
       display: none !important;
       position: absolute !important;
-      top: 100% !important; left: -22px !important; right: -22px !important;
+      top: 100% !important;
+      left: calc(-1 * var(--gutter-m)) !important;
+      right: calc(-1 * var(--gutter-m)) !important;
       flex-direction: column !important; align-items: stretch !important;
       gap: 0 !important; margin: 0 !important;
-      padding: 4px 22px 12px !important;
+      padding: 4px var(--gutter-m) 12px !important;
       background: #f3ead8 !important;
       border-bottom: 1px solid rgba(31,26,20,.10) !important;
       box-shadow: 0 18px 28px -20px rgba(31,26,20,.45) !important;
@@ -927,7 +943,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
     .hero-copy {
       display: flex !important; flex-direction: column !important;
-      text-align: center !important;
+      align-items: flex-start !important;
+      text-align: left !important;
     }
     .hero-copy h1.headline { order: 1 !important; }
     .hero-copy .hero-cta   { order: 2 !important; margin-top: 2px !important; }
@@ -942,7 +959,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
     /* one action in the hero. Our Mission is still in the menu and still the
        second button on desktop; it just stops competing above the fold. */
-    .hero-cta { justify-content: center !important; }
+    .hero-cta { justify-content: flex-start !important; }
     .hero-cta .btn-ghost { display: none !important; }
     .hero-cta .btn-primary { flex: 0 0 auto !important; padding: 15px 32px !important; }
   }
