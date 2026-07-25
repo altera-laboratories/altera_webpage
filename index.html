@@ -828,6 +828,16 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     header.nav .nav-cta .btn-clay { padding: 9px 14px !important; font-size: 14px !important; }
     .nav-toggle { display: inline-flex !important; order: 3 !important; }
 
+    /* One "Try the Beta" on screen at a time. Above the fold the hero button
+       owns the action, so the bar's copy of it is redundant and reads as two
+       asks. Past the hero the reverse is true: the hero button is gone and the
+       page still has ~25 screens to run, so the bar has to carry it. Swap on
+       scroll instead of deleting either one. */
+    header.nav .nav-cta { display: none !important; }
+    body.past-hero header.nav .nav-cta { display: flex !important; }
+    .nav-toggle { margin-left: auto !important; }
+    body.past-hero .nav-toggle { margin-left: 0 !important; }
+
     /* --- the menu: overlays the page, so the bar height never moves ---
        The containing block here is .nav-inner, which is position:relative and
        sits INSIDE .wrap's 22px gutter (331px at x=22). So the -22px pull is
@@ -3735,6 +3745,19 @@ document.addEventListener('DOMContentLoaded', function(){
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setOpen(false); });
   /* Rotating to landscape can cross the breakpoint with the menu still open. */
   window.addEventListener('resize', function(){ if (window.innerWidth > 760) setOpen(false); });
+
+  /* Hand the CTA from the hero to the bar once the hero button scrolls away,
+     so only one "Try the Beta" is ever on screen. CSS owns the visibility; this
+     only sets the flag. No IntersectionObserver means the class never lands and
+     the bar CTA stays visible, which is the safe failure. */
+  var heroCta = document.querySelector('.hero-cta');
+  if (heroCta && 'IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries){
+      document.body.classList.toggle('past-hero', !entries[0].isIntersecting);
+    }, { rootMargin: '-64px 0px 0px 0px' }).observe(heroCta);
+  } else {
+    document.body.classList.add('past-hero');
+  }
 });
 </script>
 <script>document.addEventListener("DOMContentLoaded",function(){(function go(){if(window.lucide){lucide.createIcons();}else{setTimeout(go,80);}})();});</script>
