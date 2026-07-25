@@ -14,6 +14,15 @@
   to = "/terms.html"
   status = 301
 
+# CLAUDE.md is agent guidance, not site content, and it records internal ops
+# detail (deploy-credit history, the July 2026 published-document incident).
+# The repo root is the publish directory, so without this rule Netlify would
+# serve it at /CLAUDE.md.
+[[redirects]]
+  from = "/CLAUDE.md"
+  to = "/index.html"
+  status = 404
+
 [[headers]]
   for = "/*"
   [headers.values]
