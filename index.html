@@ -869,6 +869,30 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .v2-product .vp-row .nm {
       overflow: visible !important; text-overflow: clip !important;
     }
+
+    /* ---------- mobile type scale ----------
+       The desktop scale came down to the phone unchanged: card headings landed
+       at 32px, a hair under the 34px SECTION headings, so every bento card
+       shouted at the same volume as the section it sat in, and the 20px ledes
+       ran at 1.7 leading. Reset the ratios for a 375px column. Anything already
+       at the 16px floor keeps its size and only gives back leading. */
+
+    /* headings: re-establish the step between section and card */
+    .vp-h2, .v2-sol-h2, .v2-core__h2,
+    .v2-product .vp-intro h2, .v2-team .v2-team-head h2 {
+      font-size: 29px !important; line-height: 1.12 !important;
+    }
+    .v2-product .vp-card h3 { font-size: 24px !important; line-height: 1.2 !important; }
+
+    /* ledes: 20.2/1.7 is a desktop measure; 18/1.55 is a phone measure */
+    .vp-lede, .v2-sol-lead, .v2-product .vp-sub,
+    .v2-core__lead, .v2-team .v2-team-sub {
+      font-size: 18px !important; line-height: 1.55 !important;
+    }
+
+    /* body: keep the size, tighten only the leading */
+    .v2-product .vp-body { font-size: 17.5px !important; line-height: 1.55 !important; }
+    .tr-body, .v2-bio, .v2-advisor-blurb { line-height: 1.5 !important; }
   }
 </style>
 <noscript>

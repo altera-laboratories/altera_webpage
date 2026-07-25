@@ -398,6 +398,34 @@ p.sub b { color: var(--ink); font-weight: 600; }
   p.sub { font-size: 17px; line-height: 1.55; }
 
   .strip-inner { gap: 18px; }
+
+  /* ---------- mobile type scale ----------
+     The desktop scale reached the phone unchanged: card headings landed at
+     32px against 34px SECTION headings, so every bento card shouted at the
+     volume of the section holding it, and 20px ledes ran at 1.7 leading.
+     Reset the ratios for a 375px column; anything already at the 16px floor
+     keeps its size and gives back only leading.
+
+     !important is load-bearing here, not laziness: each section's CSS lives in
+     a <style> beside its markup in the BODY, so those rules always win on
+     source order over this <head> layer no matter how they are scoped. Keeping
+     the mobile scale in LAYER 3 costs one !important per line and keeps every
+     media query in one place, which is the point of the layer. */
+  .vp-h2, .v2-sol-h2, .v2-core__h2,
+  .v2-product .vp-intro h2, .v2-team .v2-team-head h2 {
+    font-size: 29px !important; line-height: 1.12 !important;
+  }
+  .v2-product .vp-card h3 { font-size: 24px !important; line-height: 1.2 !important; }
+
+  .vp-lede, .v2-sol-lead, .v2-product .vp-sub,
+  .v2-core__lead, .v2-team .v2-team-sub {
+    font-size: 18px !important; line-height: 1.55 !important;
+  }
+
+  .v2-product .vp-body, .v2-product .vp-c8 .vp-body {
+    font-size: 17.5px !important; line-height: 1.55 !important;
+  }
+  .tr-body, .v2-bio, .v2-advisor-blurb { line-height: 1.5 !important; }
 }
 
 @media (max-width: 640px) {
