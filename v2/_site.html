@@ -6,42 +6,136 @@
      ?theme=day|lamplit|board deep-links a mode and persists it. */
   (function(){
     var q = new URLSearchParams(location.search).get('theme');
-    var t = (q === 'day' || q === 'lamplit' || q === 'board') ? q : localStorage.getItem('altera-theme');
+    var t = (q === 'day' || q === 'lamplit' || q === 'board' || q === 'meridian' || q === 'meridian-night') ? q : localStorage.getItem('altera-theme');
     if (q) localStorage.setItem('altera-theme', q);
     if (t && t !== 'day') document.documentElement.dataset.theme = t;
   })();
 </script>
 
 <style id="design-tokens">
+/* ============================================================
+   LAYER 1 · DESIGN TOKENS
+   The page's only :root block. Two vocabularies live here: the
+   token contract (--paper-*, --ink-*, --signal-*, ...) mirroring
+   colors_and_type.css, and the legacy aliases (--paper, --ink,
+   --line, ...) that older section CSS still reads. Aliases
+   reference contract tokens where values agree and stay literal
+   where they genuinely differ.
+   The night layer (last block in <head>) overrides both
+   vocabularies per theme. Chart scripts read tokens at init:
+   NEVER rename a token.
+   ============================================================ */
 :root{
-  --paper-50:#faf5ea; --paper-100:#f3ead8; --paper-200:#ebdec5; --paper-300:#ddccac; --paper-400:#c9b793;
+  /* surfaces (paper) */
+  --paper-50:#f7f0de; /* warmed from the contract's #faf5ea; near-white read cold on this page */
+  --paper-100:#f3ead8; --paper-200:#ebdec5; --paper-300:#ddccac; --paper-400:#c9b793;
   --surface-base:var(--paper-100); --surface-elevated:var(--paper-200); --surface-hover:var(--paper-50); --surface-border:var(--paper-300);
+
+  /* ink (text) */
   --ink-900:#1f1a14; --ink-700:#3d3528; --ink-600:#5a4f3e; --ink-500:#7a6c56; --ink-400:#9c8c72;
-  --ink-soft:#7a6c56;
   --text:var(--ink-700); --text-mute:var(--ink-500); --text-faint:var(--ink-400);
+
+  /* accents */
   --signal-300:#9cb5f8; --signal-500:#476ee3; --signal-700:#2f4fb0;
-  --terracotta:#9c4a2f; --terracotta-400:#d07a4f; --terracotta-500:#c0603a; --terracotta-600:#9c4a2f;
-  --ochre-500:#cf8a3b; --ochre-600:#b5722a; --sage:#6f8f5f;
+  --terracotta-400:#d07a4f; --terracotta-500:#c0603a; --terracotta-600:#9c4a2f;
+  --ochre-500:#cf8a3b; --ochre-600:#b5722a;
+
+  /* mastery semantics: emerald high, amber mid, rose low */
   --mastery-high-fill:#0f7a52; --mastery-high-stroke:#1f9d6b; --mastery-med-fill:#c0791f; --mastery-med-stroke:#e0a232; --mastery-low-fill:#b5341f; --mastery-low-stroke:#d6492f;
+
+  /* status */
   --status-async-fg:#2f6b87; --status-async-bg:rgba(63,107,135,.12); --status-async-border:rgba(63,107,135,.30);
   --status-pending-fg:var(--signal-700); --status-pending-bg:rgba(71,110,227,.10); --status-pending-border:rgba(71,110,227,.32);
   --status-ok-fg:#0f7a52; --status-ok-bg:rgba(15,122,82,.12); --status-ok-border:rgba(15,122,82,.30);
   --status-warn-fg:#b5722a; --status-warn-bg:rgba(181,114,42,.12); --status-warn-border:rgba(181,114,42,.30);
   --status-err-fg:#b5341f; --status-err-bg:rgba(181,52,31,.10); --status-err-border:rgba(181,52,31,.30);
+
+  /* collage swatches */
   --swatch-parchment:#e7d9bd; --swatch-kraft:#b5722a; --swatch-ochre:#cf8a3b; --swatch-terracotta:#c0603a; --swatch-denim:#3f6b87; --swatch-sage:#6f8f5f; --swatch-slate:#5d6b7e; --swatch-ink:#2a241b; --swatch-signal:#476ee3;
+
+  /* paper grain: SVG turbulence data-URI, layered over fills at low opacity */
   --paper-grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+
+  /* type */
   --font-display:'Fraunces','Iowan Old Style',Georgia,serif; --font-sans:'Inter',system-ui,-apple-system,sans-serif; --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
   --fs-display-xl:clamp(2.75rem,6vw,5.5rem); --fs-heading-lg:clamp(2rem,4vw,3rem); --fs-heading-md:1.875rem; --fs-base:1.0625rem; --fs-sm:0.9375rem; --fs-xs:0.75rem;
   --tracking-display:-0.01em; --tracking-tight:-0.02em; --tracking-wide:0.04em; --tracking-widest:0.14em;
+
+  /* radii, shadows, borders, motion */
   --radius-pill:9999px; --radius-button:0.5rem; --radius-md:0.375rem; --radius-card:0.625rem; --radius-lg:1rem;
   --shadow-paper-sm:0 1px 2px rgba(31,26,20,.10); --shadow-paper:0 2px 6px rgba(31,26,20,.10),0 18px 36px -22px rgba(31,26,20,.30); --shadow-pin:0 12px 32px -14px rgba(31,26,20,.38); --shadow-signal:0 0 0 3px rgba(71,110,227,.18);
   --border-hairline:rgba(31,26,20,.10); --border-soft:rgba(31,26,20,.16); --border-ink:rgba(31,26,20,.28);
   --ease-soft:cubic-bezier(0.23,1,0.32,1);
+
+  /* page measure: one shared container width for nav, hero, and sections */
+  --maxw:1340px;
+
+  /* legacy aliases */
+  --paper:var(--paper-100); --paper-2:#ece0c6; --paper-edge:var(--swatch-parchment);
+  --ink:var(--ink-900); --ink-soft:#4a4133; --ink-faint:#7a6f5c;
+  --terracotta:var(--terracotta-600); --terracotta-2:#b8633f;
+  --ochre:var(--ochre-500); --royal:var(--signal-500); --royal-deep:var(--signal-700);
+  --denim:var(--swatch-denim); --sage:var(--swatch-sage); --kraft:#8a6a45;
+  --line:rgba(31,26,20,.14); --line-2:rgba(31,26,20,.08); --shadow:rgba(31,26,20,.16);
+}
+</style>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Altera Labs | See what your students actually understand.</title>
+<meta name="description" content="Altera is the AI tutor that builds a live mastery model of every student in your Canvas course, so you know exactly what to re-teach before the next class." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<style id="base">
+/* ============================================================
+   LAYER 2 · BASE + SHARED COMPONENTS
+   Element defaults, the type system, and every component that
+   lives outside the content sections: nav, hero, collage frame,
+   partner strip, buttons, the eyebrow pill, section rhythm.
+   Section-specific CSS lives in one <style> beside its section's
+   markup in <body>. Media queries live in LAYER 3.
+   ============================================================ */
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+html, body {
+  background-color: var(--surface-base);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+body {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+/* global paper-grain wash so the whole page reads as printed stock */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
-html,body{ background-color:var(--surface-base); color:var(--text); font-family:var(--font-sans); font-size:var(--fs-base); line-height:1.65; -webkit-font-smoothing:antialiased; }
-.h1,h1.display{ font-family:var(--font-display); font-optical-sizing:auto; font-size:var(--fs-display-xl); font-weight:600; letter-spacing:var(--tracking-display); line-height:1.02; color:var(--ink-900); }
-.h2,h2.section{ font-family:var(--font-display); font-optical-sizing:auto; font-size:var(--fs-heading-lg); font-weight:600; letter-spacing:var(--tracking-display); line-height:1.08; color:var(--ink-900); }
+a { color: inherit; text-decoration: none; }
+a:focus-visible, button:focus-visible {
+  outline: 3px solid var(--royal);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ---- type system (semantic classes; mirror colors_and_type.css) ---- */
+.h1{ font-family:var(--font-display); font-optical-sizing:auto; font-size:var(--fs-display-xl); font-weight:600; letter-spacing:var(--tracking-display); line-height:1.02; color:var(--ink-900); }
+.h2{ font-family:var(--font-display); font-optical-sizing:auto; font-size:var(--fs-heading-lg); font-weight:600; letter-spacing:var(--tracking-display); line-height:1.08; color:var(--ink-900); }
 .h3{ font-family:var(--font-display); font-size:var(--fs-heading-md); font-weight:500; line-height:1.2; color:var(--ink-900); }
 .h4{ font-family:var(--font-sans); font-size:1.125rem; font-weight:600; letter-spacing:var(--tracking-tight); color:var(--ink-900); }
 .display-accent{ font-style:italic; color:var(--terracotta-600); }
@@ -50,747 +144,323 @@ html,body{ background-color:var(--surface-base); color:var(--text); font-family:
 .metadata{ font-size:var(--fs-xs); color:var(--text-faint); }
 .data-label{ font-family:var(--font-mono); font-size:var(--fs-xs); letter-spacing:var(--tracking-wide); text-transform:uppercase; color:var(--ink-500); }
 code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
-:where(a,button,input,[tabindex]):focus-visible{ outline:2px solid var(--signal-500); outline-offset:2px; border-radius:var(--radius-md); }
+
+/* ---- page measure ---- */
+/* one shared container: nav/hero/footer use .wrap, sections bring their own class */
+.wrap, .vp-wrap, .v2-sol-wrap, .v2-core__wrap, .tr-wrap, .v2-team-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.wrap { position: relative; z-index: 1; }
+
+/* ---- section rhythm: uniform vertical cadence, one shared measure ---- */
+section[id] { padding: 80px 0; scroll-margin-top: 94px; }
+
+/* ============ NAV ============ */
+header.nav { position: sticky; top: 0; z-index: 40; background: var(--paper-100); border-bottom: 1px solid rgba(31,26,20,.07); }
+header.nav .wrap { max-width: none; padding-left: 48px; padding-right: 48px; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; background: var(--paper-100); }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand img { display: block; width: auto; }
+.brand img.logo-night { display: none; } /* the night layer swaps the two logo files */
+nav.links { display: flex; align-items: center; gap: 4px; }
+nav.links a.link {
+  font-size: 14.5px; font-weight: 500; color: var(--ink-soft);
+  padding: 8px 13px; border-radius: 8px; white-space: nowrap;
+  transition: background .18s, color .18s;
+}
+nav.links a.link:hover { color: var(--ink); background: rgba(31,26,20,.05); }
+.nav-cta { display: flex; align-items: center; gap: 12px; }
+.nav-cta .btn { white-space: nowrap; }
+/* Disclosure toggle for the phone nav. Hidden here, revealed in LAYER 3 at
+   <=760px; colours come from tokens so every theme inherits it for free. */
+.nav-toggle {
+  display: none; flex: 0 0 44px; width: 44px; height: 44px;
+  align-items: center; justify-content: center;
+  padding: 0; cursor: pointer;
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--border-soft); border-radius: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-toggle svg { display: block; width: 22px; height: 22px; }
+.nav-toggle .icon-close { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-open  { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+/* Sign in rides in the menu on phones only; the bar carries its own above 760px. */
+.links .link-signin { display: none; }
+
+/* ============ BUTTONS ============ */
+.btn {
+  font-family: var(--font-sans); font-weight: 600; font-size: 14.5px;
+  border: 0; cursor: pointer; border-radius: 12px; padding: 11px 18px;
+  display: inline-flex; align-items: center; gap: 9px;
+  transition: transform .16s, box-shadow .16s, background .18s;
+  text-decoration: none;
+}
+.btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn-ghost:hover { background: rgba(31,26,20,.04); }
+/* one CTA treatment: primary and clay resolve to the same terracotta */
+.btn-primary, .btn-clay {
+  background: var(--terracotta); color: #fff5ec;
+  box-shadow: 0 3px 0 #6f3320, 0 10px 24px rgba(156,74,47,.32);
+}
+.btn-primary:hover, .btn-clay:hover {
+  transform: translateY(-2px);
+  background: var(--terracotta-2);
+  box-shadow: 0 5px 0 #6f3320, 0 16px 32px rgba(156,74,47,.36);
+}
+.btn svg { width: 17px; height: 17px; }
+
+/* ============ EYEBROW PILL ============ */
+/* the one canonical eyebrow; sections adjust only margins */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-mono); font-size: 12px; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--terracotta);
+  background: rgba(156,74,47,.08);
+  border: 1px solid rgba(156,74,47,.22);
+  padding: 7px 13px; border-radius: var(--radius-pill);
+  margin-bottom: 26px;
+}
+.eyebrow .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--royal); position: relative; }
+.eyebrow .pulse::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1.5px solid var(--royal); opacity: .5; animation: ring 2.4s ease-out infinite; }
+@keyframes ring { 0% { transform: scale(.6); opacity: .6; } 100% { transform: scale(1.9); opacity: 0; } }
+
+/* ============ HERO ============ */
+.hero { padding: 60px 0 26px; }
+.hero-grid { display: grid; align-items: center; }
+
+h1.headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(44px, 5.2vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -.01em;
+  margin: 0 0 24px;
+  color: var(--ink);
+  text-wrap: balance;
+}
+h1.headline em {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--terracotta);
+  position: relative;
+}
+/* hand-painted underline swatch under the emphasized word */
+h1.headline em::after {
+  content: "";
+  position: absolute; left: -2%; right: -2%; bottom: 4px; height: 12px;
+  background: var(--ochre);
+  opacity: .42;
+  z-index: -1;
+  clip-path: polygon(0 38%, 12% 8%, 30% 52%, 48% 14%, 66% 56%, 84% 18%, 100% 48%, 100% 100%, 0 100%);
+}
+
+p.sub {
+  font-size: 20px; line-height: 1.62; color: var(--ink-soft);
+  max-width: 540px; margin: 0 0 34px; font-weight: 400;
+}
+p.sub b { color: var(--ink); font-weight: 600; }
+
+.hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 30px; }
+.hero-cta .btn { padding: 14px 24px; font-size: 16px; border-radius: 12px; }
+
+/* the commissioned collage art floats in a dark paper frame */
+.collage-frame {
+  position: relative;
+  background: #34291d;
+  padding: 10px;
+  border-radius: 18px;
+  box-shadow: 0 30px 58px -22px rgba(31,26,20,.50), 0 12px 22px -12px rgba(31,26,20,.30);
+}
+
+/* ============ PARTNER STRIP ============ */
+.strip { margin-top: 40px; border-top: 1px solid var(--line); }
+.strip-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: 26px 40px 8px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 34px; flex-wrap: wrap;
+}
+.strip-label {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+}
+.partners { display: flex; align-items: center; justify-content: center; flex: 0 1 auto; gap: 24px 44px; flex-wrap: wrap; }
+.partner { display: flex; align-items: center; gap: 9px; }
+.partner .p-logo { width: auto; max-width: 260px; object-fit: contain; display: block; opacity: .95; }
+/* per-logo optical balance (each tuned to its proportions) */
+.partners .partner:nth-child(1) .p-logo { height: 40px; }  /* JHU */
+.partners .partner:nth-child(2) .p-logo { height: 56px; }  /* Pava Center */
+.partners .partner:nth-child(3) .p-logo { height: 48px; }  /* NVIDIA */
+.partners .partner:nth-child(4) .p-logo { height: 40px; }  /* Google Cloud */
+.partners .partner:nth-child(5) .p-logo { height: 40px; }  /* Canvas */
+.partners .partner:nth-child(6) .p-logo { height: 52px; }  /* TEDCO */
 </style>
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Altera Labs | See what your students can actually do.</title>
-<meta name="description" content="Altera is not another AI chatbot. It gives instructors course-level evidence of what students can recall, apply, and analyze, inside Canvas, with zero extra work." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
-<style>
-  :root {
-    /* Reading Room palette */
-    --paper:        #f3ead8;   /* parchment ground */
-    --paper-2:      #ece0c6;   /* deeper parchment */
-    --paper-edge:   #e7d9bd;   /* kraft trim */
-    --ink:          #1f1a14;   /* deep ink */
-    --ink-soft:     #4a4133;   /* muted ink */
-    --ink-faint:    #7a6f5c;   /* caption ink */
-    --terracotta:   #9c4a2f;   /* warm clay accent */
-    --terracotta-2: #b8633f;
-    --ochre:        #cf8a3b;   /* ochre / gold */
-    --royal:        #476ee3;   /* signal / data blue */
-    --royal-deep:   #2f4fb0;
-    --denim:        #3f6b87;   /* slate-denim */
-    --sage:         #6f8f5f;   /* paper green */
-    --kraft:        #8a6a45;   /* kraft brown */
-    --line:         rgba(31,26,20,.14);
-    --line-2:       rgba(31,26,20,.08);
-    --shadow:       rgba(31,26,20,.16);
-    --maxw:         1320px;
-  }
+<style id="responsive">
+/* ============================================================
+   LAYER 3 · RESPONSIVE
+   Every media query for LAYER 2's components, widest first.
+   Section-specific breakpoints stay in their section blocks.
+   ============================================================ */
 
-  * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    font-family: "Inter", system-ui, sans-serif;
-    color: var(--ink);
-    background-color: var(--paper);
-    background-image:
-      radial-gradient(circle at 18% -8%, rgba(207,138,59,.10), transparent 42%),
-      radial-gradient(circle at 96% 4%, rgba(71,110,227,.07), transparent 40%),
-      radial-gradient(circle at 50% 120%, rgba(156,74,47,.06), transparent 55%);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    line-height: 1.5;
-    overflow-x: hidden;
-  }
-
-  /* Global paper-grain wash so the whole page reads as printed stock */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: .5;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  }
-
-  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 40px; position: relative; z-index: 1; }
-
-  a { color: inherit; text-decoration: none; }
-
-  /* Focus states: visible, warm, never invisible */
-  a:focus-visible, button:focus-visible {
-    outline: 3px solid var(--royal);
-    outline-offset: 3px;
-    border-radius: 4px;
-  }
-
-  /* ============ NAV ============ */
-  header.nav { position: sticky; top: 0; z-index: 40; }
+@media (min-width: 761px) {
   .nav-inner {
-    display: flex; align-items: center; justify-content: space-between;
-    height: 76px;
-    border-bottom: 1px solid var(--line);
-    background: rgba(243,234,216,.82);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    flex-wrap: nowrap; position: relative;
+    height: 76px; min-height: 76px;
+    padding: 0; gap: 20px;
   }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .brand-mark {
-    width: 38px; height: 38px; border-radius: 9px;
-    position: relative; overflow: hidden;
-    box-shadow: 0 2px 0 rgba(31,26,20,.18);
-    transform: rotate(-3deg);
-  }
-  .brand-mark span { position: absolute; }
-  .brand-mark .s1 { inset: 0; background: var(--terracotta); }
-  .brand-mark .s2 { left: 0; top: 0; width: 60%; height: 100%; background: var(--ochre); transform: rotate(8deg); transform-origin: left; clip-path: polygon(0 0,100% 6%,92% 100%,0 96%); }
-  .brand-mark .s3 { right: -4px; bottom: -6px; width: 60%; height: 70%; background: var(--royal); clip-path: polygon(8% 12%,100% 0,100% 100%,0 100%); }
-  .brand-mark .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--paper); top: 8px; left: 9px; box-shadow: 0 0 0 2px rgba(31,26,20,.25); }
-  .brand-name { font-family: "Fraunces", serif; font-weight: 600; font-size: 22px; letter-spacing: -.01em; }
-  .brand-name b { font-weight: 600; }
-  .brand-name .tail { color: var(--terracotta); }
+  header.nav .wrap { padding-left: 32px; padding-right: 32px; }
+  header.nav .brand { flex: 0 0 auto; }
+  header.nav .brand img { height: 60px; }
+  nav.links { justify-content: center; flex: 1 1 auto; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+  nav.links::-webkit-scrollbar { display: none; }
+  .nav-cta { flex: 0 0 auto; gap: 10px; }
+  .nav-cta .btn { padding: 10px 16px; }
+  .hero-grid { grid-template-columns: 1fr 440px; gap: 48px; align-items: center; }
+}
+@media (min-width: 1150px) {
+  nav.links { position: absolute; left: 50%; transform: translateX(-50%); flex: none; max-width: 56vw; }
+}
 
-  nav.links { display: flex; align-items: center; gap: 6px; }
+@media (max-width: 1080px) {
+  .collage-frame { max-width: 520px; margin: 18px auto 0; }
+  p.sub { max-width: 600px; }
+}
+
+@media (max-width: 760px) {
+  html, body { overflow-x: clip; }
+  .hero { padding: 38px 0 18px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 28px; }
+  .hero-copy, .hero-copy .sub, .sub { max-width: 100%; min-width: 0; }
+  h1.headline, .hero-copy h1 { font-size: clamp(2.1rem, 8.5vw, 3rem); line-height: 1.05; }
+  p.sub { font-size: 18px; }
+  .hero-cta { gap: 12px; }
+  .hero-cta .btn { flex: 1 1 160px; justify-content: center; }
+  .collage-frame { max-width: 100%; width: auto; }
+  img, figure, .vp-card, .v2-core__panel { max-width: 100%; }
+
+  /* ---- nav: one 64px row, links behind a disclosure toggle ----
+     Two earlier shapes failed here. A horizontal scroll strip (the mask below
+     used to hint at it) clipped labels mid-word at the screen edge, so
+     "Cognitive Core" read as "Cognitive C...". A full-width wrapping row fixed
+     the clipping but pushed this sticky bar to 229px: 28% of a 812px viewport,
+     spent on every screen of a 30-screen page, and section anchors then landed
+     their headings underneath it. A menu costs one row and one tap, and turns
+     a long scroll into a jump. */
+  header.nav .wrap { padding-left: 22px; padding-right: 22px; }  /* match the body gutter */
+  .nav-inner {
+    flex-wrap: nowrap; gap: 10px;
+    min-height: 64px; padding-top: 0; padding-bottom: 0;
+  }
+  header.nav .brand { flex: 0 0 auto; height: auto; }
+  header.nav .brand img { height: 40px; }
+  .nav-cta { order: 2; margin-left: auto; }
+  .nav-cta .btn-ghost { display: none; }
+  .nav-cta .btn-clay { padding: 9px 14px; font-size: 14px; }
+  .nav-toggle { display: inline-flex; order: 3; }
+
+  /* The menu overlays the page instead of growing the bar, so the bar height
+     never changes. .wrap is position:relative and these offsets resolve against
+     its PADDING box, which already spans the full width: left/right 0 is edge
+     to edge, and the panel's own 22px padding puts the labels on the same
+     gutter as the body copy underneath. */
+  nav.links {
+    display: none;
+    position: absolute; top: 100%; left: 0; right: 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    padding: 4px 22px 12px;
+    background: var(--paper-100);
+    border-bottom: 1px solid var(--border-hairline);
+    box-shadow: var(--shadow-paper);
+  }
+  .nav-inner.is-open nav.links { display: flex; }
   nav.links a.link {
-    font-size: 14.5px; font-weight: 500; color: var(--ink-soft);
-    padding: 9px 14px; border-radius: 8px; transition: background .18s, color .18s;
+    display: flex; align-items: center;
+    /* short labels in a full-width panel left a dead right half when flush
+       left; centred, the list reads as a menu rather than as stray body copy */
+    justify-content: center; text-align: center;
+    min-height: 48px; /* tap target */
+    padding: 0 2px; font-size: 16px; border-radius: 0;
+    border-bottom: 1px solid var(--border-hairline);
   }
-  nav.links a.link:hover { color: var(--ink); background: rgba(31,26,20,.05); }
+  nav.links a.link:last-child { border-bottom: 0; }
+  .links .link-signin { display: flex; }
 
-  .btn {
-    font-family: "Inter", sans-serif; font-weight: 600; font-size: 14.5px;
-    border: 0; cursor: pointer; border-radius: 10px; padding: 11px 18px;
-    display: inline-flex; align-items: center; gap: 9px; transition: transform .16s, box-shadow .16s, background .18s;
-    text-decoration: none;
-  }
-  .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
-  .btn-ghost:hover { background: rgba(31,26,20,.04); }
-  .btn-primary {
-    background: var(--ink); color: var(--paper);
-    box-shadow: 0 3px 0 rgba(31,26,20,.28), 0 8px 22px rgba(31,26,20,.18);
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 0 rgba(31,26,20,.28), 0 14px 30px rgba(31,26,20,.22); background: #2a241b; }
-  .btn-clay { background: var(--terracotta); color: #fff5ec; box-shadow: 0 3px 0 #6f3320, 0 10px 24px rgba(156,74,47,.32); }
-  .btn-clay:hover { transform: translateY(-2px); box-shadow: 0 5px 0 #6f3320, 0 16px 32px rgba(156,74,47,.36); background: var(--terracotta-2); }
-  .btn svg { width: 17px; height: 17px; }
+  /* anchors must clear the 64px bar, not the 94px the desktop bar wants */
+  section[id] { scroll-margin-top: 76px; }
 
-  .nav-cta { display: flex; align-items: center; gap: 12px; }
+  /* the eyebrow pill fits one line at .08em, two at the desktop .14em */
+  .hero .eyebrow { letter-spacing: .08em; padding: 6px 11px; }
+  p.sub { font-size: 17px; line-height: 1.55; }
 
-  /* ============ HERO ============ */
-  .hero { padding: 60px 0 26px; }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1.04fr 1fr;
-    gap: 56px;
-    align-items: center;
-  }
+  .strip-inner { gap: 18px; }
 
-  .eyebrow {
-    display: inline-flex; align-items: center; gap: 10px;
-    font-family: "JetBrains Mono", monospace; font-size: 12px; font-weight: 500;
-    letter-spacing: .14em; text-transform: uppercase; color: var(--terracotta);
-    background: rgba(156,74,47,.08);
-    border: 1px solid rgba(156,74,47,.22);
-    padding: 7px 13px; border-radius: 999px;
-    margin-bottom: 26px;
-  }
-  .eyebrow .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--royal); position: relative; }
-  .eyebrow .pulse::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1.5px solid var(--royal); opacity: .5; animation: ring 2.4s ease-out infinite; }
-  @keyframes ring { 0% { transform: scale(.6); opacity: .6; } 100% { transform: scale(1.9); opacity: 0; } }
+  /* ---------- mobile type scale ----------
+     The desktop scale reached the phone unchanged: card headings landed at
+     32px against 34px SECTION headings, so every bento card shouted at the
+     volume of the section holding it, and 20px ledes ran at 1.7 leading.
+     Reset the ratios for a 375px column; anything already at the 16px floor
+     keeps its size and gives back only leading.
 
-  h1.headline {
-    font-family: "Fraunces", serif;
-    font-weight: 600;
-    font-size: clamp(44px, 5.2vw, 72px);
-    line-height: 1.02;
-    letter-spacing: -.022em;
-    margin: 0 0 24px;
-    color: var(--ink);
-    text-wrap: balance;
+     !important is load-bearing here, not laziness: each section's CSS lives in
+     a <style> beside its markup in the BODY, so those rules always win on
+     source order over this <head> layer no matter how they are scoped. Keeping
+     the mobile scale in LAYER 3 costs one !important per line and keeps every
+     media query in one place, which is the point of the layer. */
+  .vp-h2, .v2-sol-h2, .v2-core__h2,
+  .v2-product .vp-intro h2, .v2-team .v2-team-head h2 {
+    font-size: 29px !important; line-height: 1.12 !important;
   }
-  h1.headline em {
-    font-style: italic;
-    font-weight: 500;
-    color: var(--terracotta);
-    position: relative;
-  }
-  /* hand-painted underline swatch under the emphasized word */
-  h1.headline em::after {
-    content: "";
-    position: absolute; left: -2%; right: -2%; bottom: 4px; height: 12px;
-    background: var(--ochre);
-    opacity: .42;
-    z-index: -1;
-    clip-path: polygon(0 38%, 12% 8%, 30% 52%, 48% 14%, 66% 56%, 84% 18%, 100% 48%, 100% 100%, 0 100%);
+  .v2-product .vp-card h3 { font-size: 24px !important; line-height: 1.2 !important; }
+
+  .vp-lede, .v2-sol-lead, .v2-product .vp-sub,
+  .v2-core__lead, .v2-team .v2-team-sub {
+    font-size: 18px !important; line-height: 1.55 !important;
   }
 
-  p.sub {
-    font-size: 20px; line-height: 1.62; color: var(--ink-soft);
-    max-width: 540px; margin: 0 0 34px; font-weight: 400;
+  .v2-product .vp-body, .v2-product .vp-c8 .vp-body {
+    font-size: 17.5px !important; line-height: 1.55 !important;
   }
-  p.sub b { color: var(--ink); font-weight: 600; }
+  .tr-body, .v2-bio, .v2-advisor-blurb { line-height: 1.5 !important; }
+}
 
-  .hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 30px; }
-  .hero-cta .btn { padding: 14px 24px; font-size: 16px; border-radius: 12px; }
+@media (max-width: 640px) {
+  .wrap, .vp-wrap, .v2-sol-wrap, .v2-core__wrap, .tr-wrap, .v2-team-inner { padding-left: 22px; padding-right: 22px; }
+  section[id] { padding: 52px 0; }
+}
 
-  .hero-foot {
-    display: flex; align-items: center; gap: 14px;
-    font-family: "JetBrains Mono", monospace; font-size: 12.5px; color: var(--ink-faint);
-    letter-spacing: .01em;
-  }
-  .hero-foot .tick { color: var(--sage); font-weight: 700; }
-  .hero-foot .div { width: 1px; height: 15px; background: var(--line); }
-
-  /* ============ COLLAGE PANEL ============ */
-  .collage-frame { position: relative; }
-  .collage {
-    position: relative;
-    aspect-ratio: 5 / 5.4;
-    background: var(--paper-2);
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    box-shadow:
-      0 1px 0 rgba(255,255,255,.5) inset,
-      0 24px 50px -20px var(--shadow),
-      0 4px 0 rgba(31,26,20,.06);
-    overflow: hidden;
-    transform: rotate(-1.1deg);
-  }
-  .collage::after { /* inner mat / printed-cover vignette */
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    box-shadow: inset 0 0 0 10px rgba(243,234,216,.55), inset 0 0 60px rgba(31,26,20,.10);
-    border-radius: 14px;
-  }
-
-  /* paper grain applied to swatches */
-  svg.collage-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-
-  /* small ornaments around the frame (books, bulb, atom) */
-  .ornament { position: absolute; z-index: 3; filter: drop-shadow(0 6px 8px rgba(31,26,20,.18)); }
-  .orn-books { top: -22px; left: -26px; width: 92px; transform: rotate(-7deg); }
-  .orn-bulb  { top: -30px; right: 26px; width: 60px; transform: rotate(8deg); }
-  .orn-atom  { bottom: -24px; left: -28px; width: 78px; transform: rotate(-4deg); }
-  .orn-globe { bottom: -26px; right: -22px; width: 80px; transform: rotate(6deg); }
-
-  /* live SMI card pinned to collage */
-  .smi-card {
-    position: absolute; right: -26px; bottom: 40px; z-index: 4;
-    width: 226px; background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 14px 16px 15px;
-    box-shadow: 0 18px 36px -14px var(--shadow), 0 3px 0 rgba(31,26,20,.07);
-    transform: rotate(1.6deg);
-    /* torn left edge */
-    -webkit-mask: none;
-  }
-  .smi-card .tag {
-    font-family: "JetBrains Mono", monospace; font-size: 10.5px; letter-spacing: .12em;
-    text-transform: uppercase; color: var(--ink-faint);
-    display: flex; align-items: center; gap: 7px; margin-bottom: 10px;
-  }
-  .smi-card .tag .live { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); box-shadow: 0 0 0 3px rgba(111,143,95,.22); animation: blink 2.6s ease-in-out infinite; }
-  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-  .smi-card .num {
-    font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 34px; color: var(--ink);
-    line-height: 1; letter-spacing: -.02em;
-  }
-  .smi-card .num .pct { font-size: 18px; color: var(--terracotta); }
-  .smi-card .lbl { font-size: 11.5px; color: var(--ink-soft); margin-top: 3px; }
-  .smi-bar { height: 8px; border-radius: 5px; background: rgba(31,26,20,.10); margin-top: 11px; overflow: hidden; }
-  .smi-bar > i {
-    display: block; height: 100%; width: 74%;
-    background: linear-gradient(90deg, var(--terracotta), var(--ochre) 55%, var(--sage));
-    border-radius: 5px;
-    animation: fill 1.6s cubic-bezier(.2,.7,.2,1) both;
-  }
-  @keyframes fill { from { width: 0; } to { width: 74%; } }
-  .smi-nodes { display: flex; gap: 6px; margin-top: 12px; }
-  .smi-nodes .chip {
-    flex: 1; font-family: "JetBrains Mono", monospace; font-size: 9px; text-align: center;
-    padding: 5px 0; border-radius: 6px; letter-spacing: .04em;
-  }
-  .chip.hi { background: rgba(111,143,95,.18); color: #4c6a3d; }
-  .chip.mid { background: rgba(207,138,59,.20); color: #8a5717; }
-  .chip.lo { background: rgba(156,74,47,.16); color: var(--terracotta); }
-
-  .collage-caption {
-    margin-top: 30px; text-align: center;
-    font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint);
-    letter-spacing: .03em; line-height: 1.5;
-  }
-
-  /* ============ PARTNER STRIP ============ */
-  .strip { margin-top: 40px; border-top: 1px solid var(--line); }
-  .strip-inner { padding: 26px 0 8px; display: flex; align-items: center; gap: 34px; flex-wrap: wrap; }
-  .strip-label {
-    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .16em;
-    text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
-  }
-  .partners { display: flex; align-items: center; gap: 30px; flex-wrap: wrap; }
-  .partner {
-    display: flex; align-items: center; gap: 9px;
-    font-family: "Fraunces", serif; font-weight: 600; font-size: 16.5px; color: var(--ink-soft);
-    transition: color .18s; letter-spacing: -.01em;
-  }
-  .partner:hover { color: var(--ink); }
-  .partner .glyph {
-    width: 26px; height: 26px; border-radius: 6px; display: grid; place-items: center;
-    color: var(--paper); font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 12px;
-    box-shadow: 0 2px 5px rgba(31,26,20,.18);
-    transform: rotate(-3deg);
-  }
-  .g-jhu { background: var(--denim); }
-  .g-nv  { background: var(--sage); }
-  .g-gc  { background: var(--royal); }
-  .g-cv  { background: var(--terracotta); }
-  .partner small { font-family: "Inter", sans-serif; font-weight: 400; font-size: 12px; color: var(--ink-faint); display: block; margin-top: -2px; letter-spacing: 0; }
-  .partner .stack { display: flex; flex-direction: column; line-height: 1.05; }
-
-  /* ============ RESPONSIVE ============ */
-  @media (max-width: 1080px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-    .collage-frame { max-width: 520px; margin: 18px auto 0; }
-    p.sub { max-width: 600px; }
-  }
-  @media (max-width: 760px) {
-    .wrap { padding: 0 22px; }
-    nav.links { display: none; }
-    .hero { padding: 38px 0 18px; }
-    h1.headline { font-size: clamp(38px, 11vw, 52px); }
-    p.sub { font-size: 18px; }
-    .nav-cta .btn-ghost { display: none; }
-    .orn-books, .orn-bulb, .orn-atom, .orn-globe { width: 56px; }
-    .smi-card { right: -8px; width: 196px; }
-    .strip-inner { gap: 18px; }
-    .hero-cta .btn { flex: 1; justify-content: center; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .smi-bar > i { width: 74%; }
-  }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
 </style>
+<noscript>
+  <!-- The <=760px menu needs JS to open. Without it, fall back to a wrapping
+       row: a tall bar beats a bar whose only navigation sits behind a button
+       that cannot open. -->
+  <style>
+    @media (max-width: 760px) {
+      .nav-toggle { display: none !important; }
+      .nav-inner { flex-wrap: wrap; }
+      nav.links {
+        display: flex; position: static;
+        flex-flow: row wrap; justify-content: center;
+        flex: 0 0 100%; width: 100%;
+        margin-top: 4px; padding: 0 0 8px;
+        background: transparent; border-bottom: 0; box-shadow: none;
+      }
+      nav.links a.link { min-height: 44px; padding: 0 10px; font-size: 14.5px; border-bottom: 0; }
+    }
+  </style>
+</noscript>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-<style id="v2-spacing-normalize">
-  /* Uniform vertical rhythm across all content sections (post-assembly normalization) */
-  section[id] { padding-top: 80px !important; padding-bottom: 80px !important; }
-  @media (max-width: 640px){ section[id] { padding-top: 52px !important; padding-bottom: 52px !important; } }
-  /* one hairline between sections, not two */
-  section[id] + section[id] { border-top: 0 !important; }
-</style>
-<style id="v2-design-fixes">
-  /* hero collage: image fills its box, no leftover bg bar at the bottom */
-  .collage{ background:transparent !important; line-height:0 !important; font-size:0 !important; aspect-ratio:auto !important; }
-  .collage-img{ display:block !important; width:100% !important; height:auto !important; }
-  /* partner strip: real logos */
-  .partner{ display:flex !important; align-items:center; }
-  .partner .p-logo{ height:28px; width:auto; max-width:150px; object-fit:contain; display:block; opacity:.95; }
-
-
-  .collage{ border:0 !important; box-shadow:none !important; }
-
-
-
-
-  /* top bar: solid cream so the ambient glow can't bleed through and band */
-  header.nav{ background:#f3ead8 !important; border-bottom:1px solid rgba(31,26,20,.07) !important; }
-  /* re-center + soften the ambient glow so it never seams at the top edge */
-  body{ background-image: radial-gradient(115% 72% at 50% 0%, rgba(207,138,59,.05), rgba(0,0,0,0) 66%) !important; }
-
-
-  /* collage: float on the page, no hard border (feather the photo's cream edge into the paper) + soft grounding shadow */
-  .collage-frame{
-    background:#34291d !important; padding:10px !important; border-radius:18px !important;
-    box-shadow: 0 30px 58px -22px rgba(31,26,20,.50), 0 12px 22px -12px rgba(31,26,20,.30) !important;
-  }
-  header.nav .wrap{ max-width:none !important; padding-left:48px !important; padding-right:48px !important; }
-  header.nav .nav-inner{ max-width:none !important; width:100% !important; padding:0 !important; }
-  .collage{ filter:none !important; background:transparent !important; }
-  .collage{ overflow:hidden !important; border-radius:8px !important; }
-  .collage-img{ border:0 !important; border-radius:0 !important; box-shadow:none !important; -webkit-mask-image:none !important; mask-image:none !important; }
-  /* partner logos: optical balance (each tuned to its proportions) */
-  .partners .partner:nth-child(1) .p-logo{ height:40px !important; }  /* JHU (trimmed, no baked-in padding) */
-  .partners .partner:nth-child(2) .p-logo{ height:56px !important; }  /* Pava Center */
-  .partners .partner:nth-child(3) .p-logo{ height:48px !important; }  /* NVIDIA */
-  .partners .partner:nth-child(4) .p-logo{ height:40px !important; }  /* Google Cloud */
-  .partners .partner:nth-child(5) .p-logo{ height:40px !important; }  /* Canvas */
-  .partners .partner:nth-child(6) .p-logo{ height:52px !important; }  /* TEDCO */
-  .partner .p-logo{ max-width:260px !important; }
-
-  /* seamless cream: hero matches the flat sections (no tonal bar at the boundary) */
-  .hero{ background-color:#f3ead8 !important; }
-  /* === adversarial-review fixes === */
-  /* H2/H3/M12 one shared 1280/40 container; strip per-section side padding; H1 anchor offset */
-  section[id]{ padding-left:0 !important; padding-right:0 !important; scroll-margin-top:94px !important; }
-  .wrap,.vp-wrap,.v2-core__wrap,.v2-sol-wrap,.tr-wrap,.v2-team-inner,.nav-inner,.strip-inner{
-    max-width:1340px !important; margin-left:auto !important; margin-right:auto !important;
-    padding-left:40px !important; padding-right:40px !important; }
-  @media (max-width:640px){ .wrap,.vp-wrap,.v2-core__wrap,.v2-sol-wrap,.tr-wrap,.v2-team-inner{
-    padding-left:22px !important; padding-right:22px !important; } }
-  /* H4 top-align two-column grids (kills the voids) */
-  .vp-grid,.v2-sol-grid,.v2-core__grid{ align-items:start !important; }
-  /* M1 hero H1 tracking (un-jam the serifs) */
-  h1.headline{ letter-spacing:-0.01em !important; }
-  /* H6 consistent eyebrow tracking */
-  .eyebrow,.vp-eyebrow{ letter-spacing:0.14em !important; }
-  /* H5 raise sub-12px labels to the 12px floor */
-  .smi-card .tag,.smi-card .lbl,.smi-nodes .chip,.collage-caption,.strip-label,
-  .v2-footer nav a,.tr-pava-name span{ font-size:12px !important; }
-  /* H8/M4 one paper-card radius */
-  .tr-card,.vp-fig{ border-radius:16px !important; }
-  /* H9 keep the hero SMI card inside the frame */
-  .smi-card{ right:8px !important; }
-</style>
-<style id="v2-polish-css">
-/* ===== D3 Cognitive Core graph: node radius hover unification, constant label ===== */
-/* ===== D3 Cognitive Core legend: caption on its own line, no ragged orphan wrap ===== */
-#v2core-legend .lg-row{ row-gap:6px !important; column-gap:20px !important; }
-/* The mastery row leads with a caption; force the caption to break to its own line
-   and keep the three swatch groups together so "Live Mastery Encoding" never orphans. */
-#v2core-legend .lg-cap{
-  flex-basis:100% !important;
-  width:100% !important;
-  text-align:center !important;
-  margin-right:0 !important;
-  margin-bottom:2px !important;
-}
-/* At >=520px the semantic + mastery groups have room: keep each item from breaking
-   internally so wrapping happens only between whole items, never mid-label. */
-@media (min-width:520px){
-  #v2core-legend .lg-item{ white-space:nowrap !important; flex:0 0 auto !important; }
-  #v2core-legend .lg-row{ flex-wrap:wrap !important; }
-}
-
-/* ===== Mobile nav (<=760px): replace display:none nav.links with CSS-only hor ===== */
-/* Mobile nav fix: <=760px previously hid nav.links entirely, leaving phones
-   with no navigation. Convert the existing nav into a horizontally-scrollable
-   strip. CSS only, no markup change. >=44px tap targets preserved. */
-@media (max-width: 760px) {
-  /* Override the display:none that removed all phone navigation */
-  nav.links {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    gap: 4px !important;
-    /* Span the full nav row beneath brand + CTA so it can scroll on its own line */
-    order: 3 !important;
-    flex: 0 0 100% !important;
-    width: 100% !important;
-    margin-top: 10px !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    scroll-snap-type: x proximity !important;
-    /* Hide scrollbar (Firefox + legacy) while keeping it scrollable */
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    /* Soft fade hint that content scrolls horizontally */
-    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%) !important;
-            mask-image: linear-gradient(to right, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%) !important;
-  }
-  nav.links::-webkit-scrollbar { display: none !important; }
-
-  /* Allow the nav row to wrap the scroll strip onto a second line */
-  .nav-inner { flex-wrap: wrap !important; }
-
-  nav.links a.link {
-    flex: 0 0 auto !important;
-    white-space: nowrap !important;
-    scroll-snap-align: start !important;
-    /* >=44px tap target height while staying visually compact */
-    min-height: 44px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    padding: 0 14px !important;
-    font-size: 14.5px !important;
-  }
-}
-
-/* ===== Component consistency (eyebrow / button / pill-badge / card-radius / i ===== */
-/* ============================================================
-   COMPONENT CONSISTENCY OVERRIDES (CSS-only)
-   Unifies: eyebrow treatment, Try-the-Beta button, pill/badge
-   base, full-card radius, and icon-chip fill.
-   ============================================================ */
-
-/* ---- 1. ONE EYEBROW TREATMENT --------------------------------
-   Hero (.eyebrow), Problem (.vp-eyebrow) and all section eyebrows
-   share an identical terracotta pill. Normalize the problem
-   eyebrow to the canonical hero pill so they are pixel-identical. */
-.eyebrow,
-.v2-problem .vp-eyebrow {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  font-family: "JetBrains Mono", var(--font-mono), monospace !important;
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.14em !important;
-  text-transform: uppercase !important;
-  color: var(--terracotta) !important;
-  background: rgba(156, 74, 47, .08) !important;
-  border: 1px solid rgba(156, 74, 47, .22) !important;
-  padding: 7px 13px !important;
-  border-radius: 999px !important;
-}
-/* keep the per-section vertical rhythm intact (margins only) */
-
-/* ---- 2. ONE "TRY THE BETA" BUTTON ----------------------------
-   .btn and .hero-cta .btn share radius; .btn-primary (hero) and
-   .btn-clay (nav) resolve to the SAME terracotta CTA fill so the
-   identical label is the identical button everywhere. */
-.btn { border-radius: 12px !important; }
-.hero-cta .btn { border-radius: 12px !important; }
-
-/* unify the primary/clay CTA into one terracotta treatment */
-.btn-primary,
-.btn-clay {
-  background: var(--terracotta) !important;
-  color: #fff5ec !important;
-  box-shadow: 0 3px 0 #6f3320, 0 10px 24px rgba(156, 74, 47, .32) !important;
-}
-.btn-primary:hover,
-.btn-clay:hover {
-  background: var(--terracotta-2) !important;
-  box-shadow: 0 5px 0 #6f3320, 0 16px 32px rgba(156, 74, 47, .36) !important;
-  transform: translateY(-2px) !important;
-}
-
-/* ---- 3. ONE PILL / BADGE BASE --------------------------------
-   .v2-chat-mode, .v2-core__pill, .tr-date were authored with 3
-   different paddings + border/bg alphas. Normalize geometry to a
-   single base; each keeps its own hue (signal / signal / ochre). */
-.v2-solution .v2-chat-mode,
-.v2-core__pill,
-.v2-traction .tr-date {
-  padding: 6px 12px !important;
-  border-radius: 999px !important;
-  border-width: 1px !important;
-  border-style: solid !important;
-  font-size: 12px !important;
-}
-.v2-solution .v2-chat-mode {
-  background: rgba(71, 110, 227, .10) !important;
-  border-color: rgba(71, 110, 227, .24) !important;
-}
-.v2-core__pill {
-  background: rgba(71, 110, 227, .10) !important;
-  border-color: rgba(71, 110, 227, .24) !important;
-}
-.v2-traction .tr-date {
-  background: rgba(181, 114, 42, .10) !important;
-  border-color: rgba(181, 114, 42, .24) !important;
-}
-
-/* ---- 4. ONE FULL-CARD RADIUS (16) ----------------------------
-   Problem/Product .vp-card (radius-lg) and Core panel (radius-card)
-   join .tr-card/.vp-fig at 16px. */
-.v2-problem .vp-card,
-.v2-product .vp-card,
-.v2-core__panel,
-.tr-card,
-.vp-fig {
-  border-radius: 16px !important;
-}
-
-/* ---- 5. ONE ICON-CHIP FILL (blue signal) ---------------------
-   .vp-icon (product) used neutral paper while core badges used
-   blue. Unify every icon-chip to the blue signal fill. */
-
-.v2-product .vp-icon i,
-.v2-product .vp-icon svg {
-  color: var(--signal-700) !important;
-}
-
-/* ===== Intra-section rhythm + type (eyebrow/H2/lede margins, lede measure, Fr ===== */
-/* =============================================================
-   INTRA-SECTION RHYTHM + TYPE NORMALIZATION (CSS-only overrides)
-   ============================================================= */
-
-/* ---- 1. Unify eyebrow -> H2 -> lede margins across every section ----
-   target: eyebrow mb 16px, H2 mb 20px, lede mb 32px */
-
-/* eyebrow bottom margin */
-.v2-problem .vp-eyebrow,
-.v2-solution .v2-sol-copy .eyebrow,
-.v2-product .vp-intro .eyebrow,
-.v2-core .eyebrow,
-.v2-traction .tr-head .eyebrow,
-.v2-team .v2-team-head .eyebrow,
-.v2-team .v2-advisory-head .eyebrow { margin-bottom: 16px !important; }
-
-/* H2 bottom margin */
-.v2-problem .vp-h2,
-.v2-solution .v2-sol-h2,
-.v2-product .vp-intro h2,
-.v2-core__h2,
-.v2-team .v2-team-head h2 { margin: 0 0 20px !important; }
-
-/* lede bottom margin */
-.v2-problem .vp-lede,
-.v2-solution .v2-sol-lead,
-.v2-core__lead { margin-bottom: 32px !important; }
-
-/* ---- 2. Unify body "lede" measure to ~62ch (was 540px / 46ch / 36rem) ---- */
-.v2-problem .vp-lede,
-.v2-solution .v2-sol-lead,
-.v2-core__lead,
-.v2-product .vp-sub { max-width: 62ch !important; }
-
-/* ---- 3. Rein in Fraunces-italic overuse: AI/tutor chat bubbles are
-   Inter UI text and must NOT be italic ---- */
-.v2-solution .v2-bubble.tutor { font-style: normal !important; }
-.v2-product .vp-bubble.ai { font-style: normal !important; }
-
-/* ---- 4. Team: fix doubled air at advisory divider (~168px -> balanced ~96px)
-   and unify founder/advisor grid gaps to 1.5rem ---- */
-.v2-team .v2-advisory { margin-top: 3rem !important; padding-top: 3rem !important; }
-.v2-team .v2-founders { gap: 1.5rem !important; }
-.v2-team .v2-advisors { gap: 1.5rem !important; }
-
-/* ---- 5. Traction timeline: snap cadence to the 8px scale
-   (76/60/14 -> 72/56/16) ---- */
-.v2-traction .tr-head { margin-bottom: 72px !important; }
-.v2-traction .tr-row { margin-bottom: 40px !important; }
-.v2-traction .tr-row:last-child { margin-bottom: 0 !important; }
-/* Interleaved timeline: a script staggers each row a uniform distance below
-   the previous one (fixed offsets cannot stay consistent with varying card
-   heights). Rows overlap, so they must not swallow clicks on cards beneath. */
-@media (min-width: 901px){
-  .v2-traction .tr-row { pointer-events: none; }
-  .v2-traction .tr-row .tr-card,
-  .v2-traction .tr-row .tr-date,
-  .v2-traction .tr-row .tr-node { pointer-events: auto; }
-}
-.v2-traction .tr-date { margin-bottom: 16px !important; }
-</style>
-<style id="v2-mobile-safety">
-@media (max-width:760px){
-  .hero-grid{ grid-template-columns:1fr !important; gap:28px !important; }
-  .hero-copy, .hero-copy .sub, .sub{ max-width:100% !important; min-width:0 !important; }
-  .hero-cta{ flex-wrap:wrap !important; gap:12px !important; }
-  .hero-cta .btn{ flex:1 1 160px !important; justify-content:center !important; }
-  h1.headline, .hero-copy h1{ font-size:clamp(2.1rem,8.5vw,3rem) !important; line-height:1.05 !important; }
-  .vp-grid, .v2-sol-grid, .v2-core__grid{ grid-template-columns:1fr !important; }
-  img, figure, .vp-card, .v2-sol-card, .v2-core__panel, .collage-frame, .collage{ max-width:100% !important; }
-  .partners{ flex-wrap:wrap !important; gap:24px 56px !important; }
-  .strip-inner{ flex-wrap:wrap !important; }
-}
-@media (max-width:760px){ html,body{ overflow-x:hidden !important; } }
-</style>
-<style id="nav-size">
-  header.nav .nav-inner{ height:auto !important; min-height:0 !important; padding-top:16px !important; padding-bottom:16px !important; align-items:center !important; background:#f3ead8 !important; }
-  header.nav .wrap{ height:auto !important; }
-  header.nav .brand, header.nav .brand img, .brand img{ height:70px !important; }
-  body{ background-image:none !important; }
-  html{ background-image:none !important; }
-</style>
-<style id="collage-final">
-  @media (min-width: 761px){
-    .hero-grid{ grid-template-columns: 1fr 440px !important; gap:48px !important; align-items:center !important; }
-  }
-  .collage{ aspect-ratio:auto !important; overflow:hidden !important; border:0 !important; box-shadow:none !important; background:transparent !important; }
-  .collage-img{ display:block !important; width:100% !important; height:auto !important; object-fit:fill !important; object-position:50% 50% !important; -webkit-mask-image:none !important; mask-image:none !important; margin:0 !important; border:0 !important; border-radius:0 !important; }
-</style>
-<style id="pin-fix">
-  /* the Faculty Endorsement pin caps the card's top edge, so it must be opaque
-     (the eyebrow-consistency override had made it see-through) */
-  .v2-solution .v2-sol-quote .pin{ background:var(--paper-50) !important; padding:3px 11px !important; }
-</style>
-<style id="v2-nav-final">
-  /* Top bar: one 64px row, nothing wraps, links center, CTAs stay whole */
-  @media (min-width: 761px){
-    header.nav .nav-inner{
-      display:flex !important; flex-wrap:nowrap !important; align-items:center !important;
-      height:76px !important; min-height:76px !important; padding-top:0 !important; padding-bottom:0 !important;
-      gap:20px !important; border-bottom:0 !important;
-    }
-    header.nav .wrap{ padding-left:32px !important; padding-right:32px !important; }
-    header.nav .brand{ flex:0 0 auto !important; }
-    header.nav .brand, header.nav .brand img, .brand img{ height:auto !important; }
-    header.nav .brand img{ height:60px !important; width:auto !important; display:block !important; }
-    .brand-name{ white-space:nowrap !important; font-size:21px !important; }
-    header.nav .nav-inner{ position:relative !important; }
-    header.nav nav.links{
-      display:flex !important; justify-content:center !important; gap:4px !important;
-      flex:1 1 auto !important; min-width:0 !important;
-      overflow-x:auto !important; scrollbar-width:none !important;
-    }
-    @media (min-width: 1150px){
-      header.nav nav.links{
-        position:absolute !important; left:50% !important; transform:translateX(-50%) !important;
-        flex:none !important; max-width:56vw !important;
-      }
-    }
-    header.nav nav.links::-webkit-scrollbar{ display:none !important; }
-    header.nav nav.links a.link{ white-space:nowrap !important; padding:8px 13px !important; }
-    header.nav .nav-cta{ flex:0 0 auto !important; gap:10px !important; }
-    header.nav .nav-cta .btn{ white-space:nowrap !important; padding:10px 16px !important; }
-  }
-  @media (max-width: 760px){
-    header.nav .nav-inner{ padding-top:10px !important; padding-bottom:10px !important; }
-    header.nav .brand img{ height:56px !important; }
-    .brand-name{ white-space:nowrap !important; }
-    header.nav .nav-cta .btn{ white-space:nowrap !important; }
-  }
-  /* AI-tutor chat avatar: size the injected lucide svg (the old `i` selector died when lucide replaced the tag) */
-  .v2-product .vp-ai-av svg{ width:.75rem !important; height:.75rem !important; }
-  /* No reset ships with this page, so browser defaults leak: figure gets margin 1em 40px
-     (starved the problem-section stat cards to 160px) and p gets a font-size top margin
-     (the void above each stat number). Neutralize where fragments assumed a reset. */
-  /* Kill the tinted band that read as a shadow under the nav */
-  body{ background-image:none !important; }
-  .nav-inner{ border-bottom:0 !important; }
-  /* Mobile: nothing may widen the page; scale the collage, scroll the math */
-  @media (max-width:760px){
-    html, body{ overflow-x:clip !important; }
-    .collage-frame{ max-width:100% !important; width:auto !important; }
-    .collage, .collage-img{ max-width:100% !important; height:auto !important; }
-    .vp-inset, .v2-core__panel{ overflow-x:auto !important; }
-    .katex-display{ overflow-x:auto !important; overflow-y:hidden !important; padding-bottom:4px; }
-    .katex-display > .katex{ white-space:nowrap; }
-  }
-  @media (max-width:480px){
-    /* scale display math to the card instead of clipping at scroll position 0 */
-    .katex-display .katex{ font-size:.62em !important; }
-  }
-  /* Center the built-with strip */
-  .strip-inner{ justify-content:center !important; }
-  .partners{ justify-content:center !important; flex:0 1 auto !important; gap:24px 44px !important; }
-  /* Tone down the near-white: warm the lifted-paper token page-wide,
-     sink the icon chips into their cards, center the timeline logo frames */
-  :root{ --paper-50:#f7f0de; }
-  .v2-traction .tr-logo-frame{ justify-content:center !important; }
-  /* Canvas card header: logo stacked above the eyebrow, aligned with the other chips */
-  .v2-product .vp-head:has(.vp-canvas-img){ flex-direction:column !important; align-items:flex-start !important; gap:9px !important; }
-  /* Bento card headers: eyebrows never wrap, logo row stays tidy */
-  .v2-product .vp-card-eyebrow{ white-space:nowrap !important; }
-  .v2-product .vp-canvas-img{ height:26px !important; }
-  /* Solution list + Socratic Insight icons: terracotta, not the cold blue */
-  .v2-solution .v2-sol-list .marker svg, .v2-solution .v2-sol-list .marker i{ color:var(--terracotta-600) !important; }
-  .v2-core__insighthead .ico{ background:rgba(156,74,47,.08) !important; border:1px solid rgba(156,74,47,.22) !important; }
-  .v2-core__insighthead .ico i, .v2-core__insighthead .ico svg{ color:var(--terracotta-600) !important; }
-  /* Product bento icon chips: ink on paper, not blue (blue = data only) */
-  .v2-product .vp-icon{ background:rgba(156,74,47,.08) !important; border:1px solid rgba(156,74,47,.22) !important; }
-  .v2-product .vp-icon i, .v2-product .vp-icon svg{ color:var(--terracotta-600) !important; width:17px; height:17px; }
-  .v2-product .vp-canvas-img{ height:22px; width:auto; display:block; }
-  .v2-product .vp-head{ display:flex; align-items:center; gap:10px; }
-  /* Cognitive Core header: pill sits tight above the H2 like every other section */
-  .v2-core__rail .eyebrow{ display:inline-flex; margin:0 0 18px !important; }
-  /* Problem section: stats run full-width beneath the copy/mockup columns */
-  .v2-problem .vp-stats-row{ grid-template-columns:repeat(4,1fr) !important; margin-top:44px !important; }
-  @media (max-width:900px){ .v2-problem .vp-stats-row{ grid-template-columns:repeat(2,1fr) !important; } }
-  @media (max-width:520px){ .v2-problem .vp-stats-row{ grid-template-columns:1fr !important; } }
-  .v2-problem .vp-sources{ margin-top:26px !important; gap:10px 34px !important; }
-  .v2-problem .vp-grid{ align-items:center !important; }
-  .v2-problem .vp-fig{ margin:0 !important; }
-  .v2-problem .vp-fig .num{ margin-top:0 !important; }
-  .v2-problem .vp-stats{ align-items:start !important; }
-</style>
 
 <!-- ================= NIGHT THEMES =================
      Two dark expressions of the Reading Room, switched by data-theme on <html>:
@@ -859,15 +529,90 @@ html[data-theme="board"] header.nav .nav-inner{ background:#141f19 !important; }
 html[data-theme="lamplit"] header.nav, html[data-theme="lamplit"] .hero{ background:#272119 !important; }
 html[data-theme="board"] header.nav, html[data-theme="board"] .hero{ background:#141f19 !important; }
 html[data-theme] h1.headline em::after{ opacity:.62; }
-html[data-theme] .chip.hi{ color:#a9c79a; background:rgba(143,174,125,.16); }
-html[data-theme] .chip.mid{ color:#e3b878; background:rgba(223,160,80,.16); }
-html[data-theme] .chip.lo{ color:#e8967e; background:rgba(232,116,92,.14); }
 /* partner/press logos are dark-on-transparent; give them paper plates at night */
 html[data-theme] .tr-logo-frame{ background:#f3ead8; }
 html[data-theme] .tr-logo-frame .tr-pava-name span{ color:#4a4133; }
 html[data-theme] .tr-logo-frame .seam{ background:rgba(31,26,20,.16); }
 html[data-theme] .partner{ background:#f3ead8; height:76px; padding:0 26px; border-radius:10px; justify-content:center; box-shadow:var(--shadow-paper-sm); }
 html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:4px 8px; }
+</style>
+
+<!-- ================= CANDIDATE BRAND: MERIDIAN =================
+     Rebrand finalist (GC, July 17 2026): university press by day, observatory
+     by night. Same token contract as the night themes. REMOVE this whole
+     block (and its toggle entries) if the incumbent wins the decision. -->
+<style id="brand-meridian">
+/* ---------- meridian day: token overrides ---------- */
+html[data-theme="meridian"]{
+  --paper-50:#fdfcf7; --paper-100:#f4f3ec; --paper-200:#fdfdfa; --paper-300:#d8d4c4; --paper-400:#b7b19d;
+  --ink-900:#141f3c; --ink-700:#25304f; --ink-600:#3e4a6c; --ink-500:#5e6a89; --ink-400:#8590a8; --ink-soft:#5e6a89;
+  --signal-300:#8fc0cc; --signal-500:#1f6f80; --signal-700:#175563;
+  --terracotta:#8f6f1a; --terracotta-400:#c3a04a; --terracotta-500:#a5811f; --terracotta-600:#8f6f1a;
+  --ochre-500:#c3a04a; --ochre-600:#a5811f; --sage:#74806b;
+  --mastery-high-fill:#2f6b4a; --mastery-high-stroke:#3f8a62;
+  --mastery-med-fill:#a9681f; --mastery-med-stroke:#c9862f;
+  --mastery-low-fill:#a63d33; --mastery-low-stroke:#c05545;
+  --status-async-fg:#23617d; --status-async-bg:rgba(35,97,125,.10); --status-async-border:rgba(35,97,125,.30);
+  --status-ok-fg:#2f6b4a; --status-ok-bg:rgba(47,107,74,.10); --status-ok-border:rgba(47,107,74,.30);
+  --status-warn-fg:#a9681f; --status-warn-bg:rgba(169,104,31,.10); --status-warn-border:rgba(169,104,31,.30);
+  --status-err-fg:#a63d33; --status-err-bg:rgba(166,61,51,.10); --status-err-border:rgba(166,61,51,.30);
+  --shadow-paper-sm:0 1px 2px rgba(20,31,60,.10);
+  --shadow-paper:0 2px 6px rgba(20,31,60,.10),0 18px 36px -22px rgba(20,31,60,.28);
+  --shadow-pin:0 12px 32px -14px rgba(20,31,60,.36);
+  --shadow-signal:0 0 0 3px rgba(31,111,128,.20);
+  --border-hairline:rgba(20,31,60,.10); --border-soft:rgba(20,31,60,.16); --border-ink:rgba(20,31,60,.28);
+  --paper:#f4f3ec; --paper-2:#eceadf; --paper-edge:#d8d4c4;
+  --ink:#141f3c; --ink-faint:#5e6a89;
+  --terracotta-2:#a5811f; --ochre:#c3a04a; --royal:#1f6f80; --royal-deep:#175563;
+  --denim:#3f6b87; --kraft:#8a7a45;
+  --line:rgba(20,31,60,.14); --line-2:rgba(20,31,60,.08); --shadow:rgba(20,31,60,.16);
+}
+/* ---------- meridian night: token overrides ---------- */
+html[data-theme="meridian-night"]{
+  --paper-50:#1d2b4a; --paper-100:#0b1626; --paper-200:#132138; --paper-300:#2b3b5e; --paper-400:#3d5078;
+  --ink-900:#eef1f7; --ink-700:#d9e0ee; --ink-600:#b4bfd7; --ink-500:#8c99b8; --ink-400:#6f7fa0; --ink-soft:#8c99b8;
+  --signal-300:#a5d8e2; --signal-500:#55b9c9; --signal-700:#3a93a3;
+  --terracotta:#c9a139; --terracotta-400:#e5c76f; --terracotta-500:#d4a943; --terracotta-600:#c9a139;
+  --ochre-500:#e5c76f; --ochre-600:#d4a943; --sage:#7f9a8a;
+  --mastery-high-fill:#5fbe8e; --mastery-high-stroke:#82d6ab;
+  --mastery-med-fill:#d08a3e; --mastery-med-stroke:#e3a75e;
+  --mastery-low-fill:#cd584c; --mastery-low-stroke:#e07a6d;
+  --status-async-fg:#8fc6d6; --status-async-bg:rgba(143,198,214,.13); --status-async-border:rgba(143,198,214,.32);
+  --status-ok-fg:#82d6ab; --status-ok-bg:rgba(130,214,171,.12); --status-ok-border:rgba(130,214,171,.30);
+  --status-warn-fg:#e3a75e; --status-warn-bg:rgba(227,167,94,.12); --status-warn-border:rgba(227,167,94,.30);
+  --status-err-fg:#e07a6d; --status-err-bg:rgba(224,122,109,.12); --status-err-border:rgba(224,122,109,.30);
+  --shadow-paper-sm:0 1px 2px rgba(0,0,0,.4);
+  --shadow-paper:0 2px 6px rgba(0,0,0,.4),0 18px 36px -22px rgba(0,0,0,.65);
+  --shadow-pin:0 12px 32px -14px rgba(0,0,0,.7);
+  --shadow-signal:0 0 0 3px rgba(85,185,201,.25);
+  --border-hairline:rgba(238,241,247,.11); --border-soft:rgba(238,241,247,.18); --border-ink:rgba(238,241,247,.30);
+  --paper:#0b1626; --paper-2:#132138; --paper-edge:#2b3b5e;
+  --ink:#eef1f7; --ink-faint:#8c99b8;
+  --terracotta-2:#d4a943; --ochre:#e5c76f; --royal:#55b9c9; --royal-deep:#3a93a3;
+  --denim:#7fa9c9; --kraft:#b09a5e;
+  --line:rgba(238,241,247,.13); --line-2:rgba(238,241,247,.08); --shadow:rgba(0,0,0,.5);
+}
+/* ---------- meridian special cases ---------- */
+html[data-theme="meridian"] header.nav, html[data-theme="meridian"] .hero,
+html[data-theme="meridian"] header.nav .nav-inner{ background:#f4f3ec !important; }
+html[data-theme="meridian-night"] header.nav, html[data-theme="meridian-night"] .hero,
+html[data-theme="meridian-night"] header.nav .nav-inner{ background:#0b1626 !important; }
+/* meridian day is a light theme: undo the blanket night rules */
+html[data-theme="meridian"] .brand .logo-day{ display:block !important; }
+html[data-theme="meridian"] .brand .logo-night{ display:none !important; }
+html[data-theme="meridian"] h1.headline em::after{ opacity:.45; }
+html[data-theme="meridian"] .partner, html[data-theme="meridian"] .tr-logo-frame,
+html[data-theme="meridian"] .vp-canvas-img{ background:#fdfdfa; }
+/* meridian night: cool porcelain plates instead of the reading-room cream */
+html[data-theme="meridian-night"] .partner, html[data-theme="meridian-night"] .tr-logo-frame,
+html[data-theme="meridian-night"] .vp-canvas-img{ background:#eef1f7; }
+html[data-theme="meridian-night"] .tr-logo-frame .tr-pava-name span{ color:#25304f; }
+html[data-theme="meridian-night"] .tr-logo-frame .seam{ background:rgba(20,31,60,.18); }
+/* gold CTA: dark seal shadow by day, brass with navy ink by night */
+html[data-theme="meridian"] .btn-primary, html[data-theme="meridian"] .btn-clay{
+  box-shadow:0 3px 0 #5e4a10, 0 10px 24px rgba(143,111,26,.30); }
+html[data-theme="meridian-night"] .btn-primary, html[data-theme="meridian-night"] .btn-clay{
+  color:#12203f; box-shadow:0 3px 0 #6e5a14, 0 10px 24px rgba(0,0,0,.45); }
 </style>
 </head>
 <body>
@@ -881,12 +626,15 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
           <img class="logo-night" src="./public/images/logos/Altera/Altera-Logo-readingroom-night.svg" alt="Altera Labs">
         </a>
 
-        <nav class="links" aria-label="Primary">
+        <nav class="links" id="nav-links" aria-label="Primary">
           <a class="link" href="#problem">Our Mission</a>
           <a class="link" href="#product">Product</a>
           <a class="link" href="#core">Cognitive Core</a>
           <a class="link" href="#traction">Evidence</a>
           <a class="link" href="#team">Team</a>
+          <!-- phone-only: the bar's Sign in is display:none <=760px, so without
+               this the menu is the only place a phone can reach the app -->
+          <a class="link link-signin" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">Sign in</a>
         </nav>
 
         <div class="nav-cta">
@@ -896,6 +644,11 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
           </a>
         </div>
+
+        <button class="nav-toggle" type="button" aria-controls="nav-links" aria-expanded="false" aria-label="Open navigation menu">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6 6 18"/></svg>
+        </button>
       </div>
     </div>
   </header>
@@ -908,11 +661,11 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
 
           <!-- LEFT: editorial copy -->
           <div class="hero-copy">
-            <span class="eyebrow"><span class="pulse" aria-hidden="true"></span>Course-level evidence of learning</span>
+            <span class="eyebrow"><span class="pulse" aria-hidden="true"></span>The mastery model for your classroom</span>
 
-            <h1 class="headline" id="hero-h1">See what your students can <em>actually</em> do.</h1>
+            <h1 class="headline" id="hero-h1">See what your students <em>actually</em> understand.</h1>
 
-            <p class="sub">Altera is not another AI chatbot. It shows you, concept by concept, what the students in your Canvas course can <b>recall, apply, and analyze</b>. You see where the course is getting through and where it needs a different approach, with zero extra work for you.</p>
+            <p class="sub">Altera is the AI tutor that builds a <b>live mastery model</b> of every student in your Canvas course, so you know exactly what to re-teach before the next class.</p>
 
             <div class="hero-cta">
               <a class="btn btn-primary" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">
@@ -973,32 +726,22 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     .v2-problem {
       position: relative;
       z-index: 1;
-      padding: 96px 40px;
       background-color: var(--paper-100);
       border-top: 1px solid var(--border-hairline);
       border-bottom: 1px solid var(--border-hairline);
     }
-    .v2-problem .vp-wrap { max-width: 1280px; margin: 0 auto; }
     .v2-problem .vp-grid {
       display: grid;
       grid-template-columns: 1.04fr 0.96fr;
       gap: 64px;
       align-items: center;
     }
-    .v2-problem .vp-eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--font-mono); font-size: var(--fs-xs); font-weight: 500;
-      letter-spacing: var(--tracking-widest); text-transform: uppercase;
-      color: var(--terracotta-600);
-      background: rgba(156,74,47,.08);
-      border: 1px solid rgba(156,74,47,.22);
-      padding: 6px 12px; border-radius: var(--radius-pill);
-      margin-bottom: 22px;
-    }
+    /* the markup carries the canonical .eyebrow class; only margin + dot here */
+    .v2-problem .vp-eyebrow { margin-bottom: 16px; }
     .v2-problem .vp-eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--terracotta-600); }
-    .v2-problem .vp-h2 { margin: 0 0 22px; }
+    .v2-problem .vp-h2 { margin: 0 0 20px; }
     .v2-problem .vp-lede {
-      max-width: 540px;
+      max-width: 62ch;
       margin: 0 0 32px;
       color: var(--ink-600);
       line-height: 1.7;
@@ -1006,18 +749,21 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     }
     .v2-problem .vp-lede .em { color: var(--ink-900); font-weight: 600; }
 
-    /* ---- editorial stat figures on paper ---- */
+    /* ---- editorial stat figures on paper (full-width row under the grid) ---- */
     .v2-problem .vp-stats {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
+      margin-top: 44px;
+      align-items: start;
     }
     .v2-problem .vp-fig {
       position: relative;
+      margin: 0; /* figure carries a UA margin this page's fragments never expected */
       padding: 22px 20px 20px;
       background: var(--paper-200);
       border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-card);
+      border-radius: 16px;
       box-shadow: var(--shadow-paper-sm);
       overflow: hidden;
       transition: transform .3s var(--ease-soft), box-shadow .3s var(--ease-soft);
@@ -1040,7 +786,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       line-height: 1;
       letter-spacing: var(--tracking-display);
       color: var(--ink-900);
-      margin-bottom: 12px;
+      margin: 0 0 12px;
     }
     .v2-problem .vp-fig .num .pct { color: var(--terracotta-600); font-size: .56em; vertical-align: 0.18em; margin-left: 1px; }
     .v2-problem .vp-fig .cap {
@@ -1062,9 +808,9 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
 
     /* ---- sources ---- */
     .v2-problem .vp-sources {
-      margin-top: 18px;
+      margin-top: 26px;
       display: flex; flex-wrap: wrap;
-      gap: 4px 14px;
+      gap: 10px 34px;
       align-items: baseline;
       font-family: var(--font-mono);
       font-size: var(--fs-xs);
@@ -1086,7 +832,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       position: relative;
       background: var(--paper-50);
       border: 1px solid var(--border-soft);
-      border-radius: var(--radius-lg);
+      border-radius: 16px;
       padding: 26px 26px 28px;
       box-shadow: var(--shadow-pin);
       transform: rotate(-1.4deg);
@@ -1177,9 +923,17 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       .v2-problem .vp-grid { grid-template-columns: 1fr; gap: 56px; }
       .v2-problem .vp-card { transform: rotate(-1deg); }
     }
+    @media (max-width: 760px) {
+      .v2-problem .vp-card { max-width: 100%; }
+    }
+    @media (max-width: 900px) {
+      .v2-problem .vp-stats { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 640px) {
-      .v2-problem { padding: 72px 22px; }
-      .v2-problem .vp-stats { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .v2-problem .vp-stats { gap: 12px; }
+    }
+    @media (max-width: 520px) {
+      .v2-problem .vp-stats { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       .v2-problem .vp-fig, .v2-problem .vp-fig:hover { transition: none; transform: none; }
@@ -1192,10 +946,10 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
 
       <!-- LEFT: editorial copy + stats -->
       <div>
-        <span class="vp-eyebrow"><span class="dot" aria-hidden="true"></span>The Crisis</span>
+        <span class="eyebrow vp-eyebrow"><span class="dot" aria-hidden="true"></span>The Crisis</span>
         <h2 class="h2 vp-h2" id="v2-problem-h2">The Substitution Model</h2>
         <p class="vp-lede">
-          Current AI tools create a "substitution" effect: students bypass the reasoning that builds durable skills. The result is measurable learning loss, and a <span class="em">"black box"</span> that leaves instructors blind to what their students can actually do.
+          Current AI tools create a "substitution" effect: students bypass the reasoning that builds durable understanding. The result is measurable learning loss, and a <span class="em">"black box"</span> that leaves instructors blind to what their students actually know.
         </p>
 
         
@@ -1270,31 +1024,25 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     .v2-solution {
       position: relative;
       z-index: 1;
-      padding: clamp(72px, 9vw, 120px) 0;
       background:
-        radial-gradient(circle at 88% -6%, rgba(71,110,227,.06), transparent 42%),
-        radial-gradient(circle at 4% 108%, rgba(156,74,47,.05), transparent 48%);
-    }
-    .v2-solution .v2-sol-wrap {
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 0 40px;
+        radial-gradient(circle 650px at 88% -6%, rgba(71,110,227,.06), transparent),
+        radial-gradient(circle 740px at 4% 108%, rgba(156,74,47,.05), transparent);
     }
     .v2-solution .v2-sol-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: clamp(40px, 5vw, 72px);
-      align-items: center;
+      align-items: start;
     }
     .v2-solution .v2-sol-mockup { order: 1; }
     .v2-solution .v2-sol-copy   { order: 2; }
 
     /* ---- Copy column ---- */
-    .v2-solution .v2-sol-copy .eyebrow { margin-bottom: 20px; }
-    .v2-solution .v2-sol-h2 { margin: 0 0 22px; }
+    .v2-solution .v2-sol-copy .eyebrow { margin-bottom: 16px; }
+    .v2-solution .v2-sol-h2 { margin: 0 0 20px; }
     .v2-solution .v2-sol-lead {
-      max-width: 540px;
-      margin: 0 0 30px;
+      max-width: 62ch;
+      margin: 0 0 32px;
     }
     .v2-solution .v2-sol-lead strong { color: var(--ink-900); font-weight: 600; }
 
@@ -1347,13 +1095,14 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       mix-blend-mode: soft-light;
       opacity: .35;
     }
+    /* the pin caps the card's top edge, so it must stay opaque */
     .v2-solution .v2-sol-quote .pin {
       position: absolute;
       top: -10px; left: 22px;
-      background: var(--paper-100);
-      padding: 3px 10px;
+      background: var(--paper-50);
+      padding: 3px 11px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(156,74,47,.24);
+      border: 1px solid rgba(156,74,47,.22);
     }
     .v2-solution .v2-sol-quote .quote-body {
       position: relative;
@@ -1432,14 +1181,14 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     .v2-solution .v2-chat-dots .d2 { background: var(--signal-500); }
     .v2-solution .v2-chat-mode {
       font-family: var(--font-mono);
-      font-size: var(--fs-xs);
+      font-size: 12px;
       font-weight: 500;
       letter-spacing: var(--tracking-wide);
       text-transform: uppercase;
       color: var(--signal-700);
       background: rgba(71,110,227,.10);
-      border: 1px solid rgba(71,110,227,.28);
-      padding: 5px 11px;
+      border: 1px solid rgba(71,110,227,.24);
+      padding: 6px 12px;
       border-radius: var(--radius-pill);
     }
     .v2-solution .v2-chat-thread {
@@ -1483,7 +1232,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       background: var(--paper-100);
       border: 1px solid rgba(71,110,227,.22);
       color: var(--ink-600);
-      font-style: italic;
+      font-style: normal; /* tutor speech is UI text, not Fraunces italic */
     }
     .v2-solution .v2-bubble.tutor .mh {
       font-style: normal;
@@ -1557,7 +1306,6 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       .v2-solution .v2-sol-copy   { order: 1; }
     }
     @media (max-width: 640px) {
-      .v2-solution .v2-sol-wrap { padding: 0 22px; }
       .v2-solution .v2-chat, .v2-solution .v2-sol-quote { transform: none; }
       .v2-solution .v2-bubble { max-width: 88%; }
     }
@@ -1625,7 +1373,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
         <h2 class="h2 v2-sol-h2" id="v2-solution-h2">Adaptive Knowledge Tracking</h2>
 
         <p class="body-lg v2-sol-lead">
-          Altera maps your course as a network of concepts: the <strong>Cognitive Core</strong>. It tracks how well each concept is landing: whether the skill will <strong>still be there next month</strong>, and how solid the foundations underneath it are.
+          Altera builds a live, personalized map of what each student knows: the <strong>Cognitive Core</strong>. It tracks not just whether they got today's answer right, but whether the concept will <strong>still be there next month</strong>, and how solid the foundations underneath it are.
         </p>
 
         <ul class="v2-sol-list">
@@ -1679,30 +1427,29 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
   <style>
     .v2-product {
       position: relative;
-      padding: 6.5rem 1.5rem 7rem;
       background-color: var(--paper-100);
       color: var(--text);
-      border-top: 1px solid var(--border-hairline);
     }
-    .v2-product .vp-wrap { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+    .v2-product .vp-wrap { position: relative; z-index: 1; }
 
     /* ---- intro ---- */
     .v2-product .vp-intro { text-align: left; max-width: 44rem; margin: 0 0 3.2rem; }
-    .v2-product .vp-intro .eyebrow { margin-bottom: 1.1rem; }
-    .v2-product .vp-intro h2 { margin: 0 0 1rem; }
-    .v2-product .vp-sub { font-size: 1.1875rem; color: var(--ink-600); line-height: 1.7; margin: 0 auto; max-width: 36rem; }
+    .v2-product .vp-intro .eyebrow { margin-bottom: 16px; }
+    .v2-product .vp-intro h2 { margin: 0 0 20px; }
+    .v2-product .vp-sub { font-size: 1.1875rem; color: var(--ink-600); line-height: 1.7; margin: 0 auto; max-width: 62ch; }
 
     /* ---- bento grid ---- */
     .v2-product .vp-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
       gap: 1.5rem;
+      align-items: start;
     }
     .v2-product .vp-card {
       position: relative;
       background: var(--paper-200);
       border: 1px solid var(--surface-border);
-      border-radius: var(--radius-lg);
+      border-radius: 16px;
       padding: 2.25rem;
       box-shadow: var(--shadow-paper);
       display: flex;
@@ -1727,17 +1474,23 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
 
     /* ---- card head ---- */
     .v2-product .vp-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    /* Canvas card: logo stacks above the eyebrow, aligned with the other chips */
+    .v2-product .vp-head:has(.vp-canvas-img) { flex-direction: column; align-items: flex-start; gap: 9px; }
+    .v2-product .vp-canvas-img { height: 26px; width: auto; display: block; }
     .v2-product .vp-icon {
       width: 2.5rem; height: 2.5rem; flex-shrink: 0;
       display: grid; place-items: center;
       border-radius: var(--radius-md);
-      background: var(--paper-50);
-      border: 1px solid var(--surface-border);
+      background: rgba(156,74,47,.08);
+      border: 1px solid rgba(156,74,47,.22);
       box-shadow: var(--shadow-paper-sm);
       color: var(--signal-700);
       transform: rotate(-2deg);
     }
+    /* editorial marks are terracotta; blue stays reserved for data */
     .v2-product .vp-icon i { width: 1.25rem; height: 1.25rem; }
+    .v2-product .vp-icon svg { width: 17px; height: 17px; }
+    .v2-product .vp-icon i, .v2-product .vp-icon svg { color: var(--terracotta-600); }
     .v2-product .vp-card-eyebrow {
       font-family: var(--font-mono);
       font-size: var(--fs-xs);
@@ -1745,6 +1498,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       color: var(--terracotta-600);
       text-transform: uppercase;
       letter-spacing: var(--tracking-widest);
+      white-space: nowrap;
     }
     .v2-product .vp-card h3 { margin: 0 0 1rem; }
     .v2-product .vp-card h4 { margin: 0 0 0.9rem; }
@@ -1758,22 +1512,6 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     .v2-product .vp-body { color: var(--ink-600); line-height: 1.65; margin: 0 0 1.5rem; }
     .v2-product .vp-c8 .vp-body { font-size: 1.0625rem; max-width: 34rem; }
     .v2-product .vp-card strong { color: var(--ink-900); font-weight: 600; }
-
-    /* ---- canvas logo head ---- */
-    .v2-product .vp-canvas-logo {
-      height: 2rem; display: inline-flex; align-items: center;
-      font-family: var(--font-display); font-weight: 600; font-size: 1.3rem;
-      color: var(--ink-900); letter-spacing: -0.01em;
-      gap: 0.5rem;
-    }
-    .v2-product .vp-canvas-logo .swatch {
-      width: 1.65rem; height: 1.65rem; border-radius: var(--radius-md);
-      background: var(--swatch-terracotta);
-      display: grid; place-items: center;
-      color: #fff5ec; font-family: var(--font-mono); font-weight: 600; font-size: 0.7rem;
-      transform: rotate(-3deg);
-      box-shadow: var(--shadow-paper-sm);
-    }
 
     /* ---- equation paper inset ---- */
     .v2-product .vp-eq {
@@ -1878,7 +1616,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       align-self: flex-start;
       background: var(--paper-200);
       border: 1px solid var(--surface-border);
-      color: var(--ink-600); font-style: italic;
+      color: var(--ink-600); font-style: normal; /* AI speech is UI text, not italic */
       display: inline-block;
     }
     .v2-product .vp-chat-row { display: flex; align-items: flex-end; gap: 0.5rem; }
@@ -1890,6 +1628,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       color: var(--signal-700);
     }
     .v2-product .vp-ai-av i { width: 0.7rem; height: 0.7rem; }
+    .v2-product .vp-ai-av svg { width: 0.75rem; height: 0.75rem; }
 
     /* ---- feature bullets ---- */
     .v2-product .vp-bullets { list-style: none; margin: 0 0 1.5rem; padding: 0; display: flex; flex-direction: column; gap: 0.9rem; }
@@ -1956,9 +1695,19 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     @media (max-width: 980px) {
       .v2-product .vp-c8, .v2-product .vp-c4 { grid-column: span 12; }
     }
+    @media (max-width: 760px) {
+      .v2-product .vp-grid { grid-template-columns: 1fr; }
+      .v2-product .vp-inset { overflow-x: auto; }
+      /* display math scrolls inside its card instead of widening the page */
+      .katex-display { overflow-x: auto; overflow-y: hidden; padding-bottom: 4px; }
+      .katex-display > .katex { white-space: nowrap; }
+    }
     @media (max-width: 640px) {
-      .v2-product { padding: 4.5rem 1.25rem 5rem; }
       .v2-product .vp-card { padding: 1.6rem; }
+    }
+    @media (max-width: 480px) {
+      /* scale display math to the card instead of clipping at scroll position 0 */
+      .v2-product #vp-katex-main .katex { font-size: .62em; }
     }
     @media (prefers-reduced-motion: reduce) {
       .v2-product .vp-card:hover { transform: none; }
@@ -1970,7 +1719,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     <div class="vp-intro">
       <span class="eyebrow">The Platform</span>
       <h2 class="h2">How Altera Works</h2>
-      <p class="vp-sub">Five layers that turn passive AI into a system that teaches.</p>
+      <p class="vp-sub">Five layers that turn passive AI into a system that actually teaches.</p>
     </div>
 
     <div class="vp-grid">
@@ -1984,7 +1733,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
           </div>
           <h3 class="h3">Mastery Tracking Engine</h3>
           <p class="vp-body">
-            Altera uses <strong>Probabilistic Mastery Tracking</strong> to calculate the <strong>Sustainable Mastery Index (SMI)</strong>, a composite metric that estimates how stable and durable each student's command of a concept is. It is built to distinguish mastery that lasts from ephemeral memorization.
+            Altera uses <strong>Probabilistic Mastery Tracking</strong> to calculate the <strong>Sustainable Mastery Index (SMI)</strong>, a composite metric that represents the stability and retention probability of a student's knowledge. This ensures students achieve true mastery that lasts, rather than ephemeral memorization.
           </p>
         </div>
 
@@ -2012,33 +1761,33 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
         <div>
           <div class="vp-head">
             <span class="vp-icon" aria-hidden="true"><i data-lucide="brain-circuit"></i></span>
-            <span class="vp-card-eyebrow">For Instructors</span>
+            <span class="vp-card-eyebrow">For Teachers</span>
           </div>
           <h4 class="h4-serif">Teacher Command Center</h4>
           <p class="vp-body">
-            See, before your next class, which concepts are landing and which need a different approach. Drill down to an individual student only when you choose to.
+            See who's thriving, who's stuck, and exactly which concepts to re-teach before your next class.
           </p>
 
           <div class="vp-inset">
             <div class="vp-inset-head">
               <span class="vp-live-dot" aria-hidden="true"></span>
-              <span class="lbl">Live Course View</span>
+              <span class="lbl">Live Class View</span>
             </div>
             <div class="vp-row">
               <span class="pip hi" aria-hidden="true"></span>
-              <span class="nm">Chain Rule</span>
+              <span class="nm">Maya R.</span>
               <span class="track" aria-hidden="true"><i class="hi" style="width:82%"></i></span>
               <span class="pct">82%</span>
             </div>
             <div class="vp-row">
               <span class="pip lo" aria-hidden="true"></span>
-              <span class="nm">Related Rates</span>
+              <span class="nm">Jordan T.</span>
               <span class="track" aria-hidden="true"><i class="lo" style="width:41%"></i></span>
               <span class="pct">41%</span>
             </div>
             <div class="vp-row">
               <span class="pip mid" aria-hidden="true"></span>
-              <span class="nm">Optimization</span>
+              <span class="nm">Alex K.</span>
               <span class="track" aria-hidden="true"><i class="mid" style="width:63%"></i></span>
               <span class="pct">63%</span>
             </div>
@@ -2060,7 +1809,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
           </div>
           <h4 class="h4-serif">AI Tutor That Teaches</h4>
           <p class="vp-body">
-            Altera does not hand over the answer. It uses <strong>Socratic Scouting</strong> to find where you're stuck and gives hints that bridge the gap, personalized to your learning path.
+            Altera never just hands over the answer. It uses <strong>Socratic Scouting</strong> to find exactly where you're stuck and provides high-impact hints that bridge gaps, personalized to your specific learning path.
           </p>
 
           <div class="vp-inset">
@@ -2207,36 +1956,25 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
   <style>
     .v2-core{
       position:relative; z-index:1;
-      padding:96px 40px;
       background:var(--paper-100);
-      border-top:1px solid var(--border-hairline);
       border-bottom:1px solid var(--border-hairline);
       overflow:hidden;
     }
     .v2-core::before{
       content:""; position:absolute; inset:0; pointer-events:none; z-index:0;
       background-image:
-        radial-gradient(circle at 90% -6%, rgba(71,110,227,.07), transparent 42%),
-        radial-gradient(circle at 4% 108%, rgba(156,74,47,.06), transparent 46%);
+        radial-gradient(circle 650px at 90% -6%, rgba(71,110,227,.07), transparent),
+        radial-gradient(circle 715px at 4% 108%, rgba(156,74,47,.06), transparent);
     }
-    .v2-core__wrap{ max-width:1320px; margin:0 auto; position:relative; z-index:1; }
+    .v2-core__wrap{ position:relative; z-index:1; }
     .v2-core__grid{
-      display:grid; grid-template-columns:0.78fr 1.22fr; gap:64px; align-items:center;
+      display:grid; grid-template-columns:0.78fr 1.22fr; gap:64px; align-items:start;
     }
 
     /* ---- left rail ---- */
-    .v2-core__badge{
-      display:inline-flex; align-items:center; justify-content:center;
-      width:46px; height:46px; border-radius:var(--radius-md);
-      background:rgba(71,110,227,.10); border:1px solid rgba(71,110,227,.24);
-      transform:rotate(-3deg); margin-bottom:22px;
-      box-shadow:var(--shadow-paper-sm);
-    }
-    .v2-core__badge i{ width:22px; height:22px; color:var(--signal-700); }
-    .v2-core .eyebrow{ margin-bottom:16px; }
-    .v2-core__h2{ margin:0 0 22px; }
-    .v2-core__h2::after{ content:""; }
-    .v2-core__lead{ max-width:46ch; margin:0 0 30px; }
+    .v2-core .eyebrow{ margin:0 0 18px; }
+    .v2-core__h2{ margin:0 0 20px; }
+    .v2-core__lead{ max-width:62ch; margin:0 0 32px; }
     .v2-core__lead strong{ color:var(--ink-900); font-weight:600; }
 
     .v2-core__legend{ display:flex; flex-direction:column; gap:18px; }
@@ -2262,24 +2000,23 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       position:relative;
     }
     /* single frame: the inner panel carries the card look on its own */
-    .v2-core__panel{ box-shadow:var(--shadow-paper) !important; }
     .v2-core__panel{
       position:relative;
-      border-radius:var(--radius-card);
+      border-radius:16px;
       background:var(--paper-200);
       border:1px solid var(--border-hairline);
-      box-shadow:inset 0 1px 0 rgba(250,245,234,.6), inset 0 0 40px rgba(31,26,20,.05);
+      box-shadow:var(--shadow-paper);
       padding:14px;
     }
     .v2-core__panelhead{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
     .v2-core__pill{
       display:inline-flex; align-items:center; gap:9px;
-      font-family:var(--font-mono); font-size:var(--fs-xs); font-weight:500;
+      font-family:var(--font-mono); font-size:12px; font-weight:500;
       letter-spacing:var(--tracking-wide); text-transform:uppercase;
       color:var(--signal-700);
-      background:rgba(71,110,227,.08);
+      background:rgba(71,110,227,.10);
       border:1px solid rgba(71,110,227,.24);
-      padding:7px 13px; border-radius:var(--radius-pill);
+      padding:6px 12px; border-radius:var(--radius-pill);
     }
     .v2-core__pill .live{
       position:relative; width:8px; height:8px; border-radius:50%; background:var(--signal-500);
@@ -2332,11 +2069,18 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       display:flex; flex-direction:column; align-items:center; gap:10px;
       font-family:var(--font-mono); font-size:var(--fs-xs); color:var(--ink-500);
     }
-    #v2core-legend .lg-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px 22px; width:100%; }
+    #v2core-legend .lg-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 20px; width:100%; }
     #v2core-legend .lg-item{ display:flex; align-items:center; gap:8px; }
+    /* the caption breaks to its own line so "Live Mastery Encoding" never orphans */
     #v2core-legend .lg-cap{
       color:var(--ink-400); text-transform:uppercase; letter-spacing:var(--tracking-wide);
-      font-weight:600; margin-right:2px;
+      font-weight:600;
+      flex-basis:100%; width:100%; text-align:center;
+      margin-right:0; margin-bottom:2px;
+    }
+    /* with room, items wrap only between whole entries, never mid-label */
+    @media (min-width:520px){
+      #v2core-legend .lg-item{ white-space:nowrap; flex:0 0 auto; }
     }
     #v2core-legend .lg-dot{ width:11px; height:11px; border-radius:50%; }
     #v2core-legend .lg-sq{ width:11px; height:11px; border-radius:2px; }
@@ -2360,9 +2104,10 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     .v2-core__insighthead{ display:flex; align-items:center; gap:12px; margin-bottom:11px; position:relative; z-index:1; }
     .v2-core__insighthead .ico{
       display:grid; place-items:center; width:30px; height:30px; border-radius:var(--radius-md);
-      background:rgba(71,110,227,.10); border:1px solid rgba(71,110,227,.22);
+      background:rgba(156,74,47,.08); border:1px solid rgba(156,74,47,.22);
     }
-    .v2-core__insighthead .ico i{ width:16px; height:16px; color:var(--signal-700); }
+    .v2-core__insighthead .ico i{ width:16px; height:16px; }
+    .v2-core__insighthead .ico i, .v2-core__insighthead .ico svg{ color:var(--terracotta-600); }
     .v2-core__insighthead .ttl{
       font-family:var(--font-mono); font-size:var(--fs-xs); font-weight:600;
       letter-spacing:var(--tracking-widest); text-transform:uppercase; color:var(--signal-700);
@@ -2387,8 +2132,8 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       .v2-core__grid{ grid-template-columns:1fr; gap:44px; }
     }
     @media (max-width:760px){
-      .v2-core{ padding:60px 22px; }
       #v2core-graph-container{ height:420px; }
+      .v2-core__panel{ overflow-x:auto; }
     }
     @media (prefers-reduced-motion: reduce){
       .v2-core__pill .live::after,
@@ -2404,11 +2149,9 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
         <span class="eyebrow">The mastery graph</span>
         <h2 class="h2 v2-core__h2" id="v2-core-h2">The Cognitive Core</h2>
         <p class="body v2-core__lead">
-          This is the graph that powers every Altera course. Each node is a concept from a
+          This is the graph that powers every Altera tutor. Each node is a concept from a
           <strong>Physics I</strong> syllabus. Edges encode prerequisite, component, analogy, and
-          conflict relationships. Mastery is scored per concept and rolls up into the course-level
-          picture your dashboard shows. Altera builds this map from your own syllabus, so it works
-          for any course. No publisher textbook required.
+          conflict relationships. Student mastery is tracked per node using the live engine score.
         </p>
 
         <div class="v2-core__legend">
@@ -2416,15 +2159,15 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
             <span class="v2-core__swatch is-mastery" aria-hidden="true"><i></i></span>
             <div>
               <h4 class="h4">Node Color = Mastery State</h4>
-              <p><span class="em-hi">Green</span> nodes have high SMI: the concept is sticking for the long term.
-                <span class="em-lo">Red</span> nodes are where the course needs a different approach. Colors update after every interaction.</p>
+              <p><span class="em-hi">Green</span> nodes have high SMI (the student retains the concept long-term).
+                <span class="em-lo">Red</span> nodes need work. Colors update after every interaction.</p>
             </div>
           </div>
           <div class="v2-core__exp">
             <span class="v2-core__swatch is-weight" aria-hidden="true"><i></i></span>
             <div>
               <h4 class="h4">Node Size = Curricular Weight</h4>
-              <p>Bigger nodes are higher-leverage concepts. Once a class is solid on "Newton's Second Law,"
+              <p>Bigger nodes are higher-leverage concepts. If a student masters "Newton's Second Law,"
                 downstream topics like projectile motion and friction become easier to teach.</p>
             </div>
           </div>
@@ -2433,7 +2176,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
             <div>
               <h4 class="h4">Edges = Relationships</h4>
               <p>Solid lines are prerequisites, dashed lines are components, and red lines flag conflicts with
-                misconceptions. When a student gets stuck, the tutor walks these edges to find what's missing.</p>
+                misconceptions. When a student gets stuck, the tutor walks these edges to find what's actually missing.</p>
             </div>
           </div>
         </div>
@@ -2449,7 +2192,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
           <div id="v2core-graph-container">
             <div class="grid-bg" aria-hidden="true"></div>
             <div class="grain-bg" aria-hidden="true"></div>
-            <svg id="v2core-graph-svg" aria-label="Interactive knowledge graph of Physics I concepts, colored by mastery state."></svg>
+            <svg id="v2core-graph-svg" aria-label="Interactive knowledge graph of Physics I concepts, colored by student mastery."></svg>
             <div id="v2core-tooltip" class="hidden"></div>
           </div>
 
@@ -2856,14 +2599,11 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     .v2-traction {
       position: relative;
       z-index: 1;
-      padding: 112px 0 120px;
-      border-top: 1px solid var(--border-hairline);
       background-color: var(--paper-100);
     }
-    .v2-traction .tr-wrap { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
 
-    .v2-traction .tr-head { text-align: center; margin-bottom: 76px; }
-    .v2-traction .tr-head .eyebrow { margin-bottom: 18px; }
+    .v2-traction .tr-head { text-align: center; margin-bottom: 72px; }
+    .v2-traction .tr-head .eyebrow { margin-bottom: 16px; }
     .v2-traction .tr-head h2 { margin: 0; }
 
     /* ---- the spine ---- */
@@ -2880,8 +2620,17 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       .v2-traction .tr-spine { left: 50%; transform: translateX(-1px); }
     }
 
-    .v2-traction .tr-row { position: relative; margin-bottom: 60px; }
+    .v2-traction .tr-row { position: relative; margin-bottom: 40px; }
     .v2-traction .tr-row:last-child { margin-bottom: 0; }
+    /* A script staggers each row a uniform distance below the previous one
+       (fixed offsets cannot stay consistent with varying card heights).
+       Rows overlap, so they must not swallow clicks on cards beneath. */
+    @media (min-width: 901px) {
+      .v2-traction .tr-row { pointer-events: none; }
+      .v2-traction .tr-row .tr-card,
+      .v2-traction .tr-row .tr-date,
+      .v2-traction .tr-row .tr-node { pointer-events: auto; }
+    }
 
     /* node dot on the spine */
     .v2-traction .tr-node {
@@ -2910,23 +2659,23 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     .v2-traction .tr-date {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: var(--fs-xs);
+      font-size: 12px;
       font-weight: 500;
       letter-spacing: var(--tracking-wide);
       text-transform: uppercase;
       color: var(--ochre-600);
       background: rgba(181,114,42,.10);
-      border: 1px solid rgba(181,114,42,.28);
-      padding: 5px 11px;
+      border: 1px solid rgba(181,114,42,.24);
+      padding: 6px 12px;
       border-radius: var(--radius-pill);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     /* the milestone paper card */
     .v2-traction .tr-card {
       background: var(--paper-200);
       border: 1px solid var(--border-hairline);
-      border-radius: var(--radius-card);
+      border-radius: 16px;
       box-shadow: var(--shadow-paper);
       padding: 22px 24px 24px;
       position: relative;
@@ -2969,7 +2718,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
 
     /* logo set in a paper frame */
     .v2-traction .tr-logo-frame {
-      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;
       margin-top: 18px;
       background: var(--paper-50);
       border: 1px solid var(--border-hairline);
@@ -2977,13 +2726,13 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       padding: 14px 18px;
     }
     .v2-traction .tr-logo-frame img.logo {
-      height: 48px; object-contain: contain; object-fit: contain;
+      height: 48px; object-fit: contain;
       filter: none; opacity: .95;
     }
     .v2-traction .tr-logo-frame .seam { width: 1px; align-self: stretch; background: var(--border-soft); }
     .v2-traction .tr-pava-name { display: flex; flex-direction: column; gap: 2px; line-height: 1.08; }
     .v2-traction .tr-pava-name span {
-      font-family: var(--font-mono); font-size: 10.5px; font-weight: 500;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 500;
       letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--ink-600);
     }
 
@@ -3032,12 +2781,10 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     }
 
     @media (max-width: 879px) {
-      .v2-traction .tr-card { transform: rotate(0deg) !important; }
-      .v2-traction .tr-side { text-align: left !important; }
-    }
-    @media (max-width: 600px) {
-      .v2-traction { padding: 80px 0 88px; }
-      .v2-traction .tr-wrap { padding: 0 22px; }
+      .v2-traction .tr-row.left .tr-card,
+      .v2-traction .tr-row.right .tr-card { transform: rotate(0deg); }
+      .v2-traction .tr-row.left .tr-side,
+      .v2-traction .tr-row.right .tr-side { text-align: left; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3143,7 +2890,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
               <h3 class="h3">JHU Fuel Demo Day Win</h3>
             </a>
             <p class="tr-body">
-              Won the <strong>$5,000 Audience Award</strong> at the 2025 Johns Hopkins Fuel Demo Day, an audience-voted win that showed strong student and faculty interest in the approach.
+              Won the <strong>$5,000 Audience Award</strong> at the 2025 Johns Hopkins Fuel Demo Day, an audience-voted victory proving significant student and faculty interest in AI tutoring.
             </p>
             <a class="tr-ext" href="https://pavacenter.jhu.edu/news/catching-up-with-the-fall-2025-fuel-winners/" target="_blank" rel="noopener noreferrer">
               Read Article <i data-lucide="external-link"></i>
@@ -3270,12 +3017,10 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
   <style>
     .v2-team {
       position: relative;
-      padding: 7rem 1.5rem;
       background-color: var(--paper-100);
       background-image:
-        radial-gradient(circle at 12% -6%, rgba(207,138,59,.10), transparent 44%),
-        radial-gradient(circle at 94% 6%, rgba(71,110,227,.06), transparent 40%);
-      border-top: 1px solid var(--border-hairline);
+        radial-gradient(circle 680px at 12% -6%, rgba(207,138,59,.10), transparent),
+        radial-gradient(circle 620px at 94% 6%, rgba(71,110,227,.06), transparent);
       overflow: hidden;
     }
     .v2-team::before {
@@ -3285,12 +3030,12 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
       opacity: .42; mix-blend-mode: multiply;
       background-image: var(--paper-grain);
     }
-    .v2-team .v2-team-inner { max-width: 1240px; margin: 0 auto; position: relative; z-index: 1; }
+    .v2-team .v2-team-inner { position: relative; z-index: 1; }
 
     /* ---- header ---- */
     .v2-team .v2-team-head { text-align: center; margin-bottom: 4.5rem; }
-    .v2-team .v2-team-head .eyebrow { margin-bottom: 1.1rem; }
-    .v2-team .v2-team-head h2 { margin: 0 0 1rem; }
+    .v2-team .v2-team-head .eyebrow { margin-bottom: 16px; }
+    .v2-team .v2-team-head h2 { margin: 0 0 20px; }
     .v2-team .v2-team-sub {
       max-width: 40rem; margin: 0 auto;
       font-size: var(--fs-base); color: var(--ink-600); line-height: 1.65;
@@ -3299,7 +3044,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
 
     /* ---- founder grid ---- */
     .v2-team .v2-founders {
-      display: grid; gap: 1.75rem;
+      display: grid; gap: 1.5rem;
       grid-template-columns: repeat(4, 1fr);
     }
     @media (max-width: 1100px) { .v2-team .v2-founders { grid-template-columns: repeat(2, 1fr); } }
@@ -3374,13 +3119,13 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
     }
 
     /* ---- advisory board ---- */
-    .v2-team .v2-advisory { margin-top: 6rem; padding-top: 4.5rem; border-top: 1px solid var(--border-hairline); }
+    .v2-team .v2-advisory { margin-top: 3rem; padding-top: 3rem; border-top: 1px solid var(--border-hairline); }
     .v2-team .v2-advisory-head { text-align: center; margin-bottom: 3rem; }
-    .v2-team .v2-advisory-head .eyebrow { margin-bottom: .75rem; }
+    .v2-team .v2-advisory-head .eyebrow { margin-bottom: 16px; }
     .v2-team .v2-advisory-head p { max-width: 36rem; margin: 0 auto; color: var(--ink-600); font-size: var(--fs-base); }
 
     .v2-team .v2-advisors {
-      display: grid; gap: 1.25rem;
+      display: grid; gap: 1.5rem;
       grid-template-columns: repeat(2, 1fr);
       max-width: 64rem; margin: 0 auto;
     }
@@ -3536,7 +3281,7 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
             <h4 class="v2-advisor-name h3">Dr. Richard Brown</h4>
             <p class="v2-advisor-title">Director of Undergraduate Studies, JHU Mathematics</p>
             <p class="v2-advisor-tag">Institutional Adoption & Procurement</p>
-            <p class="v2-advisor-blurb">Our "voice of the customer," guiding procurement strategy and institutional adoption pathways.</p>
+            <p class="v2-advisor-blurb">Our "voice of the customer," guiding pricing, procurement strategy, and institutional adoption pathways.</p>
           </div>
         </article>
 
@@ -3595,11 +3340,11 @@ html[data-theme] .vp-canvas-img{ background:#f3ead8; border-radius:6px; padding:
 <footer class="v2-footer">
   <style>
    .v2-footer{position:relative;z-index:1;padding:54px 40px;background:var(--paper-200);border-top:1px solid var(--border-hairline,rgba(31,26,20,.12));}
-   .v2-footer .wrap{max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;}
+   .v2-footer .wrap{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;}
    .v2-footer .brand{font-family:var(--font-display);font-weight:600;font-size:1.1rem;color:var(--ink-900);}
    .v2-footer .brandcol{display:flex;flex-direction:column;gap:5px;align-items:flex-start;}
    .v2-footer .copy{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-400);letter-spacing:.04em;}
-   .v2-footer nav a{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-500);text-decoration:none;margin-left:26px;}
+   .v2-footer nav a{font-family:var(--font-mono);font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-500);text-decoration:none;margin-left:26px;}
    .v2-footer nav a:hover{color:var(--terracotta-600);}
   </style>
   <div class="wrap">
@@ -3647,14 +3392,49 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- night-theme toggle (demo affordance; relocate to a settings surface when night ships) -->
-<div id="theme-toggle" role="group" aria-label="Color theme">
-  <button data-set="day">Day</button><button data-set="lamplit">Lamp</button><button data-set="board">Board</button>
+<script>
+/* Phone nav disclosure (<=760px). Styling lives in LAYER 3; this owns only the
+   open/closed state and the aria that goes with it. */
+document.addEventListener('DOMContentLoaded', function(){
+  var bar = document.querySelector('header.nav .nav-inner');
+  var btn = bar && bar.querySelector('.nav-toggle');
+  if (!bar || !btn) return;
+
+  function setOpen(open){
+    bar.classList.toggle('is-open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+  }
+
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    setOpen(!bar.classList.contains('is-open'));
+  });
+
+  /* a tap on a link navigates, so the menu must not stay open over the target */
+  bar.querySelectorAll('nav.links a.link').forEach(function(a){
+    a.addEventListener('click', function(){ setOpen(false); });
+  });
+
+  document.addEventListener('click', function(e){ if (!bar.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setOpen(false); });
+  /* rotating to landscape can cross the breakpoint with the menu still open */
+  window.addEventListener('resize', function(){ if (window.innerWidth > 760) setOpen(false); });
+});
+</script>
+
+<!-- theme toggle (demo affordance; relocate to a settings surface when this ships) -->
+<div id="theme-toggle" aria-label="Theme">
+  <div class="tt-group" role="group" aria-label="Brand"><button data-brand="rr">Paper</button><button data-brand="mer">Meridian</button></div>
+  <span class="tt-sep"></span>
+  <div class="tt-group" role="group" aria-label="Mode"><button data-mode="day">Day</button><button data-mode="night">Night</button></div>
 </div>
 <style>
-  #theme-toggle{ position:fixed; right:18px; bottom:18px; z-index:9999; display:flex; gap:2px;
+  #theme-toggle{ position:fixed; right:18px; bottom:18px; z-index:9999; display:flex; align-items:center; gap:6px;
     padding:3px; border-radius:999px; background:rgba(31,26,20,.82); backdrop-filter:blur(6px);
     border:1px solid rgba(243,234,216,.25); box-shadow:0 8px 24px rgba(0,0,0,.35); }
+  #theme-toggle .tt-group{ display:flex; gap:2px; }
+  #theme-toggle .tt-sep{ width:1px; height:16px; background:rgba(243,234,216,.25); }
   #theme-toggle button{ font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase;
     color:#d8cfba; background:none; border:0; border-radius:999px; padding:6px 12px; cursor:pointer; }
   #theme-toggle button.active{ background:#c0603a; color:#fff5ec; }
@@ -3663,12 +3443,20 @@ document.addEventListener('DOMContentLoaded', function(){
 <script>
   (function(){
     var cur = localStorage.getItem('altera-theme') || 'day';
-    var btns = document.querySelectorAll('#theme-toggle button');
-    btns.forEach(function(b){
-      if (b.dataset.set === cur) b.classList.add('active');
+    var brand = (cur === 'meridian' || cur === 'meridian-night') ? 'mer' : 'rr';
+    var mode = (cur === 'day' || cur === 'meridian') ? 'day' : 'night';
+    var THEMES = { 'rr:day':'day', 'rr:night':'lamplit', 'mer:day':'meridian', 'mer:night':'meridian-night' };
+    function paint(){
+      document.querySelectorAll('#theme-toggle [data-brand]').forEach(function(b){ b.classList.toggle('active', b.dataset.brand === brand); });
+      document.querySelectorAll('#theme-toggle [data-mode]').forEach(function(b){ b.classList.toggle('active', b.dataset.mode === mode); });
+    }
+    paint();
+    document.querySelectorAll('#theme-toggle button').forEach(function(b){
       b.addEventListener('click', function(){
-        if (b.dataset.set === cur) return;
-        localStorage.setItem('altera-theme', b.dataset.set);
+        if (b.dataset.brand) brand = b.dataset.brand; else mode = b.dataset.mode;
+        var next = THEMES[brand + ':' + mode];
+        if (next === (localStorage.getItem('altera-theme') || 'day')) { paint(); return; }
+        localStorage.setItem('altera-theme', next);
         location.reload(); /* chart scripts read tokens at init, so re-init on switch */
       });
     });
