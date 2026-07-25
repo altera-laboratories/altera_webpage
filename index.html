@@ -843,6 +843,10 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     header.nav .nav-inner.is-open nav.links { display: flex !important; }
     header.nav nav.links a.link {
       display: flex !important; align-items: center !important;
+      /* The labels are short and the panel is full width, so left-flush left a
+         dead right half. Centred, the list reads as a menu rather than as body
+         copy that lost its paragraph. */
+      justify-content: center !important; text-align: center !important;
       min-height: 48px !important; padding: 0 2px !important;
       font-size: 16px !important; white-space: nowrap !important;
       border-bottom: 1px solid rgba(31,26,20,.07) !important;

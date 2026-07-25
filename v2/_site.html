@@ -380,6 +380,9 @@ p.sub b { color: var(--ink); font-weight: 600; }
   .nav-inner.is-open nav.links { display: flex; }
   nav.links a.link {
     display: flex; align-items: center;
+    /* short labels in a full-width panel left a dead right half when flush
+       left; centred, the list reads as a menu rather than as stray body copy */
+    justify-content: center; text-align: center;
     min-height: 48px; /* tap target */
     padding: 0 2px; font-size: 16px; border-radius: 0;
     border-bottom: 1px solid var(--border-hairline);
