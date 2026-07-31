@@ -143,6 +143,8 @@ a:focus-visible, button:focus-visible {
 .body-lg{ font-size:1.1875rem; color:var(--ink-600); line-height:1.7; }
 .metadata{ font-size:var(--fs-xs); color:var(--text-faint); }
 .data-label{ font-family:var(--font-mono); font-size:var(--fs-xs); letter-spacing:var(--tracking-wide); text-transform:uppercase; color:var(--ink-500); }
+/* Set initials where a portrait would sit. Sized by the container it fills. */
+.monogram{ display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:var(--paper-300); color:var(--ink-500); font-family:var(--font-display); font-weight:600; font-size:0.875rem; letter-spacing:0.04em; line-height:1; user-select:none; }
 code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
 /* ---- page measure ---- */
@@ -1400,7 +1402,7 @@ html[data-theme="meridian-night"] .btn-primary, html[data-theme="meridian-night"
           <span class="pin eyebrow">Faculty Endorsement</span>
           <div class="quote-body">
             <span class="headshot">
-              <img src="./public/images/headshots/Dr_Marshall-Stevens.jpg" alt="Prof. Kobe Marshall-Stevens" />
+              <span class="monogram" aria-hidden="true">KM</span>
             </span>
             <div>
               <blockquote>
@@ -2925,7 +2927,7 @@ html[data-theme="meridian-night"] .btn-primary, html[data-theme="meridian-night"
             <div class="tr-quote">
               <div class="q-row">
                 <span class="q-avatar">
-                  <img src="./public/images/headshots/Dr_Marshall-Stevens.jpg" alt="Prof. Kobe Marshall-Stevens">
+                  <span class="monogram" aria-hidden="true">KM</span>
                 </span>
                 <div>
                   <blockquote>
@@ -3157,6 +3159,7 @@ html[data-theme="meridian-night"] .btn-primary, html[data-theme="meridian-night"
       background: var(--paper-300);
     }
     .v2-team .v2-advisor-photo img { width: 100%; height: 100%; object-fit: cover; filter: sepia(.08) saturate(.95); }
+    .v2-team .v2-advisor-photo .monogram { font-size: 2.125rem; }
     .v2-team .v2-advisor-name { margin: 0; font-size: 1.45rem; }
     .v2-team .v2-advisor-title { font-size: var(--fs-sm); font-weight: 500; color: var(--ink-500); line-height: 1.3; margin: .25rem 0 0; }
     .v2-team .v2-advisor-tag {
@@ -3262,7 +3265,7 @@ html[data-theme="meridian-night"] .btn-primary, html[data-theme="meridian-night"
         <!-- Dr. Marshall-Stevens -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Dr_Marshall-Stevens.jpg" alt="Dr. Kobe Marshall-Stevens" loading="lazy">
+            <span class="monogram" aria-hidden="true">KM</span>
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Dr. Kobe Marshall-Stevens</h4>
