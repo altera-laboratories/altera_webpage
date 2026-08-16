@@ -378,7 +378,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .hero { padding: 38px 0 18px; }
     h1.headline { font-size: clamp(38px, 11vw, 52px); }
     p.sub { font-size: 18px; }
-    .nav-cta .btn-ghost { display: none; }
     .orn-books, .orn-bulb, .orn-atom, .orn-globe { width: 56px; }
     .smi-card { right: -8px; width: 196px; }
     .strip-inner { gap: 18px; }
@@ -602,7 +601,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 .v2-core .eyebrow,
 .v2-traction .tr-head .eyebrow,
 .v2-team .v2-team-head .eyebrow,
-.v2-team .v2-advisory-head .eyebrow { margin-bottom: 16px !important; }
+.v2-team .v2-advisory-head .h3 { margin-bottom: 16px !important; }
 
 /* H2 bottom margin */
 .v2-problem .vp-h2,
@@ -803,9 +802,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .nav-toggle .icon-close { display: none; }
   .nav-toggle[aria-expanded="true"] .icon-open  { display: none; }
   .nav-toggle[aria-expanded="true"] .icon-close { display: block; }
-  /* Sign in rides in the menu on phones only; the desktop bar has its own. */
-  .links .link-signin { display: none; }
-
   @media (max-width: 760px) {
     /* ONE mobile gutter, so the bar, the menu panel and the content cannot
        drift apart. 16px is 75% of the 22px this page shipped with, giving the
@@ -886,7 +882,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       border-bottom: 1px solid rgba(31,26,20,.07) !important;
     }
     header.nav nav.links a.link:last-child { border-bottom: 0 !important; }
-    .links .link-signin { display: flex !important; }
 
     /* --- anchors must clear the 64px bar, not the old 229px one --- */
     section[id] { scroll-margin-top: 76px !important; }
@@ -1005,13 +1000,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <a class="link" href="#core">Cognitive Core</a>
           <a class="link" href="#traction">Evidence</a>
           <a class="link" href="#team">Team</a>
-          <!-- phone-only: the desktop bar carries Sign in beside the CTA, but that
-               button is hidden <=760px, so the menu is its only home on a phone -->
-          <a class="link link-signin" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">Sign in</a>
         </nav>
 
         <div class="nav-cta">
-          <a class="btn btn-ghost" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">Sign in</a>
           <a class="btn btn-clay" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">
             Try the Beta
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
@@ -1321,7 +1312,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
       <!-- LEFT: editorial copy + stats -->
       <div>
-        <span class="vp-eyebrow"><span class="dot" aria-hidden="true"></span>The Crisis</span>
         <h2 class="h2 vp-h2" id="v2-problem-h2">The Substitution Model</h2>
         <p class="vp-lede">
           Current AI tools create a "substitution" effect: students bypass the reasoning that builds durable skills. The result is measurable learning loss, and a <span class="em">"black box"</span> that leaves instructors blind to what their students can actually do.
@@ -1750,7 +1740,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
       <!-- ===== Copy column ===== -->
       <div class="v2-sol-copy">
-        <span class="eyebrow">Our Solution</span>
         <h2 class="h2 v2-sol-h2" id="v2-solution-h2">Adaptive Knowledge Tracking</h2>
 
         <p class="body-lg v2-sol-lead">
@@ -2097,7 +2086,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
   <div class="vp-wrap">
     <div class="vp-intro">
-      <span class="eyebrow">The Platform</span>
       <h2 class="h2">How Altera Works</h2>
       <p class="vp-sub">Five layers that turn passive AI into a system that teaches.</p>
     </div>
@@ -2530,7 +2518,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
       <!-- LEFT: editorial copy + legend explainers -->
       <div class="v2-core__rail">
-        <span class="eyebrow">The mastery graph</span>
         <h2 class="h2 v2-core__h2" id="v2-core-h2">The Cognitive Core</h2>
         <p class="body v2-core__lead">
           This is the graph that powers every Altera course. Each node is a concept from a
@@ -3176,7 +3163,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
   <div class="tr-wrap">
     <div class="tr-head">
-      <span class="eyebrow">Our Journey</span>
       <h2 class="h2" id="traction-h2">Traction & Milestones</h2>
     </div>
 
@@ -3429,7 +3415,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     /* ---- founder grid ---- */
     .v2-team .v2-founders {
       display: grid; gap: 1.75rem;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
     }
     @media (max-width: 1100px) { .v2-team .v2-founders { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 600px) { .v2-team .v2-founders { grid-template-columns: 1fr; } }
@@ -3505,7 +3491,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     /* ---- advisory board ---- */
     .v2-team .v2-advisory { margin-top: 6rem; padding-top: 4.5rem; border-top: 1px solid var(--border-hairline); }
     .v2-team .v2-advisory-head { text-align: center; margin-bottom: 3rem; }
-    .v2-team .v2-advisory-head .eyebrow { margin-bottom: .75rem; }
+    .v2-team .v2-advisory-head .h3 { margin-bottom: .75rem; }
     .v2-team .v2-advisory-head p { max-width: 36rem; margin: 0 auto; color: var(--ink-600); font-size: var(--fs-base); }
 
     .v2-team .v2-advisors {
@@ -3563,7 +3549,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
   <div class="v2-team-inner">
     <div class="v2-team-head v2-reveal">
-      <span class="eyebrow">The Team</span>
       <h2 class="h2">Built by Altera Labs</h2>
       <p class="v2-team-sub">
         Altera has raised nearly <strong>$60,000</strong> in non-dilutive funding, led by a <strong>$49,838</strong> TEDCO Baltimore Innovation Initiative award. Our founding team has raised over <strong>$190,000</strong> for previous ventures, progressed through the JHU Pava Center's Spark and Fuel accelerators, and completed NSF I-Corps.
@@ -3619,27 +3604,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         </div>
       </article>
 
-      <!-- Mercedes -->
-      <article class="v2-card v2-reveal">
-        <div class="v2-card-top">
-          <h4 class="v2-card-name h3">Mercedes Rend</h4>
-          <span class="v2-role">Outreach & Equity Lead</span>
-        </div>
-        <div class="v2-photo">
-          <img src="./public/images/headshots/Mercedes.webp" alt="Mercedes Rend" style="object-position:center 18%;" loading="lazy">
-        </div>
-        <div class="v2-card-body">
-          <p class="v2-school">Johns Hopkins University</p>
-          <p class="v2-degree">BS, Biomedical Engineering</p>
-          <p class="v2-bio">JHU BME researcher and outreach lead with experience in mentoring, stakeholder coordination, and program execution. Brings an educational-equity lens that helps Altera design for access, adoption, and real student outcomes.</p>
-        </div>
-      </article>
     </div>
 
     <!-- Advisory Board -->
     <div class="v2-advisory">
       <div class="v2-advisory-head v2-reveal">
-        <span class="eyebrow">Advisory Board</span>
+        <h3 class="h3">Advisory Board</h3>
         <p>Domain, institutional, and commercial validation from leading experts.</p>
       </div>
 
