@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Version Gallery | Altera Labs</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="./public/images/logos/Altera/favicon.svg" type="image/svg+xml">
+
+<!-- Tokens and webfonts come from the one source of truth. Nothing in this
+     file re-declares a brand hex; every color below is a token reference. -->
+<link rel="stylesheet" href="colors_and_type.css">
+
+<style>
+  /* ============================================================
+     LAYOUT
+     Each card frames a LIVE page in an iframe rendered at desktop
+     width and scaled down, so the gallery can never go stale the
+     way a folder of screenshots does.
+     ============================================================ */
+  :root{
+    --frame-w: 1440;            /* the width every preview renders at, unitless
+                                   so aspect-ratio below can consume it */
+    --frame-h: 900;             /* how much of that page a card shows */
+    --font-display: 'Fraunces', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--surface-base); color:var(--text);
+    font-family:var(--font-body); -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  /* ---- masthead ---- */
+  header.top{ border-bottom:1px solid var(--surface-border); }
+  .top .wrap{ display:flex; align-items:center; gap:16px; padding-top:14px; padding-bottom:14px; }
+  .top img{ height:40px; width:auto; display:block; }
+  .top .here{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--text-faint);
+  }
+
+  .intro{ padding:56px 0 8px; }
+  .intro h1{
+    font-family:var(--font-display); font-weight:600; color:var(--ink-900);
+    font-size:clamp(34px,5vw,52px); line-height:1.08; margin:0 0 18px;
+  }
+  .intro p{ max-width:62ch; font-size:17px; line-height:1.65; margin:0 0 12px; color:var(--text); }
+  .intro p.note{ font-size:15px; color:var(--text-mute); }
+
+  /* ---- section headings ---- */
+  section.era{ padding:52px 0 8px; }
+  .era-head{ border-top:1px solid var(--surface-border); padding-top:22px; margin-bottom:30px; }
+  .era-head .eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--terracotta-600); display:block; margin-bottom:10px;
+  }
+  .era-head h2{
+    font-family:var(--font-display); font-weight:600; color:var(--ink-900);
+    font-size:27px; line-height:1.2; margin:0 0 10px;
+  }
+  .era-head p{ max-width:66ch; margin:0; font-size:16px; line-height:1.6; color:var(--text-mute); }
+
+  /* ---- cards ---- */
+  .grid{ display:grid; gap:34px; grid-template-columns:repeat(auto-fill,minmax(430px,1fr)); }
+  .grid.wide{ grid-template-columns:1fr; }
+
+  .card{
+    background:var(--surface-elevated); border:1px solid var(--surface-border);
+    border-radius:10px; overflow:hidden;
+    box-shadow:0 14px 30px -20px rgba(31,26,20,.5);
+  }
+
+  /* The preview: a fixed-ratio window onto a full-size render. The iframe
+     itself is --frame-w wide; --preview-scale (set per card in JS from the
+     measured card width) shrinks it to fit. pointer-events:none keeps the
+     card a picture rather than a page you can accidentally scroll.
+     Until the observer hands it a src the frame is empty, so .shot carries
+     the "loading" caption underneath it. */
+  .shot{
+    position:relative; display:block; overflow:hidden;
+    aspect-ratio: var(--frame-w) / var(--frame-h);
+    background:var(--paper-50); border-bottom:1px solid var(--surface-border);
+    text-decoration:none;
+  }
+  .shot::before{
+    content:"Loading"; position:absolute; inset:0; z-index:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--text-faint);
+  }
+  .shot.loaded::before{ content:none; }
+  .shot iframe{
+    position:absolute; top:0; left:0; z-index:1; border:0;
+    width:calc(var(--frame-w) * 1px); height:calc(var(--frame-h) * 1px);
+    transform:scale(var(--preview-scale,.3)); transform-origin:top left;
+    pointer-events:none;
+  }
+  .shot::after{
+    content:"Open full size"; position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--paper-50); background:rgba(31,26,20,.55);
+    opacity:0; transition:opacity .18s ease;
+  }
+  .shot:hover::after, .shot:focus-visible::after{ opacity:1; }
+  .shot:focus-visible{ outline:2px solid var(--signal-500); outline-offset:-2px; }
+
+  .meta{ padding:20px 22px 22px; }
+  .meta h3{
+    font-family:var(--font-display); font-weight:600; color:var(--ink-900);
+    font-size:20px; line-height:1.25; margin:0 0 8px;
+  }
+  .meta p{ margin:0 0 14px; font-size:15px; line-height:1.6; color:var(--text-mute); }
+  .facts{
+    display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center;
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--text-faint);
+  }
+  .facts a{ color:var(--terracotta-600); text-decoration:none; }
+  .facts a:hover{ text-decoration:underline; }
+  .tag{
+    padding:3px 9px; border-radius:999px; border:1px solid; line-height:1.5;
+  }
+  .tag.live   { color:var(--status-ok-fg);      background:var(--status-ok-bg);      border-color:var(--status-ok-border); }
+  .tag.work   { color:var(--status-pending-fg); background:var(--status-pending-bg); border-color:var(--status-pending-border); }
+  .tag.retired{ color:var(--text-faint);        background:rgba(156,140,114,.10);    border-color:var(--surface-border); }
+
+  footer.foot{
+    margin-top:64px; border-top:1px solid var(--surface-border);
+    padding:26px 0 60px; font-size:14px; line-height:1.65; color:var(--text-mute);
+  }
+  footer.foot code{ font-family:var(--font-mono); font-size:12.5px; color:var(--ink-700); }
+
+  @media (max-width:760px){
+    .wrap{ padding:0 16px; }
+    .grid{ grid-template-columns:1fr; gap:26px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .shot::after{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a href="_site.html" aria-label="Altera Labs"><img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs"></a>
+    <span class="here">Version gallery / internal</span>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="intro">
+    <h1>Every version of the page, side by side.</h1>
+    <p>
+      Nine renders of the same marketing site: the page we shipped in 2025, the page
+      that is live now, the four themes still being tried in the workshop, and the three
+      identity studies the current design came out of.
+    </p>
+    <p class="note">
+      Each panel is the real page in a frame, rendered at 1440px and scaled down, not a
+      screenshot. When a page changes, its panel changes with it. Click any panel to open it full size.
+    </p>
+  </div>
+
+  <section class="era">
+    <div class="era-head">
+      <span class="eyebrow">Shipped</span>
+      <h2>What has actually been on altera-labs.com</h2>
+      <p>
+        The site ran dark for most of a year, then switched to paper in July 2026.
+        The old page is kept at /v1.html so the before and after stay comparable.
+      </p>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <a class="shot" href="../v1.html" target="_blank" rel="noopener">
+          <iframe data-src="../v1.html" title="v1, the Deep Space Lab page" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>v1 · Deep Space Lab</h3>
+          <p>
+            Zinc-950 ground, royal blue button, geometric sans throughout. It reads like
+            every other AI startup of its year, which is exactly why it was replaced.
+          </p>
+          <div class="facts">
+            <span class="tag retired">Archived</span>
+            <span>Sep 2025 to Jul 2026</span>
+            <a href="../v1.html" target="_blank" rel="noopener">/v1.html</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="../index.html" target="_blank" rel="noopener">
+          <iframe data-src="../index.html" title="The live Reading Room page" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>v2 · The Reading Room, live</h3>
+          <p>
+            Warm paper, Fraunces headline with a painted underline, terracotta call to
+            action, and the collage illustration as the signature. This is production today.
+          </p>
+          <div class="facts">
+            <span class="tag live">Live</span>
+            <span>Since Jul 2026</span>
+            <a href="../index.html" target="_blank" rel="noopener">/index.html</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="era">
+    <div class="era-head">
+      <span class="eyebrow">In the workshop</span>
+      <h2>Four themes off one source file</h2>
+      <p>
+        v2/_site.html is where the design is still moving. It carries no forked copies:
+        one file, one set of tokens, and a theme layer that swaps their values under
+        html[data-theme]. Paper is the shipped identity, Meridian is the rebrand finalist.
+      </p>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <a class="shot" href="_site.html?theme=day" target="_blank" rel="noopener">
+          <iframe data-src="_site.html?theme=day" title="Paper theme, day" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>Paper · Day</h3>
+          <p>The shipped identity, plus whatever the workshop file has moved on to since the last promotion to index.html.</p>
+          <div class="facts">
+            <span class="tag work">Workshop</span>
+            <a href="_site.html?theme=day" target="_blank" rel="noopener">?theme=day</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="_site.html?theme=lamplit" target="_blank" rel="noopener">
+          <iframe data-src="_site.html?theme=lamplit" title="Paper theme, lamplit night" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>Paper · Lamplit</h3>
+          <p>The night half of the paper family. The room goes dark, the paper stays warm, and the terracotta holds its contrast.</p>
+          <div class="facts">
+            <span class="tag work">Workshop</span>
+            <a href="_site.html?theme=lamplit" target="_blank" rel="noopener">?theme=lamplit</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="_site.html?theme=meridian" target="_blank" rel="noopener">
+          <iframe data-src="_site.html?theme=meridian" title="Meridian theme, day" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>Meridian · Day</h3>
+          <p>The rebrand finalist: cooler stock, navy ink, ochre in place of terracotta. University press by day.</p>
+          <div class="facts">
+            <span class="tag work">Candidate</span>
+            <a href="_site.html?theme=meridian" target="_blank" rel="noopener">?theme=meridian</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="_site.html?theme=meridian-night" target="_blank" rel="noopener">
+          <iframe data-src="_site.html?theme=meridian-night" title="Meridian theme, night" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>Meridian · Night</h3>
+          <p>Observatory by night. Deep navy ground with the ochre accent carrying, the pairing the day-and-night family was chosen for.</p>
+          <div class="facts">
+            <span class="tag work">Candidate</span>
+            <a href="_site.html?theme=meridian-night" target="_blank" rel="noopener">?theme=meridian-night</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="era">
+    <div class="era-head">
+      <span class="eyebrow">Where it came from</span>
+      <h2>The three identity studies, July 2026</h2>
+      <p>
+        Before the paper page existed there were three full-page directions built to be
+        argued over. B won and became the Reading Room. A and C are kept because the
+        reasons they lost are still the reasons the current page looks the way it does.
+      </p>
+    </div>
+    <div class="grid">
+
+      <article class="card">
+        <a class="shot" href="identity-directions/a-deep-ink-atelier.html" target="_blank" rel="noopener">
+          <iframe data-src="identity-directions/a-deep-ink-atelier.html" title="Direction A, Deep Ink Atelier" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>A · Deep Ink Atelier</h3>
+          <p>Dark ground kept, craft added on top. Closest to v1, which was the problem: it did not change the first impression enough.</p>
+          <div class="facts">
+            <span class="tag retired">Not chosen</span>
+            <a href="identity-directions/a-deep-ink-atelier.html" target="_blank" rel="noopener">a-deep-ink-atelier</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="identity-directions/b-reading-room.html" target="_blank" rel="noopener">
+          <iframe data-src="identity-directions/b-reading-room.html" title="Direction B, The Reading Room" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>B · The Reading Room</h3>
+          <p>The winner. Paper ground, serif display, blue reserved for data. Everything shipped since is a refinement of this panel.</p>
+          <div class="facts">
+            <span class="tag live">Became v2</span>
+            <a href="identity-directions/b-reading-room.html" target="_blank" rel="noopener">b-reading-room</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="shot" href="identity-directions/c-field-notebook.html" target="_blank" rel="noopener">
+          <iframe data-src="identity-directions/c-field-notebook.html" title="Direction C, Field Notebook" loading="lazy" tabindex="-1" scrolling="no"></iframe>
+        </a>
+        <div class="meta">
+          <h3>C · Field Notebook</h3>
+          <p>Graph paper and lab notation on a dark ground. Strong character, but it read as a tool for researchers rather than for a class.</p>
+          <div class="facts">
+            <span class="tag retired">Not chosen</span>
+            <a href="identity-directions/c-field-notebook.html" target="_blank" rel="noopener">c-field-notebook</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p>
+      Internal page. It is under /v2/, so netlify.toml already serves it
+      <code>X-Robots-Tag: noindex</code>. Nine live pages load here, one after another from
+      the top rather than all at once, so the lower panels fill in over a few seconds.
+    </p>
+    <p>
+      A retired third paper theme, <code>board</code>, still has a token block in
+      _site.html but is no longer offered by the toggle, so it is not shown here.
+    </p>
+  </footer>
+
+</main>
+
+<script>
+  /* Two jobs.
+
+     fit(): each card renders its page at --frame-w and scales it to the card's
+     real width. Recomputed on resize because the grid reflows between one and
+     two columns.
+
+     The queue: these are nine complete marketing pages, several of them
+     running chart scripts at init. Handing the browser all nine srcs at once
+     stalls the renderer for seconds, and iframe loading="lazy" prefetches too
+     eagerly to prevent it, so frames are given their src one at a time, each
+     starting when the previous one finishes. The page is readable immediately
+     and fills in from the top. */
+  (function () {
+    var FRAME_W = 1440;
+    var shots = [].slice.call(document.querySelectorAll('.shot'));
+
+    function fit() {
+      shots.forEach(function (shot) {
+        shot.style.setProperty('--preview-scale', shot.clientWidth / FRAME_W);
+      });
+    }
+    fit();
+    addEventListener('resize', fit);
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+
+    var queue = shots.slice();
+    function next() {
+      var shot = queue.shift();
+      if (!shot) return;
+      var frame = shot.querySelector('iframe');
+      if (!frame) return next();
+      /* Advance on error too, so one missing page cannot stall the rest. */
+      function done() { shot.classList.add('loaded'); next(); }
+      frame.addEventListener('load', done);
+      frame.addEventListener('error', done);
+      frame.src = frame.dataset.src;
+    }
+    next();
+  })();
+</script>
+
+</body>
+</html>
