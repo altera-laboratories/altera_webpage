@@ -435,12 +435,31 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .collage{ overflow:hidden !important; border-radius:8px !important; }
   .collage-img{ border:0 !important; border-radius:0 !important; box-shadow:none !important; -webkit-mask-image:none !important; mask-image:none !important; }
   /* partner logos: optical balance (each tuned to its proportions) */
-  .partners .partner:nth-child(1) .p-logo{ height:40px !important; }  /* JHU (trimmed, no baked-in padding) */
-  .partners .partner:nth-child(2) .p-logo{ height:56px !important; }  /* Pava Center */
-  .partners .partner:nth-child(3) .p-logo{ height:48px !important; }  /* NVIDIA */
-  .partners .partner:nth-child(4) .p-logo{ height:40px !important; }  /* Google Cloud */
-  .partners .partner:nth-child(5) .p-logo{ height:40px !important; }  /* Canvas */
-  .partners .partner:nth-child(6) .p-logo{ height:52px !important; }  /* TEDCO */
+  /* Keyed to the file, not the position: the row gets logos added and removed,
+     and nth-child rules silently resize a neighbour when that happens. */
+  .partners .p-logo[src*="JHU.logo"]{ height:40px !important; }
+  .partners .p-logo[src*="pava_logo"]{ height:56px !important; }
+  .partners .p-logo[src*="gcloud"]{ height:40px !important; }
+  .partners .p-logo[src*="tedco"]{ height:52px !important; }
+  /* Instructure points Integrated Tier partners at the Canvas Integrated badge
+     for website branding. It is square and transparent, so unlike a lockup it
+     needs no partner-logo geometry: set a height and leave the artwork alone
+     (no recolour, no shadow, no stretch). */
+  .partners .p-logo[src*="canvas-integrated"]{ height:84px !important; }
+  /* NVIDIA Inception is boxed artwork, so it needs more height than a bare
+     wordmark to read at the same optical size (>=30px minimum). */
+  .partners .p-logo[src*="nvidia-inception"]{ height:64px !important; }
+  /* The official badge SVG ships with a viewBox and no width/height, so pin the
+     artwork ratio in CSS. NVIDIA forbids changing the badge proportions or colour,
+     so height alone drives it and it always renders at full opacity. */
+  img[src*="nvidia-inception-program-badge"]{ width:auto; aspect-ratio:500.4288/216; opacity:1 !important; }
+/* The badge is boxed artwork: the NVIDIA mark inside is only about half the
+   file height, so it needs more than the 48px a bare wordmark gets here to
+   carry the same optical weight. */
+/* Specific enough to beat `.v2-traction .tr-logo-frame img.logo{height:48px}`,
+   which is later in the file. */
+.v2-traction .tr-logo-frame img.logo[src*="nvidia-inception-program-badge"]{ height:120px; }
+.v2-traction .tr-logo-frame img.logo[src*="canvas-integrated"]{ height:76px; }
   .partner .p-logo{ max-width:260px !important; }
 
   /* seamless cream: hero matches the flat sections (no tonal bar at the boundary) */
@@ -472,7 +491,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 /* ===== D3 Cognitive Core legend: caption on its own line, no ragged orphan wrap ===== */
 #v2core-legend .lg-row{ row-gap:6px !important; column-gap:20px !important; }
 /* The mastery row leads with a caption; force the caption to break to its own line
-   and keep the three swatch groups together so "Live Mastery Encoding" never orphans. */
+   and keep the three swatch groups together so the "Mastery" caption never orphans. */
 #v2core-legend .lg-cap{
   flex-basis:100% !important;
   width:100% !important;
@@ -746,10 +765,10 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   :root{ --paper-50:#f7f0de; }
   .v2-traction .tr-logo-frame{ justify-content:center !important; }
   /* Canvas card header: logo stacked above the eyebrow, aligned with the other chips */
-  .v2-product .vp-head:has(.vp-canvas-img){ flex-direction:column !important; align-items:flex-start !important; gap:9px !important; }
+  .v2-product .vp-head:has(.vp-canvas-badge){ flex-direction:column !important; align-items:flex-start !important; gap:9px !important; }
   /* Bento card headers: eyebrows never wrap, logo row stays tidy */
   .v2-product .vp-card-eyebrow{ white-space:nowrap !important; }
-  .v2-product .vp-canvas-img{ height:26px !important; }
+  .v2-product .vp-canvas-badge{ height:40px !important; }
   /* Solution list + Socratic Insight icons: terracotta, not the cold blue */
   .v2-solution .v2-sol-list .marker svg, .v2-solution .v2-sol-list .marker i{ color:var(--terracotta-600) !important; }
   .v2-core__insighthead .ico{ background:rgba(156,74,47,.08) !important; border:1px solid rgba(156,74,47,.22) !important; }
@@ -757,7 +776,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   /* Product bento icon chips: ink on paper, not blue (blue = data only) */
   .v2-product .vp-icon{ background:rgba(156,74,47,.08) !important; border:1px solid rgba(156,74,47,.22) !important; }
   .v2-product .vp-icon i, .v2-product .vp-icon svg{ color:var(--terracotta-600) !important; width:17px; height:17px; }
-  .v2-product .vp-canvas-img{ height:22px; width:auto; display:block; }
+  .v2-product .vp-canvas-badge{ height:48px; width:auto; display:block; }
   .v2-product .vp-head{ display:flex; align-items:center; gap:10px; }
   /* Cognitive Core header: pill sits tight above the H2 like every other section */
   .v2-core__rail .eyebrow{ display:inline-flex; margin:0 0 18px !important; }
@@ -1060,7 +1079,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- ============ PARTNER / TRUST STRIP ============ -->
         <div class="strip">
           <div class="strip-inner">
-            <span class="strip-label">Built with / backed by</span>
+            <span class="strip-label">Programs and partners</span>
             <div class="partners">
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
                 <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.trimmed.svg" alt="Johns Hopkins University" loading="lazy" decoding="async">
@@ -1069,13 +1088,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
                 <img class="p-logo" src="public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Marie LaPere Center for Entrepreneurship" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://www.nvidia.com/en-us/startups/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/NVIDIA/nvidia-inception-program-badge-rgb.svg" alt="NVIDIA Inception program member badge" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://cloud.google.com/startup" target="_blank" rel="noopener noreferrer">
                 <img class="p-logo" src="public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud for Startups" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/Canvas/canvas-integrated-badge.png" alt="Canvas Integrated partner badge" loading="lazy" decoding="async">
               </a>
               <a class="partner" href="https://www.tedcomd.com/news-events/press-releases/2026/tedcos-maryland-innovation-initiative-announces-664448-granted" target="_blank" rel="noopener noreferrer">
                 <img class="p-logo" src="public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO" loading="lazy" decoding="async">
@@ -2092,23 +2111,23 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
     <div class="vp-grid">
 
-      <!-- Card 1: Mastery Tracking Engine -->
+      <!-- Card 1: How We Score Mastery -->
       <div class="vp-card vp-c8">
         <div>
           <div class="vp-head">
             <span class="vp-icon" aria-hidden="true"><i data-lucide="atom"></i></span>
-            <span class="vp-card-eyebrow">Proprietary Engine</span>
+            <span class="vp-card-eyebrow">Under the Hood</span>
           </div>
-          <h3 class="h3">Mastery Tracking Engine</h3>
+          <h3 class="h3">How We Score Mastery</h3>
           <p class="vp-body">
-            Altera uses <strong>Probabilistic Mastery Tracking</strong> to calculate the <strong>Sustainable Mastery Index (SMI)</strong>, a composite metric that estimates how stable and durable each student's command of a concept is. It is built to distinguish mastery that lasts from ephemeral memorization.
+            Every answer nudges a score for that one concept, tracking how solid a student's grasp is and how well it is likely to hold. It is built to tell the difference between understanding that lasts and something crammed the night before.
           </p>
         </div>
 
         <div class="vp-eq">
           <div class="vp-eq-head">
             <div>
-              <p class="lbl-main">Mastery Computation Chain</p>
+              <p class="lbl-main">Sustainable Mastery Index (SMI)</p>
               <p class="lbl-sub">Per concept node, refreshed after every relevant interaction</p>
             </div>
             <div class="vp-eq-dots" aria-hidden="true">
@@ -2207,12 +2226,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c4">
         <div>
           <div class="vp-head">
-            <img class="vp-canvas-img" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
-            <span class="vp-card-eyebrow">Integration Partner</span>
+            <img class="vp-canvas-badge" src="public/images/logos/Canvas/canvas-integrated-badge.png" alt="Canvas Integrated partner badge" loading="lazy" decoding="async">
           </div>
           <h4 class="h4-serif">Works Inside Canvas</h4>
           <p class="vp-body">
-            One click and your class is live. Altera syncs directly with Canvas: rosters, logins, and grades handled automatically. No new accounts, no manual setup.
+            One click and your class is live. Altera integrates with Canvas LMS, part of the Instructure Learning Platform, so rosters, logins, and grades are handled automatically. No new accounts, no manual setup.
           </p>
 
           <div class="vp-flow">
@@ -2398,15 +2416,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       border:1px solid rgba(71,110,227,.24);
       padding:7px 13px; border-radius:var(--radius-pill);
     }
-    .v2-core__pill .live{
-      position:relative; width:8px; height:8px; border-radius:50%; background:var(--signal-500);
-    }
-    .v2-core__pill .live::after{
-      content:""; position:absolute; inset:-4px; border-radius:50%;
-      border:1.5px solid var(--signal-500); opacity:.5;
-      animation:v2coreRing 2.4s ease-out infinite;
-    }
-    @keyframes v2coreRing{ 0%{ transform:scale(.6); opacity:.6; } 100%{ transform:scale(1.9); opacity:0; } }
 
     #v2core-graph-container{
       position:relative; width:100%; height:500px; min-height:400px;
@@ -2508,7 +2517,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       #v2core-graph-container{ height:420px; }
     }
     @media (prefers-reduced-motion: reduce){
-      .v2-core__pill .live::after,
       .v2-core__insighthead .flag .pip{ animation:none !important; }
     }
   </style>
@@ -2532,7 +2540,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <span class="v2-core__swatch is-mastery" aria-hidden="true"><i></i></span>
             <div>
               <h4 class="h4">Node Color = Mastery State</h4>
-              <p><span class="em-hi">Green</span> nodes have high SMI: the concept is sticking for the long term.
+              <p><span class="em-hi">Green</span> nodes are sticking: the class has a grasp that should hold.
                 <span class="em-lo">Red</span> nodes are where the course needs a different approach. Colors update after every interaction.</p>
             </div>
           </div>
@@ -2559,7 +2567,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="v2-core__panelframe">
         <div class="v2-core__panel" id="v2core-demo">
           <div class="v2-core__panelhead">
-            <div class="v2-core__pill"><span class="live" aria-hidden="true"></span>Live Mastery Engine</div>
+            <div class="v2-core__pill">Physics I &middot; drag any node</div>
           </div>
 
           <div id="v2core-graph-container">
@@ -2746,6 +2754,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             (h - padding * 2) / fullHeight,
             1.4
           ));
+          /* Bound the zoom against the view that actually fits: a little pull-back
+             for context, a little push-in for detail, and no further. */
+          zoom.scaleExtent([scale * 0.8, scale * 2.4]);
           var transform = d3.zoomIdentity.translate(w / 2, h / 2).scale(scale).translate(-midX, -midY);
           if (immediate) { svg.call(zoom.transform, transform); }
           else { svg.transition().duration(1000).call(zoom.transform, transform); }
@@ -2901,8 +2912,12 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           link.transition().duration(200).style('opacity', 0.72);
         });
 
+        /* The extent is set from the fitted scale in centerView(), not fixed here:
+           a hardcoded floor lets you shrink the map to a speck on a wide screen
+           and a hardcoded ceiling lets one label swallow the panel on a narrow
+           one. These bounds are only a backstop for the first tick. */
         var zoom = d3.zoom()
-          .scaleExtent([0.1, 4])
+          .scaleExtent([0.2, 3])
           .on('zoom', function (event) { g.attr('transform', event.transform); });
         svg.call(zoom).on('dblclick.zoom', null);
 
@@ -2951,7 +2966,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           semanticRow += '</div>';
 
           var masteryRow = '<div class="lg-row">';
-          masteryRow += '<span class="lg-cap">Live Mastery Encoding</span>';
+          masteryRow += '<span class="lg-cap">Mastery</span>';
           masteryRow += '<div class="lg-item"><span class="lg-dot" style="background:' + THEME.masteryHi + ';box-shadow:0 0 0 2px rgba(15,122,82,.18);"></span><span>High</span></div>';
           masteryRow += '<div class="lg-item"><span class="lg-dot" style="background:' + THEME.masteryMed + ';box-shadow:0 0 0 2px rgba(192,121,31,.18);"></span><span>Medium</span></div>';
           masteryRow += '<div class="lg-item"><span class="lg-dot" style="background:' + THEME.masteryLow + ';box-shadow:0 0 0 2px rgba(181,52,31,.18);"></span><span>Low</span></div>';
@@ -3220,10 +3235,10 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               <h3 class="h3">NVIDIA Inception Program</h3>
             </a>
             <p class="tr-body">
-              Accepted into <strong>NVIDIA Inception</strong>, gaining access to GPU cloud credits, DGX Cloud, and NVIDIA's deep learning ecosystem to accelerate our AI engine.
+              A member of the <strong>NVIDIA Inception</strong> program, with access to developer resources, training, and exclusive pricing on NVIDIA hardware and software to accelerate our AI engine.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" loading="lazy" decoding="async">
+              <img class="logo" src="./public/images/logos/NVIDIA/nvidia-inception-program-badge-rgb.svg" alt="NVIDIA Inception program member badge" loading="lazy" decoding="async">
             </div>
           </div>
         </div>
@@ -3236,13 +3251,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="tr-date">Dec 17, 2025</span>
           <div class="tr-card">
             <a class="tr-title" href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer">
-              <h3 class="h3">Canvas Integration Partner</h3>
+              <h3 class="h3">Instructure Integration Partner</h3>
             </a>
             <p class="tr-body">
-              Signed a commercial <strong>LTI 1.3 license</strong> with Instructure at the Integrated partner tier, so Altera ships inside any Canvas course and is listed in the Canvas partner directory.
+              An <strong>Instructure integration partner</strong> on a commercial LTI 1.3 license at the Integrated partner tier, so Altera ships inside any Canvas LMS course.
             </p>
             <div class="tr-logo-frame">
-              <img class="logo" src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
+              <img class="logo" src="./public/images/logos/Canvas/canvas-integrated-badge.png" alt="Canvas Integrated partner badge" loading="lazy" decoding="async">
             </div>
           </div>
         </div>
@@ -3701,11 +3716,16 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
    .v2-footer .copy{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-400);letter-spacing:.04em;}
    .v2-footer nav a{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-500);text-decoration:none;margin-left:26px;}
    .v2-footer nav a:hover{color:var(--terracotta-600);}
+   .v2-footer .trademarks{max-width:1320px;margin:22px auto 0;font-family:var(--font-mono);font-size:.68rem;line-height:1.6;color:var(--ink-400);}
   </style>
   <div class="wrap">
     <div class="brandcol"><span class="brand">Altera Labs</span><span class="copy">© 2026 Altera Labs</span></div>
     <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
   </div>
+  <!-- Required by the NVIDIA Inception brand guidelines whenever NVIDIA, the NVIDIA
+       logo, or an NVIDIA trademark appears. Keep the trademark list alphabetical and
+       in sync with what the page actually names. -->
+  <p class="trademarks">© 2026 NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks and/or registered trademarks of NVIDIA Corporation in the U.S. and other countries.</p>
 </footer>
 <script>
 /* Mobile nav disclosure (<=760px). Styling lives in the #v2-mobile-nav layer;

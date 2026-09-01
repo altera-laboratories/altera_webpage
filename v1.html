@@ -532,6 +532,16 @@
                 grid-template-columns: repeat(3, minmax(0, 1fr));
             }
         }
+        /* The Canvas Integrated badge ships transparent with dark navy type, so on
+           this dark page it sits on a paper plate. Instructure's guide asks for a
+           background of sufficient contrast and forbids altering the artwork, so
+           the plate goes behind it rather than a recolour going into it. */
+        .canvas-badge {
+            background: #f3ead8;
+            border-radius: 10px;
+            padding: 10px;
+            box-sizing: content-box;
+        }
     </style>
 
     <!-- KaTeX CSS + JS -->
@@ -660,10 +670,11 @@
                                 Entrepreneurship</span>
                         </div>
                     </a>
+                    <!-- No opacity on this anchor: NVIDIA forbids adjusting the badge colour. -->
                     <a href="https://www.nvidia.com/en-us/startups/" target="_blank" rel="noopener noreferrer"
-                        class="flex items-center gap-2 group opacity-90 hover:opacity-100 transition-opacity">
-                        <img src="./public/images/logos/NVIDIA/nvidia-inception-logo-cropped-white.png"
-                            alt="NVIDIA Inception"
+                        class="flex items-center gap-2 group">
+                        <img src="./public/images/logos/NVIDIA/nvidia-inception-program-badge-rgb.svg"
+                            alt="NVIDIA Inception program member badge"
                             class="h-8 md:h-10 object-contain transition-transform group-hover:scale-105">
                     </a>
                     <a href="https://cloud.google.com/startup" target="_blank" rel="noopener noreferrer"
@@ -671,17 +682,10 @@
                         <img src="./public/images/logos/Google/gcloud-cropped-white.png" alt="Google Cloud Startup"
                             class="h-8 md:h-10 object-contain transition-transform group-hover:scale-105">
                     </a>
+                    <!-- No opacity on this anchor: the Canvas lockup renders unmodified. -->
                     <a href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer"
-                        class="flex items-center gap-2 group opacity-90 hover:opacity-100 transition-all hover:scale-105 origin-center transform-gpu">
-                        <img src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped-white.png"
-                            alt="Canvas" class="h-7 md:h-9 object-contain">
-                        <div class="hidden lg:flex flex-col leading-none gap-0.5">
-                            <span
-                                class="text-sm font-bold tracking-wide text-zinc-300 group-hover:text-white transition-colors uppercase">Integrated
-                                Tier</span>
-                            <span
-                                class="text-xs font-bold tracking-wide text-zinc-300 group-hover:text-white transition-colors uppercase">Partner</span>
-                        </div>
+                        class="flex items-center gap-2 group transition-transform hover:scale-105 origin-center transform-gpu">
+                        <img src="./public/images/logos/Canvas/canvas-integrated-badge.png" alt="Canvas Integrated partner badge" class="canvas-badge h-14 md:h-16 object-contain">
                     </a>
                 </div>
             </div>
@@ -1078,13 +1082,12 @@
                 <div class="md:col-span-4 bento-card p-10 flex flex-col group h-full">
                     <div class="relative z-10 flex-1">
                         <div class="flex items-center gap-4 mb-8">
-                            <img src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped-white.png"
-                                alt="Canvas" class="h-10 object-contain">
-                            <span class="card-eyebrow">Certified Partner</span>
+                            <img src="./public/images/logos/Canvas/canvas-integrated-badge.png" alt="Canvas Integrated partner badge" class="canvas-badge h-16 object-contain">
                         </div>
                         <h4 class="text-2xl font-bold mb-4 leading-tight">Works Inside Canvas</h4>
                         <p class="text-zinc-400 text-sm leading-relaxed mb-6">One click and your class is live. Altera
-                            syncs directly with Canvas: rosters, logins, and grades handled automatically. No new
+                            integrates with Canvas LMS, part of the Instructure Learning Platform, so rosters, logins,
+                            and grades are handled automatically. No new
                             accounts, no manual setup.</p>
                         <!-- 3-step flow -->
                         <div class="flex items-center gap-2 mb-8 flex-wrap">
@@ -1392,16 +1395,15 @@
                                 <h3 class="text-xl font-bold text-white">NVIDIA Inception Program</h3>
                             </a>
                             <p class="text-zinc-500 text-sm leading-relaxed mb-6">
-                                Accepted into <strong class="text-zinc-200">NVIDIA Inception</strong>, gaining
-                                access to
-                                GPU cloud credits, DGX Cloud, and NVIDIA's deep learning ecosystem to accelerate our
-                                AI
-                                engine.
+                                A member of the <strong class="text-zinc-200">NVIDIA Inception</strong> program,
+                                with access to developer resources, training, and exclusive pricing on NVIDIA
+                                hardware and software to accelerate our AI engine.
                             </p>
                             <div class="flex md:justify-start">
-                                <img src="./public/images/logos/NVIDIA/nvidia-inception-logo-cropped-white.png"
-                                    alt="NVIDIA Inception"
-                                    class="h-20 object-contain opacity-80 hover:opacity-100 transition-opacity">
+                                <!-- No opacity: NVIDIA forbids adjusting the badge colour. -->
+                                <img src="./public/images/logos/NVIDIA/nvidia-inception-program-badge-rgb.svg"
+                                    alt="NVIDIA Inception program member badge"
+                                    class="h-20 object-contain">
                             </div>
                         </div>
                     </div>
@@ -1416,18 +1418,14 @@
                                 17, 2025</span>
                             <a href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer"
                                 class="block mb-2 group">
-                                <h3 class="text-xl font-bold text-white">Integrated Tier Partnership</h3>
+                                <h3 class="text-xl font-bold text-white">Instructure Integration Partner</h3>
                             </a>
                             <p class="text-zinc-500 text-sm leading-relaxed mb-6">
-                                Secured <strong class="text-zinc-200">Integrated Tier Partnership</strong> with
-                                Instructure. Verified LTI 1.3 standards implementation for seamless institutional
-                                LMS
-                                integration.
+                                An <strong class="text-zinc-200">Instructure integration partner</strong> on a commercial LTI 1.3
+                                license at the Integrated partner tier, so Altera ships inside any Canvas LMS course.
                             </p>
                             <div class="flex md:justify-end">
-                                <img src="./public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped-white.png"
-                                    alt="Canvas"
-                                    class="h-20 object-contain opacity-80 hover:opacity-100 transition-opacity">
+                                <img src="./public/images/logos/Canvas/canvas-integrated-badge.png" alt="Canvas Integrated partner badge" class="canvas-badge h-24 object-contain">
                             </div>
                         </div>
                         <div class="hidden md:block md:w-1/2"></div>
@@ -1886,6 +1884,7 @@
                 <img src="./public/images/logos/Altera/Altera-Logo-Transparent.svg" alt="Altera Labs"
                     class="h-4 opacity-30 grayscale contrast-50">
                 <span class="text-zinc-500">&copy; 2026 Altera-Labs.</span>
+                <span class="block mt-2 text-xs text-zinc-600">© 2026 NVIDIA, the NVIDIA logo, and NVIDIA Inception are trademarks and/or registered trademarks of NVIDIA Corporation in the U.S. and other countries.</span>
             </div>
             <div class="flex gap-10">
                 <a href="privacy.html" class="hover:text-zinc-100 transition-colors tracking-wider font-bold">Privacy
