@@ -3,11 +3,13 @@
 <head>
 <script>
   /* Apply the theme before first paint; chart scripts read tokens at init.
-     ?theme=day|lamplit|board deep-links a mode and persists it. */
+     ?theme=day|lamplit|board deep-links a mode and persists it, except when
+     framed: versions.html shows several themes at once, and persisting from
+     inside those frames would leave the last one as everybody's default. */
   (function(){
     var q = new URLSearchParams(location.search).get('theme');
     var t = (q === 'day' || q === 'lamplit' || q === 'board' || q === 'meridian' || q === 'meridian-night') ? q : localStorage.getItem('altera-theme');
-    if (q) localStorage.setItem('altera-theme', q);
+    if (q && window.top === window) localStorage.setItem('altera-theme', q);
     if (t && t !== 'day') document.documentElement.dataset.theme = t;
   })();
 </script>
