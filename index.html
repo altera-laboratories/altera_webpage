@@ -5,13 +5,13 @@
 :root{
   --paper-50:#faf5ea; --paper-100:#f3ead8; --paper-200:#ebdec5; --paper-300:#ddccac; --paper-400:#c9b793;
   --surface-base:var(--paper-100); --surface-elevated:var(--paper-200); --surface-hover:var(--paper-50); --surface-border:var(--paper-300);
-  --ink-900:#1f1a14; --ink-700:#3d3528; --ink-600:#5a4f3e; --ink-500:#7a6c56; --ink-400:#9c8c72;
-  --ink-soft:#7a6c56;
+  --ink-900:#1f1a14; --ink-700:#3d3528; --ink-600:#5a4f3e; --ink-500:#6c604c; --ink-400:#9c8c72;
+  --ink-soft:#6c604c;
   --text:var(--ink-700); --text-mute:var(--ink-500); --text-faint:var(--ink-400);
   --signal-300:#9cb5f8; --signal-500:#476ee3; --signal-700:#2f4fb0;
   --terracotta:#9c4a2f; --terracotta-400:#d07a4f; --terracotta-500:#c0603a; --terracotta-600:#9c4a2f;
-  --ochre-500:#cf8a3b; --ochre-600:#b5722a; --sage:#6f8f5f;
-  --mastery-high-fill:#0f7a52; --mastery-high-stroke:#1f9d6b; --mastery-med-fill:#c0791f; --mastery-med-stroke:#e0a232; --mastery-low-fill:#b5341f; --mastery-low-stroke:#d6492f;
+  --ochre-500:#cf8a3b; --ochre-600:#b5722a; --ochre-700:#865522; --sage:#6f8f5f;
+  --mastery-high-text:#0e6e4a; --mastery-high-fill:#0f7a52; --mastery-high-stroke:#1f9d6b; --mastery-med-fill:#c0791f; --mastery-med-stroke:#e0a232; --mastery-low-fill:#b5341f; --mastery-low-stroke:#d6492f;
   --status-async-fg:#2f6b87; --status-async-bg:rgba(63,107,135,.12); --status-async-border:rgba(63,107,135,.30);
   --status-pending-fg:var(--signal-700); --status-pending-bg:rgba(71,110,227,.10); --status-pending-border:rgba(71,110,227,.32);
   --status-ok-fg:#0f7a52; --status-ok-bg:rgba(15,122,82,.12); --status-ok-border:rgba(15,122,82,.30);
@@ -39,9 +39,12 @@ html,body{ background-color:var(--surface-base); color:var(--text); font-family:
 .metadata{ font-size:var(--fs-xs); color:var(--text-faint); }
 .data-label{ font-family:var(--font-mono); font-size:var(--fs-xs); letter-spacing:var(--tracking-wide); text-transform:uppercase; color:var(--ink-500); }
 /* Set initials where a portrait would sit. Sized by the container it fills. */
-.monogram{ display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:var(--paper-300); color:var(--ink-500); font-family:var(--font-display); font-weight:600; font-size:0.875rem; letter-spacing:0.04em; line-height:1; user-select:none; }
+.monogram{ display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:var(--paper-300); color:var(--ink-600); font-family:var(--font-display); font-weight:600; font-size:0.875rem; letter-spacing:0.04em; line-height:1; user-select:none; }
 code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 :where(a,button,input,[tabindex]):focus-visible{ outline:2px solid var(--signal-500); outline-offset:2px; border-radius:var(--radius-md); }
+.skip-link{ position:absolute; left:16px; top:-100px; z-index:1000; padding:12px 18px; background:var(--ink-900); color:var(--paper-50); border-radius:var(--radius-button); font-weight:600; text-decoration:none; }
+.skip-link:focus{ top:12px; }
+@media (prefers-reduced-motion: reduce){ *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
 </style>
 
 <meta charset="UTF-8" />
@@ -82,7 +85,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     --paper-edge:   #e7d9bd;   /* kraft trim */
     --ink:          #1f1a14;   /* deep ink */
     --ink-soft:     #4a4133;   /* muted ink */
-    --ink-faint:    #7a6f5c;   /* caption ink */
+    --ink-faint:    #6c604c;   /* caption ink */
     --terracotta:   #9c4a2f;   /* warm clay accent */
     --terracotta-2: #b8633f;
     --ochre:        #cf8a3b;   /* ochre / gold */
@@ -147,7 +150,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
   }
-  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 12px; min-height: 44px; }
   .brand-mark {
     width: 38px; height: 38px; border-radius: 9px;
     position: relative; overflow: hidden;
@@ -391,12 +394,37 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   }
 </style>
   <!-- KaTeX renders via deferred JS, so its stylesheet must not block first paint -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css"></noscript>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js"></script>
   <!-- All d3/lucide consumers poll or guard on DOMContentLoaded, so both can defer -->
-  <script defer src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
-  <script defer src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    // KaTeX (the mastery equation) and d3 (the Cognitive Core graph) render far
+    // below the fold. Fetch each only as its section nears the viewport, so the
+    // first paint on a phone does not wait on ~600KB of script it cannot see.
+    // The render code in each section already polls for the global to appear.
+    document.addEventListener('DOMContentLoaded', function () {
+      var LIBS = {
+        'vp-katex-main': ['https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.css',
+                          'https://cdn.jsdelivr.net/npm/katex@0.16.28/dist/katex.min.js'],
+        'v2core-graph-container': ['https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js']
+      };
+      function load(urls) {
+        urls.forEach(function (url) {
+          var el = /\.css$/.test(url) ? document.createElement('link') : document.createElement('script');
+          if (el.tagName === 'LINK') { el.rel = 'stylesheet'; el.href = url; } else { el.src = url; el.async = true; }
+          document.head.appendChild(el);
+        });
+      }
+      Object.keys(LIBS).forEach(function (id) {
+        var target = document.getElementById(id);
+        if (!target || !('IntersectionObserver' in window)) { load(LIBS[id]); return; }
+        var io = new IntersectionObserver(function (entries) {
+          if (!entries[0].isIntersecting) return;
+          io.disconnect();
+          load(LIBS[id]);
+        }, { rootMargin: '1200px 0px' });
+        io.observe(target);
+      });
+    });
+  </script>
 <style id="v2-spacing-normalize">
   /* Uniform vertical rhythm across all content sections (post-assembly normalization) */
   section[id] { padding-top: 80px !important; padding-bottom: 80px !important; }
@@ -409,7 +437,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   .collage{ background:transparent !important; line-height:0 !important; font-size:0 !important; aspect-ratio:auto !important; }
   .collage-img{ display:block !important; width:100% !important; height:auto !important; }
   /* partner strip: real logos */
-  .partner{ display:flex !important; align-items:center; }
+  .partner{ display:flex !important; align-items:center; min-height:44px; }
   .partner .p-logo{ height:28px; width:auto; max-width:150px; object-fit:contain; display:block; opacity:.95; }
 
 
@@ -707,9 +735,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       }
     }
     header.nav nav.links::-webkit-scrollbar{ display:none !important; }
-    header.nav nav.links a.link{ white-space:nowrap !important; padding:8px 13px !important; }
+    header.nav nav.links a.link{ white-space:nowrap !important; padding:11px 13px !important; }
     header.nav .nav-cta{ flex:0 0 auto !important; gap:10px !important; }
-    header.nav .nav-cta .btn{ white-space:nowrap !important; padding:10px 16px !important; }
+    header.nav .nav-cta .btn{ white-space:nowrap !important; padding:11px 16px !important; }
   }
   @media (max-width: 760px){
     header.nav .nav-inner{ padding-top:8px !important; padding-bottom:8px !important; }
@@ -837,7 +865,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     }
     header.nav .brand img { height: 40px !important; width: auto !important; }
     header.nav .nav-cta { order: 2 !important; margin-left: auto !important; }
-    header.nav .nav-cta .btn-clay { padding: 9px 14px !important; font-size: 14px !important; }
+    header.nav .nav-cta .btn-clay { padding: 9px 14px !important; font-size: 14px !important; min-height: 44px !important; }
     .nav-toggle { display: inline-flex !important; order: 3 !important; }
 
     /* One "Try the Beta" on screen at a time. Above the fold the hero button
@@ -923,42 +951,93 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .v2-product .vp-body { font-size: 17.5px !important; line-height: 1.55 !important; }
     .tr-body, .v2-bio, .v2-advisor-blurb { line-height: 1.5 !important; }
 
-    /* ---------- open hero ----------
-       Measured against studyfetch.com at 375x812: it opens with 22 words, ONE
-       action, and the headline sitting 444px down, so the first thing the page
-       does is hold its breath. Ours opened with 55 words, three actions and a
-       seven-line paragraph starting at 103px. Words per screen were nearly
-       identical (52 vs 59), so the difference was never density. It was room.
-
-       The sub-paragraph stays: "recall, apply, and analyze" is what keeps the
-       claim Bloom's-safe, "zero extra work for you" answers the faculty
-       exhaustion complaint almost verbatim, and since the eyebrow came out it
-       is the only thing carrying the course-level framing. So buy the openness
-       with space and sequence instead of deletion: headline, then the single
-       action, then the paragraph as the reward for scrolling. */
-    .hero { padding-top: 116px !important; }
+    /* ---------- hero ----------
+       October 2026: the July "open hero" (116px of air, centred headline and
+       button, paragraph pushed below the action) read as broken on a real
+       phone: a mostly empty first screen, two alignments, and an action that
+       came before the sentence saying what it does. Now it reads top to
+       bottom like the desktop column: headline, paragraph, one button, all
+       on the left gutter, with the collage starting inside the first screen. */
+    .hero { padding-top: 32px !important; }
 
     .hero-copy {
       display: flex !important; flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
+      align-items: flex-start !important;
+      text-align: left !important;
     }
-    .hero-copy h1.headline { order: 1 !important; }
-    .hero-copy .hero-cta   { order: 2 !important; margin-top: 2px !important; }
-    /* Tried holding the whole first screen (min-height + margin-top:auto to drop
-       this to the fold). It opened a ~200px void under the button that read as a
-       bug, and the paragraph stayed on screen one regardless. Natural spacing
-       wins. A centred seven-line paragraph is unreadable, so this block opts
-       out of the centring above. */
-    .hero-copy p.sub {
-      order: 3 !important; text-align: left !important; margin-top: 34px !important;
-    }
+    .hero-copy p.sub { margin-top: 14px !important; }
+    .hero-copy .hero-cta { margin-top: 22px !important; }
 
     /* one action in the hero. Our Mission is still in the menu and still the
        second button on desktop; it just stops competing above the fold. */
-    .hero-cta { justify-content: center !important; }
+    .hero-cta { justify-content: flex-start !important; }
     .hero-cta .btn-ghost { display: none !important; }
     .hero-cta .btn-primary { flex: 0 0 auto !important; padding: 15px 32px !important; }
+  }
+</style>
+<!-- HERO-VARIANTS (preview only, remove before merge): ?hero=a|b|c|d -->
+<script>
+  (function () {
+    var v = (new URLSearchParams(location.search).get('hero') || '').toLowerCase();
+    if (!/^[abcd]$/.test(v)) return;
+    document.documentElement.setAttribute('data-hero', v);
+    if (v === 'c') {
+      var m = document.querySelector('meta[name=viewport]');
+      if (m) m.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var bar = document.createElement('div');
+      bar.className = 'hv-switch';
+      bar.innerHTML = ['a','b','c','d'].map(function (k) {
+        return '<a href="?hero=' + k + '"' + (k === v ? ' aria-current="page"' : '') + '>' + k.toUpperCase() + '</a>';
+      }).join('');
+      document.body.appendChild(bar);
+      if (v === 'c') {
+        var cta = document.createElement('div');
+        cta.className = 'hv-thumb';
+        cta.innerHTML = '<a class="btn btn-clay" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">Try the Beta</a>';
+        document.body.appendChild(cta);
+      }
+    });
+  })();
+</script>
+<style id="hero-variants">
+  .hv-switch{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(16px + env(safe-area-inset-bottom)); z-index:200; display:flex; gap:4px; padding:4px; background:var(--ink-900); border-radius:999px; box-shadow:var(--shadow-pin); }
+  .hv-switch a{ display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:999px; color:var(--paper-50); font:600 15px var(--font-sans); text-decoration:none; }
+  .hv-switch a[aria-current]{ background:var(--terracotta-500); }
+  html[data-hero="c"] .hv-switch{ bottom:calc(92px + env(safe-area-inset-bottom)); }
+  @media (min-width:761px){ .hv-switch, .hv-thumb{ display:none !important; } }
+
+  @media (max-width:760px){
+    /* A. Poster: oversized headline, the button right under it, paragraph after. */
+    html[data-hero="a"] .hero{ padding-top:20px !important; }
+    html[data-hero="a"] .hero-copy h1.headline{ font-size:clamp(3.2rem,15vw,4.2rem) !important; line-height:.98 !important; letter-spacing:-.02em !important; }
+    html[data-hero="a"] .hero-copy .hero-cta{ order:2 !important; margin-top:22px !important; }
+    html[data-hero="a"] .hero-copy p.sub{ order:3 !important; margin-top:26px !important; font-size:16px !important; color:var(--ink-600) !important; }
+
+    /* B. Picture first: the collage opens the page edge to edge, cropped, then the words. */
+    html[data-hero="b"] .hero{ padding-top:0 !important; }
+    html[data-hero="b"] .hero-grid{ gap:22px !important; }
+    html[data-hero="b"] .collage-frame{ order:-1 !important; margin:0 calc(-1 * var(--gutter-m, 16px)) !important; max-width:none !important; padding:0 !important; border-radius:0 !important; box-shadow:none !important; background:none !important; }
+    html[data-hero="b"] .collage-frame img{ height:44vh !important; object-fit:cover !important; object-position:50% 38% !important; border-radius:0 !important; }
+    html[data-hero="b"] .hero-copy h1.headline{ font-size:clamp(2.3rem,10vw,2.8rem) !important; }
+    html[data-hero="b"] .hero-copy p.sub{ margin-top:12px !important; }
+    html[data-hero="b"] .hero-copy .hero-cta{ margin-top:20px !important; }
+
+    /* C. Thumb bar: the action lives in a fixed bar at the bottom, in reach of a thumb. */
+    html[data-hero="c"] .hero-cta, html[data-hero="c"] header.nav .nav-cta{ display:none !important; }
+    html[data-hero="c"] .nav-toggle{ margin-left:auto !important; }
+    html[data-hero="c"] body{ padding-bottom:calc(84px + env(safe-area-inset-bottom)) !important; }
+    html[data-hero="c"] .hero-copy p.sub{ margin-top:16px !important; }
+    html[data-hero="c"] .hero-grid{ gap:28px !important; }
+    .hv-thumb{ position:fixed; left:0; right:0; bottom:0; z-index:150; padding:12px max(16px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); background:rgba(243,234,216,.94); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border-top:1px solid var(--border-soft); }
+    .hv-thumb .btn{ display:flex !important; justify-content:center; width:100%; min-height:52px; font-size:17px; }
+
+    /* D. Centred: the July layout without the void; everything on one axis, short measure. */
+    html[data-hero="d"] .hero{ padding-top:40px !important; }
+    html[data-hero="d"] .hero-copy{ align-items:center !important; text-align:center !important; }
+    html[data-hero="d"] .hero-copy p.sub{ text-align:center !important; max-width:30ch !important; margin-top:16px !important; }
+    html[data-hero="d"] .hero-cta{ justify-content:center !important; }
   }
 </style>
 <noscript>
@@ -985,13 +1064,14 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 </noscript>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- ================= NAV ================= -->
   <header class="nav">
     <div class="wrap">
       <div class="nav-inner">
         <a class="brand" href="#" aria-label="Altera Labs home">
-          <img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs">
+          <img src="./public/images/logos/Altera/Altera-Logo-readingroom.svg" alt="Altera Labs" width="630" height="468" decoding="async">
         </a>
 
         <nav class="links" id="nav-links" aria-label="Primary">
@@ -1018,7 +1098,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
   </header>
 
   <!-- ================= HERO ================= -->
-  <main>
+  <main id="main">
     <section class="hero" aria-labelledby="hero-h1">
       <div class="wrap">
         <div class="hero-grid">
@@ -1063,22 +1143,22 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <span class="strip-label">Built with / backed by</span>
             <div class="partners">
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.trimmed.svg" alt="Johns Hopkins University" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/JHU/JHU.logo_horizontal.blue.trimmed.svg" alt="Johns Hopkins University" loading="lazy" decoding="async" width="300" height="57">
               </a>
               <a class="partner" href="https://pavacenter.jhu.edu/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Marie LaPere Center for Entrepreneurship" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/JHU/pava_logo_stacked.svg" alt="Pava Marie LaPere Center for Entrepreneurship" loading="lazy" decoding="async" width="440" height="491">
               </a>
               <a class="partner" href="https://www.nvidia.com/en-us/startups/" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/NVIDIA/nvidia-inception-logo-cropped.png" alt="NVIDIA Inception" loading="lazy" decoding="async" width="926" height="322">
               </a>
               <a class="partner" href="https://cloud.google.com/startup" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud for Startups" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/Google/gcloud-cropped.png" alt="Google Cloud for Startups" loading="lazy" decoding="async" width="678" height="147">
               </a>
               <a class="partner" href="https://www.instructure.com/canvas" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async" width="1986" height="506">
               </a>
               <a class="partner" href="https://www.tedcomd.com/news-events/press-releases/2026/tedcos-maryland-innovation-initiative-announces-664448-granted" target="_blank" rel="noopener noreferrer">
-                <img class="p-logo" src="public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO" loading="lazy" decoding="async">
+                <img class="p-logo" src="public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO" loading="lazy" decoding="async" width="1050" height="387">
               </a>
             </div>
           </div>
@@ -1188,11 +1268,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       align-items: baseline;
       font-family: var(--font-mono);
       font-size: var(--fs-xs);
-      color: var(--ink-400);
+      color: var(--ink-500);
     }
-    .v2-problem .vp-sources .lbl { color: var(--ink-400); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
+    .v2-problem .vp-sources .lbl { color: var(--ink-500); text-transform: uppercase; letter-spacing: var(--tracking-wide); }
     .v2-problem .vp-sources a {
-      display: inline-flex; align-items: center; gap: 3px;
+      display: inline-flex; align-items: center; gap: 3px; min-height: 44px;
       color: var(--terracotta-600);
       text-decoration: none;
       transition: color .18s var(--ease-soft);
@@ -1277,7 +1357,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .v2-problem .vp-outcome .label .lead {
       font-family: var(--font-mono); font-size: var(--fs-xs);
       text-transform: uppercase; letter-spacing: var(--tracking-wide);
-      color: var(--ink-400); font-weight: 500; display: block; margin-bottom: 4px;
+      color: var(--ink-500); font-weight: 500; display: block; margin-bottom: 4px;
     }
     .v2-problem .vp-track {
       height: 7px; width: 100%;
@@ -1372,13 +1452,13 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     <div class="vp-sources">
           <span class="lbl">Sources:</span>
           <a href="https://www.hepi.ac.uk/reports/student-generative-ai-survey-2025/" target="_blank" rel="noopener noreferrer">
-            HEPI 2025 (n=1,041) <i data-lucide="external-link"></i>
+            HEPI 2025 (n=1,041) <svg class="lucide lucide-external-link" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
           </a>
           <a href="https://www.pnas.org/doi/10.1073/pnas.2422633122" target="_blank" rel="noopener noreferrer">
-            Bastani et al., PNAS 2025 <i data-lucide="external-link"></i>
+            Bastani et al., PNAS 2025 <svg class="lucide lucide-external-link" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
           </a>
           <a href="https://imaginingthedigitalfuture.org/wp-content/uploads/2026/01/Elon-AACU-faculty-AI-survey-full-report-1-21-26.pdf" target="_blank" rel="noopener noreferrer">
-            AAC&U/Elon Faculty Survey 2026 <i data-lucide="external-link"></i>
+            AAC&U/Elon Faculty Survey 2026 <svg class="lucide lucide-external-link" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
           </a>
         </div>
 
@@ -1643,8 +1723,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       font-weight: 600;
       letter-spacing: var(--tracking-wide);
     }
-    .v2-solution .v2-smi-bar.high .val { color: var(--mastery-high-fill); }
-    .v2-solution .v2-smi-bar.med  .val { color: var(--mastery-med-fill); }
+    .v2-solution .v2-smi-bar.high .val { color: var(--mastery-high-text); }
+    .v2-solution .v2-smi-bar.med  .val { color: var(--ochre-700); }
     .v2-solution .v2-smi-track {
       height: 8px;
       border-radius: var(--radius-pill);
@@ -1701,7 +1781,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <div class="v2-chat-thread">
             <div class="v2-bubble-row me">
               <div class="v2-avatar student" aria-hidden="true">
-                <i data-lucide="user"></i>
+                <svg class="lucide lucide-user" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
               </div>
               <div class="v2-bubble student">How do I solve for displacement?</div>
             </div>
@@ -1711,7 +1791,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
                 You've <span class="mh">mastered velocity (94%)</span>, but <span class="mh">area under the curve is still shaky (38%)</span>. Displacement is the integral of velocity over time. Let's start there: can you sketch what the area under a v(t) curve represents physically?
               </div>
               <div class="v2-avatar tutor" aria-hidden="true">
-                <i data-lucide="brain"></i>
+                <svg class="lucide lucide-brain" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18V5" /><path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /><path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /><path d="M18 18a4 4 0 0 0 2-7.464" /><path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /><path d="M6 18a4 4 0 0 1-2-7.464" /><path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg>
               </div>
             </div>
           </div>
@@ -1748,19 +1828,19 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
         <ul class="v2-sol-list">
           <li>
-            <span class="marker" aria-hidden="true"><i data-lucide="layout-dashboard"></i></span>
+            <span class="marker" aria-hidden="true"><svg class="lucide lucide-layout-dashboard" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /></svg></span>
             Shows where your course is getting the message across, and where it is not
           </li>
           <li>
-            <span class="marker" aria-hidden="true"><i data-lucide="git-branch"></i></span>
+            <span class="marker" aria-hidden="true"><svg class="lucide lucide-git-branch" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6a9 9 0 0 0-9 9V3" /><circle cx="18" cy="6" r="3" /><circle cx="6" cy="18" r="3" /></svg></span>
             Measures learning outcomes across levels, from recall to application to synthesis
           </li>
           <li>
-            <span class="marker" aria-hidden="true"><i data-lucide="brain-circuit"></i></span>
+            <span class="marker" aria-hidden="true"><svg class="lucide lucide-brain-circuit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M9 13a4.5 4.5 0 0 0 3-4" /><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" /><path d="M3.477 10.896a4 4 0 0 1 .585-.396" /><path d="M6 18a4 4 0 0 1-1.967-.516" /><path d="M12 13h4" /><path d="M12 18h6a2 2 0 0 1 2 2v1" /><path d="M12 8h8" /><path d="M16 8V5a2 2 0 0 1 2-2" /><circle cx="16" cy="13" r=".5" /><circle cx="18" cy="3" r=".5" /><circle cx="20" cy="21" r=".5" /><circle cx="20" cy="8" r=".5" /></svg></span>
             Adapts its tutoring to where each student is stuck
           </li>
           <li>
-            <span class="marker" aria-hidden="true"><i data-lucide="plug"></i></span>
+            <span class="marker" aria-hidden="true"><svg class="lucide lucide-plug" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-5" /><path d="M15 8V2" /><path d="M17 8a1 1 0 0 1 1 1v4a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1z" /><path d="M9 8V2" /></svg></span>
             Installs into your Canvas course in minutes, with zero extra work for you
           </li>
         </ul>
@@ -1785,13 +1865,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
-      }
-    });
-  </script>
 </section>
 <section id="product" class="v2-product">
   <style>
@@ -1909,7 +1982,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     }
     .v2-product .vp-eq-head .lbl-sub {
       font-family: var(--font-mono); font-size: var(--fs-xs);
-      color: var(--ink-400); letter-spacing: var(--tracking-wide); margin-top: 0.3rem;
+      color: var(--ink-500); letter-spacing: var(--tracking-wide); margin-top: 0.3rem;
     }
     .v2-product .vp-eq-dots { display: flex; gap: 0.4rem; flex-shrink: 0; margin-top: 0.2rem; }
     .v2-product .vp-eq-dots span { width: 0.5rem; height: 0.5rem; border-radius: 50%; }
@@ -2096,7 +2169,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c8">
         <div>
           <div class="vp-head">
-            <span class="vp-icon" aria-hidden="true"><i data-lucide="atom"></i></span>
+            <span class="vp-icon" aria-hidden="true"><svg class="lucide lucide-atom" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1" /><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5Z" /><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5Z" /></svg></span>
             <span class="vp-card-eyebrow">Proprietary Engine</span>
           </div>
           <h3 class="h3">Mastery Tracking Engine</h3>
@@ -2128,7 +2201,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c4">
         <div>
           <div class="vp-head">
-            <span class="vp-icon" aria-hidden="true"><i data-lucide="brain-circuit"></i></span>
+            <span class="vp-icon" aria-hidden="true"><svg class="lucide lucide-brain-circuit" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M9 13a4.5 4.5 0 0 0 3-4" /><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" /><path d="M3.477 10.896a4 4 0 0 1 .585-.396" /><path d="M6 18a4 4 0 0 1-1.967-.516" /><path d="M12 13h4" /><path d="M12 18h6a2 2 0 0 1 2 2v1" /><path d="M12 8h8" /><path d="M16 8V5a2 2 0 0 1 2-2" /><circle cx="16" cy="13" r=".5" /><circle cx="18" cy="3" r=".5" /><circle cx="20" cy="21" r=".5" /><circle cx="20" cy="8" r=".5" /></svg></span>
             <span class="vp-card-eyebrow">For Instructors</span>
           </div>
           <h4 class="h4-serif">Teacher Command Center</h4>
@@ -2172,7 +2245,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c4">
         <div>
           <div class="vp-head">
-            <span class="vp-icon" aria-hidden="true"><i data-lucide="graduation-cap"></i></span>
+            <span class="vp-icon" aria-hidden="true"><svg class="lucide lucide-graduation-cap" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /><path d="M22 10v6" /><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg></span>
             <span class="vp-card-eyebrow">For Students</span>
           </div>
           <h4 class="h4-serif">AI Tutor That Teaches</h4>
@@ -2184,7 +2257,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             <div class="vp-chat">
               <div class="vp-bubble me">What's the derivative of x²?</div>
               <div class="vp-chat-row">
-                <span class="vp-ai-av" aria-hidden="true"><i data-lucide="sparkles"></i></span>
+                <span class="vp-ai-av" aria-hidden="true"><svg class="lucide lucide-sparkles" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" /><path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" /></svg></span>
                 <div class="vp-bubble ai">Good question. What rule applies when the exponent is a constant?</div>
               </div>
             </div>
@@ -2207,7 +2280,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       <div class="vp-card vp-c4">
         <div>
           <div class="vp-head">
-            <img class="vp-canvas-img" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async">
+            <img class="vp-canvas-img" src="public/images/logos/Canvas/Canvas_Horizontal_Full-Color_RGB-cropped.png" alt="Canvas" loading="lazy" decoding="async" width="1986" height="506">
             <span class="vp-card-eyebrow">Integration Partner</span>
           </div>
           <h4 class="h4-serif">Works Inside Canvas</h4>
@@ -2217,9 +2290,9 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
           <div class="vp-flow">
             <span class="vp-step">Canvas</span>
-            <i data-lucide="chevron-right" class="arrow" aria-hidden="true"></i>
+            <svg class="lucide lucide-chevron-right arrow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
             <span class="vp-step">Click Tool</span>
-            <i data-lucide="chevron-right" class="arrow" aria-hidden="true"></i>
+            <svg class="lucide lucide-chevron-right arrow" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
             <span class="vp-step active">Altera Live</span>
           </div>
 
@@ -2241,7 +2314,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <div>
           <div class="vp-head" style="justify-content: space-between;">
             <div style="display:flex; align-items:center; gap:0.75rem;">
-              <span class="vp-icon" aria-hidden="true"><i data-lucide="building-2"></i></span>
+              <span class="vp-icon" aria-hidden="true"><svg class="lucide lucide-building-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12h4" /><path d="M10 8h4" /><path d="M14 21v-3a2 2 0 0 0-4 0v3" /><path d="M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2" /><path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16" /></svg></span>
               <span class="vp-card-eyebrow">For Admins</span>
             </div>
             <div class="vp-dash-dots" aria-hidden="true">
@@ -2313,8 +2386,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         if (l1) l1.innerHTML = katex.renderToString(`\\text{SMI}_n = P(\\text{mastery}_n) \\cdot e^{-\\lambda \\Delta t} - k\\sigma_n`, { throwOnError: false });
         if (l2) l2.innerHTML = katex.renderToString(`\\textcolor{${signal}}{\\alpha}=\\text{correct evidence},\\;\\textcolor{${mastery}}{\\newline \\beta}=\\text{incorrect evidence}`, { throwOnError: false });
         if (l3) l3.innerHTML = katex.renderToString(`\\lambda\\Delta t=\\text{retention decay},\\newline \\;k\\sigma_n=\\text{uncertainty penalty}`, { throwOnError: false });
-
-        if (typeof lucide !== 'undefined' && lucide.createIcons) { lucide.createIcons(); }
       }
       vpRenderKatex();
     });
@@ -2371,7 +2442,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .v2-core__swatch.is-edge i{ background:var(--ochre-600); box-shadow:0 0 0 3px rgba(181,114,42,.16); }
     .v2-core__exp h4{ margin:0 0 4px; font-size:1rem; }
     .v2-core__exp p{ margin:0; font-size:var(--fs-sm); color:var(--ink-600); line-height:1.55; }
-    .v2-core__exp p .em-hi{ color:var(--mastery-high-fill); font-weight:600; }
+    .v2-core__exp p .em-hi{ color:var(--mastery-high-text); font-weight:600; }
     .v2-core__exp p .em-lo{ color:var(--mastery-low-fill); font-weight:600; }
 
     /* ---- right: the paper panel holding the graph ---- */
@@ -2452,7 +2523,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     #v2core-legend .lg-row{ display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px 22px; width:100%; }
     #v2core-legend .lg-item{ display:flex; align-items:center; gap:8px; }
     #v2core-legend .lg-cap{
-      color:var(--ink-400); text-transform:uppercase; letter-spacing:var(--tracking-wide);
+      color:var(--ink-500); text-transform:uppercase; letter-spacing:var(--tracking-wide);
       font-weight:600; margin-right:2px;
     }
     #v2core-legend .lg-dot{ width:11px; height:11px; border-radius:50%; }
@@ -2497,7 +2568,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       color:var(--ink-700);
     }
     .v2-core__insight p .hl-err{ color:var(--mastery-low-fill); font-weight:600; font-style:normal; }
-    .v2-core__insight p .hl-med{ color:var(--ochre-600); font-weight:600; font-style:normal; }
+    .v2-core__insight p .hl-med{ color:var(--ochre-700); font-weight:600; font-style:normal; }
     .v2-core__insight p .hl-eq{ color:var(--ink-900); font-weight:600; font-style:normal; font-family:var(--font-mono); }
 
     @media (max-width:1080px){
@@ -2573,7 +2644,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
           <div class="v2-core__insight">
             <div class="v2-core__insighthead">
-              <span class="ico" aria-hidden="true"><i data-lucide="brain"></i></span>
+              <span class="ico" aria-hidden="true"><svg class="lucide lucide-brain" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 18V5" /><path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" /><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" /><path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" /><path d="M18 18a4 4 0 0 0 2-7.464" /><path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" /><path d="M6 18a4 4 0 0 1-2-7.464" /><path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /></svg></span>
               <span class="ttl">Socratic Insight</span>
               <span class="flag"><span class="pip" aria-hidden="true"></span>Misconception Detected</span>
             </div>
@@ -2638,7 +2709,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           masteryLowS: cv('--mastery-low-stroke', '#d6492f'),
           ochre:       cv('--ochre-600', '#b5722a'),
           ink:         cv('--ink-700', '#3d3528'),
-          inkMute:     cv('--ink-500', '#7a6c56'),
+          inkMute:     cv('--ink-500', '#6c604c'),
           paper:       cv('--paper-100', '#f3ead8'),
           paperLift:   cv('--paper-50', '#faf5ea')
         };
@@ -2959,10 +3030,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
           legendEl.innerHTML = semanticRow + masteryRow;
         }
-
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-          window.lucide.createIcons();
-        }
       }
     });
   </script>
@@ -3030,7 +3097,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
       font-weight: 500;
       letter-spacing: var(--tracking-wide);
       text-transform: uppercase;
-      color: var(--ochre-600);
+      color: var(--ochre-700);
       background: rgba(181,114,42,.10);
       border: 1px solid rgba(181,114,42,.28);
       padding: 5px 11px;
@@ -3072,11 +3139,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
 
     /* external link chip */
     .v2-traction a.tr-ext {
-      display: inline-flex; align-items: center; gap: 7px;
+      display: inline-flex; align-items: center; gap: 7px; min-height: 44px;
       font-family: var(--font-mono); font-size: var(--fs-xs); font-weight: 500;
       letter-spacing: var(--tracking-wide); text-transform: uppercase;
       color: var(--terracotta-600);
-      margin-bottom: 16px;
+      margin-bottom: 6px;
       transition: gap .2s var(--ease-soft);
     }
     .v2-traction a.tr-ext:hover { gap: 11px; }
@@ -3182,7 +3249,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Awarded a <strong>$49,838</strong> TEDCO Baltimore Innovation Initiative grant for "Altera Core: Adaptive Knowledge Tracking for Canvas-Native STEM Higher Education," funding a 9-month build at JHU.
             </p>
             <a class="tr-ext" href="https://www.tedcomd.com/news-events/press-releases/2026/tedcos-maryland-innovation-initiative-announces-664448-granted" target="_blank" rel="noopener noreferrer">
-              Read Announcement <i data-lucide="external-link"></i>
+              Read Announcement <svg class="lucide lucide-external-link" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
             </a>
             <div class="tr-logo-frame">
               <img class="logo" src="./public/images/logos/TEDCO/tedco-logo-black.png" alt="TEDCO" loading="lazy" decoding="async">
@@ -3261,11 +3328,11 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               Won the <strong>$5,000 Audience Award</strong> at the 2025 Johns Hopkins Fuel Demo Day, an audience-voted win that showed strong student and faculty interest in the approach.
             </p>
             <a class="tr-ext" href="https://pavacenter.jhu.edu/news/catching-up-with-the-fall-2025-fuel-winners/" target="_blank" rel="noopener noreferrer">
-              Read Article <i data-lucide="external-link"></i>
+              Read Article <svg class="lucide lucide-external-link" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
             </a>
             <div class="tr-photo video">
               <span class="frame-inner">
-                <img src="./public/images/logos/FUEL.webp" alt="JHU Fuel Demo Day Win" loading="lazy" decoding="async">
+                <img src="./public/images/logos/FUEL.webp" alt="JHU Fuel Demo Day Win" loading="lazy" decoding="async" width="760" height="571">
               </span>
             </div>
             <div class="tr-logo-frame">
@@ -3304,7 +3371,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               </div>
             </div>
             <a class="tr-ext last" href="viewer.html?doc=letter" target="_blank" rel="noopener noreferrer">
-              Read Letter <i data-lucide="external-link"></i>
+              Read Letter <svg class="lucide lucide-external-link" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
             </a>
           </div>
         </div>
@@ -3338,7 +3405,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
             </p>
             <div class="tr-photo portrait">
               <span class="frame-inner">
-                <img src="./public/images/Pava-Center-Wrap-Up-2025-Main-photo-980x654.webp" alt="2025 Fuel Cohort" loading="lazy" decoding="async">
+                <img src="./public/images/Pava-Center-Wrap-Up-2025-Main-photo-980x654.webp" alt="2025 Fuel Cohort" loading="lazy" decoding="async" width="760" height="507">
               </span>
             </div>
             <div class="tr-logo-frame">
@@ -3364,7 +3431,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
               CEO publishes <strong>"AI and Education: A Neurocognitive Perspective"</strong> at Johns Hopkins, establishing the scientific foundation for Altera's state-aware approach. The paper synthesizes research demonstrating a <strong>significant negative correlation between AI tool use and critical thinking</strong> (<a href="https://www.mdpi.com/2075-4698/15/1/6" target="_blank" rel="noopener noreferrer">Gerlich, 2025</a>).
             </p>
             <a class="tr-ext last" href="viewer.html?doc=paper" target="_blank" rel="noopener noreferrer">
-              Read Paper <i data-lucide="external-link"></i>
+              Read Paper <svg class="lucide lucide-external-link" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>
             </a>
           </div>
         </div>
@@ -3373,13 +3440,6 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      if (window.lucide && typeof window.lucide.createIcons === 'function') {
-        window.lucide.createIcons();
-      }
-    });
-  </script>
 </section>
 <section id="team" class="v2-team">
   <style>
@@ -3563,7 +3623,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="v2-role">CEO</span>
         </div>
         <div class="v2-photo">
-          <img src="./public/images/headshots/Peter.webp" alt="Peter Seelman" style="object-position:center 15%;" loading="lazy">
+          <img src="./public/images/headshots/Peter.webp" alt="Peter Seelman" style="object-position:center 15%;" loading="lazy" width="640" height="640" decoding="async">
         </div>
         <div class="v2-card-body">
           <p class="v2-school">Johns Hopkins University</p>
@@ -3579,7 +3639,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="v2-role">CFO, R&D Lead</span>
         </div>
         <div class="v2-photo">
-          <img src="./public/images/headshots/Alex.webp" alt="Alex Kroumov" style="object-position:center 10%;" loading="lazy">
+          <img src="./public/images/headshots/Alex.webp" alt="Alex Kroumov" style="object-position:center 10%;" loading="lazy" width="640" height="640" decoding="async">
         </div>
         <div class="v2-card-body">
           <p class="v2-school">Johns Hopkins University</p>
@@ -3595,7 +3655,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
           <span class="v2-role">CTO, Lead Developer</span>
         </div>
         <div class="v2-photo">
-          <img src="./public/images/headshots/Akira.webp" alt="Akira Lonske" style="object-position:center 45%;" loading="lazy">
+          <img src="./public/images/headshots/Akira.webp" alt="Akira Lonske" style="object-position:center 45%;" loading="lazy" width="600" height="601" decoding="async">
         </div>
         <div class="v2-card-body">
           <p class="v2-school">Johns Hopkins University</p>
@@ -3630,7 +3690,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- Dr. Brown -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Dr_Brown.webp" alt="Dr. Richard Brown" loading="lazy">
+            <img src="./public/images/headshots/Dr_Brown.webp" alt="Dr. Richard Brown" loading="lazy" width="200" height="300" decoding="async">
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Dr. Richard Brown</h4>
@@ -3643,7 +3703,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- Jennifer Harvey -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Jen_Harvey.webp" alt="Jennifer Harvey" loading="lazy">
+            <img src="./public/images/headshots/Jen_Harvey.webp" alt="Jennifer Harvey" loading="lazy" width="640" height="640" decoding="async">
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Jennifer Harvey</h4>
@@ -3656,7 +3716,7 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
         <!-- Iris Gupta -->
         <article class="v2-advisor v2-reveal">
           <div class="v2-advisor-photo">
-            <img src="./public/images/headshots/Iris.webp" alt="Iris Gupta" loading="lazy">
+            <img src="./public/images/headshots/Iris.webp" alt="Iris Gupta" loading="lazy" width="640" height="640" decoding="async">
           </div>
           <div>
             <h4 class="v2-advisor-name h3">Iris Gupta</h4>
@@ -3698,8 +3758,8 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
    .v2-footer .wrap{max-width:1320px;margin:0 auto;display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:space-between;}
    .v2-footer .brand{font-family:var(--font-display);font-weight:600;font-size:1.1rem;color:var(--ink-900);}
    .v2-footer .brandcol{display:flex;flex-direction:column;gap:5px;align-items:flex-start;}
-   .v2-footer .copy{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-400);letter-spacing:.04em;}
-   .v2-footer nav a{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-500);text-decoration:none;margin-left:26px;}
+   .v2-footer .copy{font-family:var(--font-mono);font-size:.75rem;color:var(--ink-500);letter-spacing:.04em;}
+   .v2-footer nav a{font-family:var(--font-mono);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-500);text-decoration:none;margin-left:26px;display:inline-flex;align-items:center;min-height:44px;padding:0 4px;}
    .v2-footer nav a:hover{color:var(--terracotta-600);}
   </style>
   <div class="wrap">
@@ -3750,7 +3810,6 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 });
 </script>
-<script>document.addEventListener("DOMContentLoaded",function(){(function go(){if(window.lucide){lucide.createIcons();}else{setTimeout(go,80);}})();});</script>
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   var STAGGER = 190, SIDE_GAP = 36, BASE = 40;

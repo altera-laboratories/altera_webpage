@@ -31,3 +31,11 @@ Static marketing site for Altera Labs (altera-labs.com). No build step: Netlify 
 - The bar is one 64px row: brand, a CTA that appears only after the hero button scrolls away, and a disclosure menu. Section anchors use `scroll-margin-top: 76px` to clear it.
 - One `--gutter-m` token (16px) drives the gutter; it is declared *inside* the media block so it does not exist on desktop. Anything needing to sit flush to the screen edge cancels it with `calc(-1 * var(--gutter-m))`, never a hardcoded number.
 - `h1.headline em` must stay `display: inline-block`. As a plain inline it splits into two fragments when the emphasised word lands on a line break, which collapses the underline swatch's absolutely positioned `::after` to `width: 0`.
+
+## Accessibility and performance floor (October 2026)
+
+- Text contrast is 4.5:1 or better on every paper tone. `--ink-400` fails that, so it is for icons and rules only; muted text uses `--ink-500`. Ochre and green text use `--ochre-700` and `--mastery-high-text`, never the `-600` / `-fill` swatches.
+- Every link or button is at least 44px tall (use `min-height`, not padding guesses). New `<img>` tags carry `width`/`height` unless CSS sizes both axes.
+- Icons are inline Lucide SVGs (`class="lucide lucide-<name>"`, `aria-hidden="true"`). Do not bring back the lucide script: `lucide@latest` was 445KB and unpinned.
+- KaTeX and d3 are fetched by a loader in `<head>` only when their section nears the viewport. Keep them out of the initial `<script>` tags.
+- The skip link targets `#main` on every page. Reduced motion is honoured globally in the design-tokens layer.
