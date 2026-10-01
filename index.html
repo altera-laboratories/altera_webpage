@@ -975,6 +975,71 @@ code,.mono{ font-family:var(--font-mono); font-size:0.8125rem; }
     .hero-cta .btn-primary { flex: 0 0 auto !important; padding: 15px 32px !important; }
   }
 </style>
+<!-- HERO-VARIANTS (preview only, remove before merge): ?hero=a|b|c|d -->
+<script>
+  (function () {
+    var v = (new URLSearchParams(location.search).get('hero') || '').toLowerCase();
+    if (!/^[abcd]$/.test(v)) return;
+    document.documentElement.setAttribute('data-hero', v);
+    if (v === 'c') {
+      var m = document.querySelector('meta[name=viewport]');
+      if (m) m.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var bar = document.createElement('div');
+      bar.className = 'hv-switch';
+      bar.innerHTML = ['a','b','c','d'].map(function (k) {
+        return '<a href="?hero=' + k + '"' + (k === v ? ' aria-current="page"' : '') + '>' + k.toUpperCase() + '</a>';
+      }).join('');
+      document.body.appendChild(bar);
+      if (v === 'c') {
+        var cta = document.createElement('div');
+        cta.className = 'hv-thumb';
+        cta.innerHTML = '<a class="btn btn-clay" href="https://app.altera-labs.com" target="_blank" rel="noopener noreferrer">Try the Beta</a>';
+        document.body.appendChild(cta);
+      }
+    });
+  })();
+</script>
+<style id="hero-variants">
+  .hv-switch{ position:fixed; left:50%; transform:translateX(-50%); bottom:calc(16px + env(safe-area-inset-bottom)); z-index:200; display:flex; gap:4px; padding:4px; background:var(--ink-900); border-radius:999px; box-shadow:var(--shadow-pin); }
+  .hv-switch a{ display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:999px; color:var(--paper-50); font:600 15px var(--font-sans); text-decoration:none; }
+  .hv-switch a[aria-current]{ background:var(--terracotta-500); }
+  html[data-hero="c"] .hv-switch{ bottom:calc(92px + env(safe-area-inset-bottom)); }
+  @media (min-width:761px){ .hv-switch, .hv-thumb{ display:none !important; } }
+
+  @media (max-width:760px){
+    /* A. Poster: oversized headline, the button right under it, paragraph after. */
+    html[data-hero="a"] .hero{ padding-top:20px !important; }
+    html[data-hero="a"] .hero-copy h1.headline{ font-size:clamp(3.2rem,15vw,4.2rem) !important; line-height:.98 !important; letter-spacing:-.02em !important; }
+    html[data-hero="a"] .hero-copy .hero-cta{ order:2 !important; margin-top:22px !important; }
+    html[data-hero="a"] .hero-copy p.sub{ order:3 !important; margin-top:26px !important; font-size:16px !important; color:var(--ink-600) !important; }
+
+    /* B. Picture first: the collage opens the page edge to edge, cropped, then the words. */
+    html[data-hero="b"] .hero{ padding-top:0 !important; }
+    html[data-hero="b"] .hero-grid{ gap:22px !important; }
+    html[data-hero="b"] .collage-frame{ order:-1 !important; margin:0 calc(-1 * var(--gutter-m, 16px)) !important; max-width:none !important; padding:0 !important; border-radius:0 !important; box-shadow:none !important; background:none !important; }
+    html[data-hero="b"] .collage-frame img{ height:44vh !important; object-fit:cover !important; object-position:50% 38% !important; border-radius:0 !important; }
+    html[data-hero="b"] .hero-copy h1.headline{ font-size:clamp(2.3rem,10vw,2.8rem) !important; }
+    html[data-hero="b"] .hero-copy p.sub{ margin-top:12px !important; }
+    html[data-hero="b"] .hero-copy .hero-cta{ margin-top:20px !important; }
+
+    /* C. Thumb bar: the action lives in a fixed bar at the bottom, in reach of a thumb. */
+    html[data-hero="c"] .hero-cta, html[data-hero="c"] header.nav .nav-cta{ display:none !important; }
+    html[data-hero="c"] .nav-toggle{ margin-left:auto !important; }
+    html[data-hero="c"] body{ padding-bottom:calc(84px + env(safe-area-inset-bottom)) !important; }
+    html[data-hero="c"] .hero-copy p.sub{ margin-top:16px !important; }
+    html[data-hero="c"] .hero-grid{ gap:28px !important; }
+    .hv-thumb{ position:fixed; left:0; right:0; bottom:0; z-index:150; padding:12px max(16px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); background:rgba(243,234,216,.94); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border-top:1px solid var(--border-soft); }
+    .hv-thumb .btn{ display:flex !important; justify-content:center; width:100%; min-height:52px; font-size:17px; }
+
+    /* D. Centred: the July layout without the void; everything on one axis, short measure. */
+    html[data-hero="d"] .hero{ padding-top:40px !important; }
+    html[data-hero="d"] .hero-copy{ align-items:center !important; text-align:center !important; }
+    html[data-hero="d"] .hero-copy p.sub{ text-align:center !important; max-width:30ch !important; margin-top:16px !important; }
+    html[data-hero="d"] .hero-cta{ justify-content:center !important; }
+  }
+</style>
 <noscript>
   <!-- No JS means no toggle, so fall back to the wrapping row: a tall bar beats
        a bar whose only navigation is behind a button that cannot open. -->
